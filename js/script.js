@@ -1,23 +1,32 @@
-import { listarDespesas, listarCategorias } from './api.js';
+//import { listarDespesas, listarCategorias } from './api.js';
+import { despesas } from './data/despesas.js';
+import formatCurrency from './utils/money.js';
 
+let total = 0;
 
-listarDespesas().then(debitos => {
-    debitos.forEach(element => {
-        
-        const tabela = document.getElementById("tabela-despesas").querySelector("tbody");
-        const novaLinha = tabela.insertRow();
+despesas.forEach(despesa => {
+      
+    const tabela = document.getElementById("tabela-despesas").querySelector("tbody");
+    const novaLinha = tabela.insertRow();
 
-        novaLinha.innerHTML = `
-          <td>${element.categoryName}</td>
-          <td>${element.name}</td>
-          <td>${parseFloat(element.value).toFixed(2)}</td>
-  `;
-        // Limpar formulário
-        document.getElementById("form-despesa").reset();
+    const valor = formatCurrency(despesa.value);
 
-      });
+    novaLinha.innerHTML = `
+      <td>${despesa.category.name}</br><p>${despesa.description}</p></td>
+      <td>${despesa.name}</td>
+      <td>${valor}</td>
+      <td>${despesa.date}</td>
+      <td>${despesa.payment}</td>
+`;
+    total += valor;
+
+    document.querySelector('.total-despesas').innerHTML = `Total: ${parseFloat(total).toFixed(2)}`
+
+    // Limpar formulário
+    document.getElementById("form-despesa").reset();
+
+    console.log(novaLinha, total);
 });
-
 
 const btnAbrir = document.getElementById("btn-abrir-form");
 const btnFechar = document.getElementById("btn-fechar");
@@ -41,7 +50,6 @@ window.addEventListener("click", (event) => {
     modal.style.display = "none";
   }
 });
-
 
 // Salvar despesa
 form.addEventListener("submit", (event) => {
