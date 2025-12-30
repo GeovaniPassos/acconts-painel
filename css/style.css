@@ -64,9 +64,29 @@ th {
   background-color: #fff;
   margin: 10% auto;
   padding: 20px;
-  border-radius: 5px;
-  width: 50%;
-  text-align: left;
+  border-radius: 8px;
+  width: 38%;
+  text-align: center;
+  min-width: 350px;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+#form-despesa {
+  text-align: right;
+  margin: 0px 20px;
+  
+}
+
+.button-form {
+  margin: 5px;
+  padding: 5px;
+  width: 180px;
 }
 
 .close {
@@ -75,3 +95,7 @@ th {
   cursor: pointer;
 }
 
+.input-data {
+  margin: 5px;
+  width: 168px;
+}
