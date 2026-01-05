@@ -30,10 +30,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #45a049;
-}
-
 table {
   margin: 0 auto;
   border-collapse: collapse;
@@ -88,6 +84,15 @@ th {
   padding: 5px;
   width: 180px;
 }
+
+.btn-status {
+  background-color: red;
+}
+
+.btn-status.pago {
+  background-color: #5cb85c;
+}
+
 
 .close {
   float: right;

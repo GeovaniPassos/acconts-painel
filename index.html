@@ -21,19 +21,19 @@
             <input type="text" id="categoria" name="categoria" required>
             </br>
             <label for="nome">Nome:</label>
-            <input type="text" id="descricao" name="descricao" required>
+            <input type="text" id="nome" name="nome" required>
             </br>
             <label for="nome">Descrição:</label>
-            <input type="text" id="descricao" name="descricao" required>
+            <input type="text" id="descricao" name="descricao">
             </br>
             <label for="valor">Valor:</label>
             <input type="number" id="valor" name="valor" step="0.01" required>
             </br>
-            <label for="pago">Está pago:</label>
-            <button class="button-form">Pago</button>
+            <label for="status">Status:</label>
+            <button type="button" class="button-form btn-status" id="status" data-pago="false">Não Pago</button>
             </br>
             <label for="data">Data:</label>
-            <input class="input-data" type="date" id="valor" name="data" >
+            <input class="input-data" type="date" id="data" name="data" >
             </br>
             <button class="button-form" type="submit">Salvar</button>
           </form>
