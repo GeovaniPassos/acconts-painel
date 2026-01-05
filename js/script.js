@@ -1,7 +1,34 @@
-//import { listarDespesas, listarCategorias } from './api.js';
+import { createCategory, createExpenses, getCategory, getExpenses, getExpensesById } from './api.js';
 import { despesas } from './data/despesas.js';
 import formatCurrency from './utils/money.js';
 
+
+//console.log(getExpensesById(10));
+
+const categoria = {
+  "name": "Veiculo",
+  "type": "EXPENSES"
+}
+
+//createCategory(categoria);
+console.log(getCategory());
+
+const despesa = {
+  "name": "Carro",
+  "description": "",
+  "categoryName": "Veiculo",
+  "payment": false,
+  "value": 135.35,
+  "date": "2025-12-18T02:36:01.643Z"
+}
+
+//createExpenses(despesa);
+
+console.log(getExpenses());
+
+
+
+/*
 let total = 0;
 let despesa = {};
 
@@ -97,3 +124,4 @@ btnStatus.addEventListener("click", () => {
     btnStatus.classList.add("pago");
   }
 });
+*/
