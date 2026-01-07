@@ -80,4 +80,3 @@ export function setLoading(isLoading) {
     const loader = document.getElementById("loader");
     loader.style.display = isLoading ? "block" : "none";
 }
-

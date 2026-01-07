@@ -103,3 +103,41 @@ window.addEventListener("click", (event) => {
     modal.style.display = "none";
   }
 });
+
+const categories = ["Alimentação", "Aluguel", "Lazer", "Transporte", "Saúde"];
+const input = document.getElementById('category-input');
+const ghost = document.getElementById('ghost-text');
+
+input.addEventListener('input', () => {
+    const value = input.value;
+    
+    if (!value) {
+        ghost.textContent = "";
+        return;
+    }
+
+    // Procura uma categoria que comece com o que foi digitado
+    const match = categories.find(cat => 
+        cat.toLowerCase().startsWith(value.toLowerCase())
+    );
+
+    if (match) {
+        // O ghost text precisa ser o que o usuário digitou + o resto da palavra
+        // Usamos o valor do input original para manter a capitalização do usuário
+        ghost.textContent = value + match.slice(value.length);
+    } else {
+        ghost.textContent = "";
+    }
+});
+
+// Aceitar a sugestão com Tab ou Seta para Direita
+input.addEventListener('keydown', (e) => {
+    if ((e.key === 'Tab' || e.key === 'ArrowRight') && ghost.textContent) {
+        // Se houver uma sugestão, preenche o input e cancela o comportamento padrão
+        if (input.value.length < ghost.textContent.length) {
+            e.preventDefault();
+            input.value = ghost.textContent;
+            ghost.textContent = "";
+        }
+    }
+});
