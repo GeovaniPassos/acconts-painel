@@ -10,7 +10,7 @@ h1 {
 }
 
 form {
-  margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 
 label {
@@ -19,7 +19,11 @@ label {
 
 input {
   margin: 5px;
-  padding: 5px;
+  padding: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  border: 1px solid #a8a8a8;
+  border-radius: 8px;
 }
 
 button {
@@ -30,21 +34,7 @@ button {
   cursor: pointer;
 }
 
-table {
-  margin: 0 auto;
-  border-collapse: collapse;
-  width: 60%;
-  background-color: white;
-}
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-}
-
-th {
-  background-color: #f2f2f2;
-}
 
 /* Estilo do modal */
 .modal {
@@ -58,10 +48,10 @@ th {
 
 .modal-content {
   background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
+  margin: 8% auto;
+  padding: 5px;
   border-radius: 8px;
-  width: 38%;
+  width: 50%;
   text-align: center;
   min-width: 350px;
 }
@@ -75,14 +65,14 @@ th {
 
 #expenses-form {
   text-align: right;
-  margin: 0px 20px;
+  margin: 0px 10px;
   
 }
 
 .button-form {
   margin: 5px;
   padding: 5px;
-  width: 180px;
+  width: 183px;
 }
 
 .btn-status {
@@ -169,42 +159,34 @@ th {
 }
 
 
-
-
-
-
+/*Auto-complete do input da categoria*/
 .inline-autocomplete {
     position: relative;
-    font-family: sans-serif; /* Use a mesma fonte em ambos */
-    font-size: 16px;
-    width: 100%;
-}
+    display: flex;
+    top: 15px;
+    left: 15px;
+  }
 
-#category-input, .ghost-text {
-    padding: 12px;
-    font-size: 16px;
-    font-family: inherit;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box; /* Garante que o padding não mude o tamanho */
-    line-height: normal;
-    display: block;
-}
 
 #category-input {
     background: transparent; /* Permite ver o ghost-text atrás */
     position: relative;
-    z-index: 2;
+    color: #000000;
 }
 
 .ghost-text {
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    color: #ccc; /* Cor cinza clarinha igual VS Code */
-    border-color: transparent; /* A borda da frente que manda */
+    color: #535353; /* Cor cinza clarinha igual VS Code */
     pointer-events: none; /* O usuário não interage com o texto de trás */
     white-space: pre; /* Mantém espaços extras se houver */
+
+    height: 22.5px;
+    width: 194.5px;
+    text-align: start;
+    left: 75px;
+    padding: 8px;
+    margin: 5px;
+    
+    top: 3px;
+
 }

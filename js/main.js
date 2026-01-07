@@ -1,4 +1,4 @@
-import { createExpenses, deleteExpenses, getExpenses, getExpensesById, updateExpenses } from "./api.js";
+import { createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses } from "./api.js";
 import { clearForm, fillFormForEdit, renderExpensesList, setLoading, showMessage } from "./ui.js";
 
 async function loading() {
@@ -104,7 +104,11 @@ window.addEventListener("click", (event) => {
   }
 });
 
-const categories = ["Alimentação", "Aluguel", "Lazer", "Transporte", "Saúde"];
+//Sugestão da categoria
+
+const categoriesData = await getCategory();
+const categories = categoriesData.map(cat => cat.name);
+
 const input = document.getElementById('category-input');
 const ghost = document.getElementById('ghost-text');
 

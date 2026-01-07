@@ -7,7 +7,7 @@ async function request(path, options = {}) {
     });
     if (!resp.ok) {
         const message = await resp.text().catch(() => "");
-        throw new Error(msg || `Erro ${resp.status}`);
+        throw new Error(message || `Erro ${resp.status}`);
     }
 
     // Para respostas sem corpo
