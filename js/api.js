@@ -48,7 +48,7 @@ export async function getCategory() {
 }
 
 export async function createCategory(data) {
-    return request(`/categories`, {
+    return request("/categories", {
         method: "POST",
         body: JSON.stringify(data)
     });

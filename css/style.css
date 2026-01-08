@@ -75,15 +75,6 @@ button {
   width: 183px;
 }
 
-.btn-status {
-  background-color: red;
-}
-
-.btn-status.paid {
-  background-color: #5cb85c;
-}
-
-
 .close {
   float: right;
   font-size: 24px;
@@ -151,9 +142,17 @@ button {
 .badge:active {
     transform: scale(0.95); /* Efeito de clique (afunda levemente) */
 }
-.paid-status { background: #d4edda; color: #155724; }
-.pending-status { background: #f8d7da; color: #721c24; }
+.btn-pago, .status-pago {
+    background-color: #27ae60 !important;
+    color: white !important;
+    border: none;
+}
 
+.btn-pendente, .status-pendente {
+    background-color: #e74c3c !important;
+    color: white !important;
+    border: none;
+}
 /* Ajustes para Celular (Responsividade) */
 @media (max-width: 600px) {
     .expense-item {

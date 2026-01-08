@@ -1,4 +1,4 @@
-import { createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses as updateExpense, updateExpenses } from "./api.js";
+import { createCategory, createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses as updateExpense, updateExpenses } from "./api.js";
 import { clearForm, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
 
 let expenseData = [];
@@ -21,23 +21,48 @@ async function refreshExpenses() {
 async function handleSaveExpenses(event) {
     event.preventDefault();
     const form = event.target;
+     
+    const categoryTyped = document.getElementById('category-input').value.trim();
+
     const data = {
        
         name: form.name.value.trim(),
         description: form.description.value.trim(),
-        categoryName: document.getElementById('category-input').value.trim(),
+        categoryName: categoryTyped,
         value: Number(form.value.value),
         payment: form.status.dataset.pago === "true",
         date: form.date.value
     };
-
-    if (!data.name || isNaN(data.value) || !data.categoryName) {
-        showMessage("error", "Preencha o nome e o valor válido.");
+    
+    if (!data.name || isNaN(data.value || !data.categoryName)) {
+        showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
     }
-    
+        
     try {
         setLoading(true);
+        
+        const categoryExists = categories.some(cat => cat.toLowerCase() === categoryTyped.toLowerCase());
+        if (!categoryExists) {
+            try {
+                const categoryCreate = {
+                    name: categoryTyped,
+                    type: "EXPENSES"
+                };
+                
+                const newCategory = await createCategory(categoryCreate);
+
+                categories.push(newCategory.name);
+                if (typeof categoriesData != 'undefined') {
+                    categoriesData.push(newCategory);
+                }
+
+            } catch (e) {
+                showMessage("error", `Erro ao criar a categoria!`);
+            }
+        
+        }
+
         if (form.dataset.mode === "edit" && form.dataset.id) {
             await updateExpense(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
@@ -46,8 +71,16 @@ async function handleSaveExpenses(event) {
             showMessage("success", "Conta criada.");
         }
 
+        // Limpa o formulario
         form.reset();
         document.getElementById('ghost-text').textContent = "";
+
+        //Reset do botão de status
+        const statusBtn = document.getElementById("status");
+        statusBtn.dataset.pago = "false";
+        statusBtn.textContent = "Pendente";
+        
+        // fecha o modal e atualiza a lista de despesas
         modal.style.display = "none";
         await refreshExpenses();
     } catch (e) {
@@ -64,27 +97,32 @@ async function handleListClick(event) {
     const id = Number(li.dataset.id);
     
     const badge = event.target.closest(".badge");
-    if (badge) {
+    if(badge) {
         const expense = expenseData.find(e => e.id === id);
-
         if (expense) {
             try {
                 const currentStatus = (expense.payment === true || expense.payment === "true");
-                const updatedData = {
-                    ...expense,
-                payment: !currentStatus
-                };
+                const newStatus = !currentStatus;
 
-                await updateExpenses(id, updatedData);
+                // 1. Atualiza no Banco
+                await updateExpenses(id, { ...expense, payment: newStatus });
+                
+                // 2. Atualiza na Memória Local
+                expense.payment = newStatus;
 
-                await refreshExpenses();
-                showMessage("sucess", "Status atualizado!");
+                // 3. Atualiza na UI (Usa a mesma função do formulário!)
+                toggleStatusVisual(badge, newStatus);
+                
+                // 4. Atualiza os cards do topo
+                updateSummary(expensesData);
+                
+                showMessage("success", "Status atualizado!");
             } catch (e) {
-                showMessage("error", "Erro ao mudar o status.");
+                showMessage("error", "Erro ao mudar status.");
             }
         }
-        return
-    }
+        return;
+    }   
 
     const btnDelete = event.target.closest(".btn-delete");
     if (btnDelete) {
@@ -113,6 +151,7 @@ async function handleListClick(event) {
             setLoading(false);
         }
     }
+    
 }
 
 export function init() {
@@ -128,7 +167,7 @@ document.addEventListener("DOMContentLoaded", init);
 const btnAbrir = document.getElementById("btn-open-form");
 const btnFechar = document.getElementById("btn-to-close");
 const modal = document.getElementById("modal");
-const form = document.getElementById("expenses-form");
+//const form = document.getElementById("expenses-form");
 //const tabela = document.getElementById("expenses-list");
 
 // Abrir modal
@@ -163,7 +202,7 @@ input.addEventListener('input', () => {
         return;
     }
 
-    // Procura uma categoria que comece com o que foi digitado
+    // Procura uma categoria ao digitar
     const match = categories.find(cat => 
         cat.toLowerCase().startsWith(value.toLowerCase())
     );
@@ -189,24 +228,18 @@ input.addEventListener('keydown', (e) => {
     }
 });
 
-//Botão de alterar o status
-// Dentro do seu init() ou área de eventos
-const statusBtn = document.getElementById("status");
+const statusBtnForm = document.getElementById("status");
 
-statusBtn.addEventListener("click", () => {
-    // Inverte o valor: se for "true" vira false e vice-versa
-    const isPaid = statusBtn.dataset.pago === "true";
-    const newState = !isPaid;
-
-    // Atualiza o dataset e o texto
-    statusBtn.dataset.pago = newState;
-    statusBtn.textContent = newState ? "Pago" : "Pendente";
-    
-    // Opcional: trocar cores via classe CSS
-    statusBtn.classList.toggle("btn-pago", newState);
+//alterar status do botão
+statusBtnForm.addEventListener("click", () => {
+    // Inverte o estado atual baseado no dataset
+    const isPaid = statusBtnForm.dataset.pago === "true";
+    toggleStatusVisual(statusBtnForm, !isPaid);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
+    
+    
 });

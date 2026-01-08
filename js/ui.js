@@ -68,6 +68,7 @@ export function fillFormForEdit(expenses) {
 
     const statusBtn = document.getElementById("status");
     const isPaid = expenses.payment === true || expenses.payment === "true";
+    toggleStatusVisual(document.getElementById("status"), isPaid);
 
     statusBtn.dataset.pago = isPaid;
     statusBtn.textContent = isPaid ? "Pago" : "Pendente";
@@ -102,21 +103,20 @@ export function setLoading(isLoading) {
 }
 
 // Botão de alterar o status do pagamento
-const btnStatus = document.querySelector(".btn-status");
-
-btnStatus.addEventListener("click", () => {
-  const pago = btnStatus.getAttribute("data-pago") === "true";
-  
-  if (pago) {
-    btnStatus.setAttribute("data-pago", "false");
-    btnStatus.textContent = "Pendente";
-    btnStatus.classList.remove("paid");
-  } else {
-    btnStatus.setAttribute("data-pago", "true");
-    btnStatus.textContent = "Pago";
-    btnStatus.classList.add("paid");
-  }
-});
+export function toggleStatusVisual(button, isPaid) {
+    button.dataset.pago = isPaid;
+    
+    button.textContent = isPaid ? "Pago" : "Pendente";
+    
+    // Atualiza as cores
+    if (isPaid) {
+        button.classList.add("btn-pago");
+        button.classList.remove("btn-pendente");
+    } else {
+        button.classList.add("btn-pendente");
+        button.classList.remove("btn-pago");
+    }
+}
 
 export function updateSummary(expenses) {
     // Calculando os valores usando reduce
