@@ -11,6 +11,21 @@
   <div id="messages"></div>
   <div id="loader" style="display:none;">Carregando...</div>
 
+  <section id="summary-container" class="summary-cards">
+    <div class="card total">
+        <h3>Total Geral</h3>
+        <p id="total-geral">R$ 0,00</p>
+    </div>
+    <div class="card paid">
+        <h3>Total Pago</h3>
+        <p id="total-pago">R$ 0,00</p>
+    </div>
+    <div class="card pending">
+        <h3>Pendente</h3>
+        <p id="total-pendente">R$ 0,00</p>
+    </div>
+</section>
+
   <button id="btn-open-form">Adicionar Despesa</button>
   <!-- Modal formulario novo-->
   <div id="modal" class="modal">
@@ -25,27 +40,26 @@
               <span id="ghost-text" class="ghost-text"></span>
               <input type="text"
                       id="category-input"
-                      list="category-suggestions"
                       placeholder="Selecione a categoria..."
                       autocomplete="off"
               >
               
             </div>
             </br>
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required>
             </br>
-            <label for="nome">Descrição:</label>
-            <input type="text" id="descricao" name="descricao">
+            <label for="name">Descrição:</label>
+            <input type="text" id="description" name="description">
             </br>
-            <label for="valor">Valor:</label>
-            <input type="number" id="valor" name="valor" step="0.01" required>
+            <label for="value">Valor:</label>
+            <input type="number" id="value" name="value" step="0.01" required>
             </br>
             <label for="status">Status:</label>
             <button type="button" class="button-form btn-status" id="status" data-pago="false">Pendente</button>
             </br>
-            <label for="data">Data:</label>
-            <input class="input-data" type="date" id="data" name="data" >
+            <label for="date">Data:</label>
+            <input class="input-date" type="date" id="date" name="date" >
             </br>
             <button class="button-form" type="submit">Salvar</button>
           </form>

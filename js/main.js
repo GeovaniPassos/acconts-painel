@@ -1,11 +1,16 @@
-import { createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses } from "./api.js";
-import { clearForm, fillFormForEdit, renderExpensesList, setLoading, showMessage } from "./ui.js";
+import { createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses as updateExpense, updateExpenses } from "./api.js";
+import { clearForm, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
 
-async function loading() {
+let expenseData = [];
+
+refreshExpenses();
+
+async function refreshExpenses() {
     try {
         setLoading(true);
-        const expenses = await getExpenses();
-        renderExpensesList(expenses);
+        expenseData = await getExpenses();
+        renderExpensesList(expenseData);
+        updateSummary(expenseData);
     } catch (e) {
         showMessage("error", `Falha ao carregar: ${e.message}`);
     } finally {
@@ -13,14 +18,20 @@ async function loading() {
     }
 }
 
-async function handleSubmit(event) {
+async function handleSaveExpenses(event) {
     event.preventDefault();
     const form = event.target;
     const data = {
-        name: form.nome.value.trim(),
-        value: Number(form.value.value)
+       
+        name: form.name.value.trim(),
+        description: form.description.value.trim(),
+        categoryName: document.getElementById('category-input').value.trim(),
+        value: Number(form.value.value),
+        payment: form.status.dataset.pago === "true",
+        date: form.date.value
     };
-    if (!data.name || isNaN(data.value)) {
+
+    if (!data.name || isNaN(data.value) || !data.categoryName) {
         showMessage("error", "Preencha o nome e o valor válido.");
         return;
     }
@@ -28,32 +39,61 @@ async function handleSubmit(event) {
     try {
         setLoading(true);
         if (form.dataset.mode === "edit" && form.dataset.id) {
-            await updateExpenses(form.dataset.id, data);
+            await updateExpense(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
         } else {
             await createExpenses(data);
             showMessage("success", "Conta criada.");
         }
-        clearForm();
+
+        form.reset();
+        document.getElementById('ghost-text').textContent = "";
+        modal.style.display = "none";
+        await refreshExpenses();
     } catch (e) {
         showMessage("error", `Erro: ${e.message}`);
     } finally {
         setLoading(false);
     }
+    
 }
 
 async function handleListClick(event) {
     const li = event.target.closest("li");
     if (!li) return;
-    const id = li.dataset.id;
+    const id = Number(li.dataset.id);
+    
+    const badge = event.target.closest(".badge");
+    if (badge) {
+        const expense = expenseData.find(e => e.id === id);
 
-    if (event.target.classList.contains("btn-delete")) {
+        if (expense) {
+            try {
+                const currentStatus = (expense.payment === true || expense.payment === "true");
+                const updatedData = {
+                    ...expense,
+                payment: !currentStatus
+                };
+
+                await updateExpenses(id, updatedData);
+
+                await refreshExpenses();
+                showMessage("sucess", "Status atualizado!");
+            } catch (e) {
+                showMessage("error", "Erro ao mudar o status.");
+            }
+        }
+        return
+    }
+
+    const btnDelete = event.target.closest(".btn-delete");
+    if (btnDelete) {
         if (!confirm("Excluir está conta?")) return;
         try {
             setLoading(true);
             await deleteExpenses(id);
             showMessage("success", "Conta excluída.");
-            await loading();
+            await refreshExpenses();
         } catch (e) {
             showMessage("error", `Erro ao excluir: ${e.message}`);
         } finally {
@@ -61,21 +101,25 @@ async function handleListClick(event) {
         }
     }
 
-    if (event.target.classList.contains("btn-edit")) {
+    const btnEdit = event.target.closest(".btn-edit");
+    if (btnEdit) {
         try {
+            setLoading(true);
             const expenses = await getExpensesById(id);
             fillFormForEdit(expenses);
         } catch (e) {
             showMessage("error", `Error ao buscar a despesa: ${e.message}`);
+        } finally {
+            setLoading(false);
         }
     }
 }
 
 export function init() {
-    //document.getElementById("expenses-form").addEventListener("submit", handleSubmit);
+    document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
     //document.getElementById("btn-carregar").addEventListener("click", loading);
-    loading();
+    
 }
 
 document.addEventListener("DOMContentLoaded", init);
@@ -84,7 +128,7 @@ document.addEventListener("DOMContentLoaded", init);
 const btnAbrir = document.getElementById("btn-open-form");
 const btnFechar = document.getElementById("btn-to-close");
 const modal = document.getElementById("modal");
-//const form = document.getElementById("expenses-form");
+const form = document.getElementById("expenses-form");
 //const tabela = document.getElementById("expenses-list");
 
 // Abrir modal
@@ -105,7 +149,6 @@ window.addEventListener("click", (event) => {
 });
 
 //Sugestão da categoria
-
 const categoriesData = await getCategory();
 const categories = categoriesData.map(cat => cat.name);
 
@@ -144,4 +187,26 @@ input.addEventListener('keydown', (e) => {
             ghost.textContent = "";
         }
     }
+});
+
+//Botão de alterar o status
+// Dentro do seu init() ou área de eventos
+const statusBtn = document.getElementById("status");
+
+statusBtn.addEventListener("click", () => {
+    // Inverte o valor: se for "true" vira false e vice-versa
+    const isPaid = statusBtn.dataset.pago === "true";
+    const newState = !isPaid;
+
+    // Atualiza o dataset e o texto
+    statusBtn.dataset.pago = newState;
+    statusBtn.textContent = newState ? "Pago" : "Pendente";
+    
+    // Opcional: trocar cores via classe CSS
+    statusBtn.classList.toggle("btn-pago", newState);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    refreshExpenses();
+    document.getElementById("expenses-list").addEventListener("click", handleListClick);
 });

@@ -2,7 +2,7 @@ import { createCategory, createExpenses, getCategory, getExpenses, getExpensesBy
 import { despesas } from './data/despesas.js';
 import formatCurrency from './utils/money.js';
 
-
+/*
 //console.log(getExpensesById(10));
 
 const categoria = {
@@ -26,7 +26,7 @@ const despesa = {
 
 console.log(getExpenses());
 
-
+*/
 
 /*
 let total = 0;

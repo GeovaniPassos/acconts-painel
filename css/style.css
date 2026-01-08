@@ -138,6 +138,18 @@ button {
     font-size: 0.75rem;
     text-align: center;
     width: fit-content;
+
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    user-select: none;
+}
+
+.badge:hover {
+    filter: brightness(0.9); /* Escurece levemente ao passar o mouse */
+}
+
+.badge:active {
+    transform: scale(0.95); /* Efeito de clique (afunda levemente) */
 }
 .paid-status { background: #d4edda; color: #155724; }
 .pending-status { background: #f8d7da; color: #721c24; }
@@ -189,4 +201,53 @@ button {
     
     top: 3px;
 
+}
+
+
+/*Select com valores totais das despesas*/
+
+.summary-cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Para quebrar linha no celular */
+}
+
+.card {
+    flex: 1; /* Faz todos terem o mesmo tamanho */
+    min-width: 200px; /* Evita que fiquem pequenos demais */
+    padding: 20px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.card h3 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.card p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* Cores específicas para cada tipo */
+.card.total { border-top: 5px solid #3498db; }
+.card.paid p { color: #27ae60; }
+.card.paid { border-top: 5px solid #27ae60; }
+.card.pending p { color: #e74c3c; }
+.card.pending { border-top: 5px solid #e74c3c; }
+
+@media (max-width: 600px) {
+    .card {
+        padding: 15px;
+    }
+    .card p {
+        font-size: 1.2rem;
+    }
 }

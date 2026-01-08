@@ -1,3 +1,5 @@
+import { deleteExpenses } from "./api.js";
+
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
@@ -8,9 +10,11 @@ export function renderExpensesItem(expense) {
     const li = document.createElement("li");
     li.dataset.id = expense.id;
     li.className = "expense-item";
-    //li.textContent = `${expenses.name} - R$ ${Number(expenses.value).toFixed(2)}`;
-    const statusClass = expense.paid ? "paid-status" : "pending-status";
-    const statusText = expense.paid ? "Pago" : "Pendente";
+
+    const idPaid = expense.payment === true || expense.payment === "true";
+
+    const statusClass = idPaid ? "paid-status" : "pending-status";
+    const statusText = idPaid ? "Pago" : "Pendente";
 
     li.innerHTML = `
         <div class="info-group main">
@@ -19,8 +23,8 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group finance">
-            <span class="expense-value">R$ ${Number(expense.value).toFixed(2)}</span>
-            <span class="expense-date">${expense.date}</span>
+            <span class="expense-value">R$ ${Number(expense.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <span class="expense-date">${formatDate(expense.date)}</span>
         </div>
 
         <div class="info-group status">
@@ -33,30 +37,46 @@ export function renderExpensesItem(expense) {
         </div>
     `;
 
-    li.querySelector(".btn-edit").addEventListener("click", () => handleEdit(expense.id));
-    li.querySelector(".btn-delete").addEventListener("click", () => handleDelete(expense.id));
-
     return li;
-    /*
-    const btnEdit = document.createElement("button");
-    btnEdit.textContent = "Editar";
-    btnEdit.className = "btn-edit";
+}
 
-    const btnDelete = document.createElement("button");
-    btnDelete.textContent = "Deletar";
-    btnDelete.className = "btn-delete";
-
-    li.append(" ", btnEdit, " ", btnDelete);
-    return li;
-    */
+function formatDate(dateStr) {
+    if (!dateStr) return "-";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year}`;
 }
 
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.querySelector(".modal-title");
+
     form.dataset.mode = "edit";
     form.dataset.id = expenses.id;
+
     form.name.value = expenses.name;
     form.value.value = expenses.value;
+    form.description.value = expenses.description || "";
+
+    if (expenses.date) {
+        form.date.value = expenses.date.split("T")[0];
+    }
+
+    const categoryInput = document.getElementById('category-input');
+    categoryInput.value = expenses.categoryName;
+    document.getElementById('ghost-text').textContent = "";
+
+    const statusBtn = document.getElementById("status");
+    const isPaid = expenses.payment === true || expenses.payment === "true";
+
+    statusBtn.dataset.pago = isPaid;
+    statusBtn.textContent = isPaid ? "Pago" : "Pendente";
+
+    statusBtn.classList.toggle("btn-pago", isPaid);
+
+    if (modalTitle) modalTitle.textContent = "Editar despesa";
+
+    modal.style.display = "block";
 }
 
 export function clearForm() {
@@ -79,4 +99,48 @@ export function showMessage(type, text) {
 export function setLoading(isLoading) {
     const loader = document.getElementById("loader");
     loader.style.display = isLoading ? "block" : "none";
+}
+
+// Botão de alterar o status do pagamento
+const btnStatus = document.querySelector(".btn-status");
+
+btnStatus.addEventListener("click", () => {
+  const pago = btnStatus.getAttribute("data-pago") === "true";
+  
+  if (pago) {
+    btnStatus.setAttribute("data-pago", "false");
+    btnStatus.textContent = "Pendente";
+    btnStatus.classList.remove("paid");
+  } else {
+    btnStatus.setAttribute("data-pago", "true");
+    btnStatus.textContent = "Pago";
+    btnStatus.classList.add("paid");
+  }
+});
+
+export function updateSummary(expenses) {
+    // Calculando os valores usando reduce
+    const totals = expenses.reduce((acc, expense) => {
+        const value = Number(expense.value) || 0;
+        const isPaid = expense.payment === true || expense.payment === "true";
+
+        acc.total += value;
+        if (isPaid) {
+            acc.paid += value;
+        } else {
+            acc.pending += value;
+        }
+        
+        return acc;
+    }, { total: 0, paid: 0, pending: 0 });
+
+    // Atualizando o DOM com formatação de moeda brasileira
+    document.getElementById('total-geral').textContent = formatCurrency(totals.total);
+    document.getElementById('total-pago').textContent = formatCurrency(totals.paid);
+    document.getElementById('total-pendente').textContent = formatCurrency(totals.pending);
+}
+
+// Função auxiliar de formatação
+function formatCurrency(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
