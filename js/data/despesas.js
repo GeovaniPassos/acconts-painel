@@ -8,7 +8,7 @@ export const despesas = [
         type: "EXPENSES"
     },
     payment: false,
-    value: 10034,
+    value: 100.34,
     date: "30/12/2025"
     },
     {
@@ -20,7 +20,7 @@ export const despesas = [
         type: "EXPENSES"
     },
     payment: false,
-    value: 15834,
+    value: 158.34,
     date: "29/12/2025"
     },
     {
@@ -32,7 +32,7 @@ export const despesas = [
         type: "EXPENSES"
     },
     payment: true,
-    value: 25321,
+    value: 253.21,
     date: "20/12/2025"
     }
 ];

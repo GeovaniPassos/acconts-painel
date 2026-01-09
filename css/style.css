@@ -142,13 +142,13 @@ button {
 .badge:active {
     transform: scale(0.95); /* Efeito de clique (afunda levemente) */
 }
-.btn-pago, .status-pago {
+.btn-paid, .status-paid {
     background-color: #27ae60 !important;
     color: white !important;
     border: none;
 }
 
-.btn-pendente, .status-pendente {
+.btn-pendent, .status-pendent {
     background-color: #e74c3c !important;
     color: white !important;
     border: none;
