@@ -13,7 +13,7 @@ export function renderExpensesItem(expense) {
 
     const idPaid = expense.payment === true || expense.payment === "true";
 
-    const statusClass = idPaid ? "paid-status" : "pending-status";
+    const statusClass = idPaid ? "status-paid" : "status-pending";
     const statusText = idPaid ? "Pago" : "Pendente";
 
     li.innerHTML = `
@@ -70,10 +70,10 @@ export function fillFormForEdit(expenses) {
     const isPaid = expenses.payment === true || expenses.payment === "true";
     toggleStatusVisual(document.getElementById("status"), isPaid);
 
-    statusBtn.dataset.pago = isPaid;
+    statusBtn.dataset.paid = isPaid;
     statusBtn.textContent = isPaid ? "Pago" : "Pendente";
 
-    statusBtn.classList.toggle("btn-pago", isPaid);
+    statusBtn.classList.toggle("btn-paid", isPaid);
 
     if (modalTitle) modalTitle.textContent = "Editar despesa";
 
@@ -103,18 +103,20 @@ export function setLoading(isLoading) {
 }
 
 // Botão de alterar o status do pagamento
-export function toggleStatusVisual(button, isPaid) {
-    button.dataset.pago = isPaid;
+export function toggleStatusVisual(element, isPaid) {
+    if (!element) return;
+
+    element.dataset.paid = isPaid;
     
-    button.textContent = isPaid ? "Pago" : "Pendente";
+    element.textContent = isPaid ? "Pago" : "Pendente";
     
     // Atualiza as cores
     if (isPaid) {
-        button.classList.add("btn-pago");
-        button.classList.remove("btn-pendente");
+        element.classList.add("status-paid");
+        element.classList.remove("status-pending");
     } else {
-        button.classList.add("btn-pendente");
-        button.classList.remove("btn-pago");
+        element.classList.add("status-pending");
+        element.classList.remove("status-paid");
     }
 }
 

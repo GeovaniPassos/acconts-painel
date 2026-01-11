@@ -142,17 +142,7 @@ button {
 .badge:active {
     transform: scale(0.95); /* Efeito de clique (afunda levemente) */
 }
-.btn-paid, .status-paid {
-    background-color: #27ae60 !important;
-    color: white !important;
-    border: none;
-}
 
-.btn-pendent, .status-pendent {
-    background-color: #e74c3c !important;
-    color: white !important;
-    border: none;
-}
 /* Ajustes para Celular (Responsividade) */
 @media (max-width: 600px) {
     .expense-item {
@@ -250,3 +240,62 @@ button {
         font-size: 1.2rem;
     }
 }
+
+/*Ajustar botão de status*/
+.btn-status {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    text-align: center;
+    width: fit-content;
+
+    cursor: pointer;
+    /*transition: transform 0.1s ease;*/
+    user-select: none;
+    transition: filter 0.2s;
+}
+
+.badge:hover {
+    filter: brightness(0.9); 
+}
+
+.badge:active {
+    transform: scale(0.95); 
+}
+
+.status-paid {
+    /*background-color: #27ae60 !important;
+    color: white !important;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: inline-block;*/
+
+    background-color: #27ae60 !important;
+    color: white !important;
+    border: none;
+}
+
+.status-pending {
+    /*background-color: #e74c3c !important;
+    color: white !important;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: inline-block;*/
+    
+
+    background-color: #e74c3c !important;
+    color: white !important;
+    border: none;
+}
+

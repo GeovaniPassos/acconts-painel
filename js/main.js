@@ -1,5 +1,5 @@
 import { createCategory, createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses as updateExpense, updateExpenses } from "./api.js";
-import { clearForm, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
 
 let expenseData = [];
 
@@ -30,7 +30,7 @@ async function handleSaveExpenses(event) {
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
-        payment: form.status.dataset.pago === "true",
+        payment: form.status.dataset.paid === "true",
         date: form.date.value
     };
     
@@ -38,7 +38,6 @@ async function handleSaveExpenses(event) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
     }
-        
     try {
         setLoading(true);
         
@@ -104,17 +103,13 @@ async function handleListClick(event) {
                 const currentStatus = (expense.payment === true || expense.payment === "true");
                 const newStatus = !currentStatus;
 
-                // 1. Atualiza no Banco
                 await updateExpenses(id, { ...expense, payment: newStatus });
                 
-                // 2. Atualiza na Memória Local
                 expense.payment = newStatus;
 
-                // 3. Atualiza na UI (Usa a mesma função do formulário!)
                 toggleStatusVisual(badge, newStatus);
                 
-                // 4. Atualiza os cards do topo
-                updateSummary(expensesData);
+                updateSummary(expenseData);
                 
                 showMessage("success", "Status atualizado!");
             } catch (e) {
@@ -232,8 +227,7 @@ const statusBtnForm = document.getElementById("status");
 
 //alterar status do botão
 statusBtnForm.addEventListener("click", () => {
-    // Inverte o estado atual baseado no dataset
-    const isPaid = statusBtnForm.dataset.pago === "true";
+    const isPaid = statusBtnForm.dataset.paid === "true";
     toggleStatusVisual(statusBtnForm, !isPaid);
 });
 
