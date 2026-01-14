@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:8080";
+//const API_BASE = "http://localhost:8080";
+const API_BASE = "https://acconts-api.onrender.com"
 
 async function request(path, options = {}) {
     const resp = await fetch(`${API_BASE}${path}`, {
