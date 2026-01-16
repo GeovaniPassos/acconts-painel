@@ -1,5 +1,3 @@
-import { deleteExpenses } from "./api.js";
-
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";

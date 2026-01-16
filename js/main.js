@@ -1,14 +1,14 @@
-import { createCategory, createExpenses, deleteExpenses, getCategory, getExpenses, getExpensesById, updateExpenses as updateExpense, updateExpenses } from "./api.js";
+import Service from "./services/service.js";
 import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
 
 let expenseData = [];
-
+const service = new Service("api");
 refreshExpenses();
 
 async function refreshExpenses() {
     try {
         setLoading(true);
-        expenseData = await getExpenses();
+        expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -49,7 +49,7 @@ async function handleSaveExpenses(event) {
                     type: "EXPENSES"
                 };
                 
-                const newCategory = await createCategory(categoryCreate);
+                const newCategory = await service.createCategory(categoryCreate);
 
                 categories.push(newCategory.name);
                 if (typeof categoriesData != 'undefined') {
@@ -63,10 +63,10 @@ async function handleSaveExpenses(event) {
         }
 
         if (form.dataset.mode === "edit" && form.dataset.id) {
-            await updateExpense(form.dataset.id, data);
+            await service.updateExpenses(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
         } else {
-            await createExpenses(data);
+            await service.createExpenses(data);
             showMessage("success", "Conta criada.");
         }
 
@@ -103,7 +103,7 @@ async function handleListClick(event) {
                 const currentStatus = (expense.payment === true || expense.payment === "true");
                 const newStatus = !currentStatus;
 
-                await updateExpenses(id, { ...expense, payment: newStatus });
+                await service.updateExpenses(id, { ...expense, payment: newStatus });
                 
                 expense.payment = newStatus;
 
@@ -124,7 +124,7 @@ async function handleListClick(event) {
         if (!confirm("Excluir está conta?")) return;
         try {
             setLoading(true);
-            await deleteExpenses(id);
+            await service.deleteExpenses(id);
             showMessage("success", "Conta excluída.");
             await refreshExpenses();
         } catch (e) {
@@ -138,7 +138,7 @@ async function handleListClick(event) {
     if (btnEdit) {
         try {
             setLoading(true);
-            const expenses = await getExpensesById(id);
+            const expenses = await service.getExpensesById(id);
             fillFormForEdit(expenses);
         } catch (e) {
             showMessage("error", `Error ao buscar a despesa: ${e.message}`);
@@ -183,7 +183,7 @@ window.addEventListener("click", (event) => {
 });
 
 //Sugestão da categoria
-const categoriesData = await getCategory();
+const categoriesData = await service.getExpenses();
 const categories = categoriesData.map(cat => cat.name);
 
 const input = document.getElementById('category-input');
