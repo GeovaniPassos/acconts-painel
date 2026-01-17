@@ -1,4 +1,4 @@
-export const despesas = [
+export const expenses = [
     {
     id: "1",
     name: "Conta de agua",

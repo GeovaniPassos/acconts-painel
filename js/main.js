@@ -2,9 +2,10 @@ import Service from "./services/service.js";
 import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
 
 let expenseData = [];
-const service = new Service("api");
+const service = new Service("local");
 refreshExpenses();
 
+console.log(service.getCategoryById(2))
 async function refreshExpenses() {
     try {
         setLoading(true);
