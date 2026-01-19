@@ -1,11 +1,16 @@
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm } from "./ui.js";
+
+//botao para limpar localstorege, Remover quando for para produção
+const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
+btnLimparLocalstorege.addEventListener('click', () => {
+    localStorage.clear();
+});
 
 let expenseData = [];
 const service = new Service("local");
 refreshExpenses();
 
-console.log(service.getCategoryById(2))
 async function refreshExpenses() {
     try {
         setLoading(true);
@@ -24,7 +29,6 @@ async function handleSaveExpenses(event) {
     const form = event.target;
      
     const categoryTyped = document.getElementById('category-input').value.trim();
-
     const data = {
        
         name: form.name.value.trim(),
@@ -168,23 +172,25 @@ const modal = document.getElementById("modal");
 
 // Abrir modal
 btnAbrir.addEventListener("click", () => {
-  modal.style.display = "block";
+    modal.style.display = "block";
 });
 
 // Fechar modal
 btnFechar.addEventListener("click", () => {
-  modal.style.display = "none";
+    clearForm();
+    modal.style.display = "none";
 });
 
 // Fechar clicando fora do modal
 window.addEventListener("click", (event) => {
   if (event.target === modal) {
+    clearForm();
     modal.style.display = "none";
   }
 });
 
 //Sugestão da categoria
-const categoriesData = await service.getExpenses();
+const categoriesData = await service.getCategory();
 const categories = categoriesData.map(cat => cat.name);
 
 const input = document.getElementById('category-input');

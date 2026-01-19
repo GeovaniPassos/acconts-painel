@@ -23,7 +23,7 @@ export default class Service {
     }
 
     deleteExpenses(id) {
-        return this.stragegy.deleteExpense(id);
+        return this.stragegy.deleteExpenses(id);
     }
 
     //Categories

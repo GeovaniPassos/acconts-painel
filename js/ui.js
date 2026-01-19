@@ -80,9 +80,8 @@ export function fillFormForEdit(expenses) {
 
 export function clearForm() {
     const form = document.getElementById("expenses-form");
-    form.requestFullscreen();
-    form.dataset.mode = "create";
     form.dataset.id = "";
+    form.reset();
 }
 
 export function showMessage(type, text) {
