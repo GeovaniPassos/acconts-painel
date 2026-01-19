@@ -5,6 +5,7 @@ import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, sh
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
 btnLimparLocalstorege.addEventListener('click', () => {
     localStorage.clear();
+    window.alert('LocalStorege resetado!');
 });
 
 let expenseData = [];

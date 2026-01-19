@@ -29,24 +29,31 @@ export default class LocalStorageService {
     async getExpensesById(id){
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const expense = expenses.find(exp =>  exp.id === id);
+
+        console.log(expense);
+
         if (!expense) return null;
         const category = categories.find(cat => cat.id === expense.category);
+        console.log(category);
             return {
                 ...expense,
                 categoryName: category ? category.name: null,
                 
             };
-        
     }   
-    
 
     async createExpenses(data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
+
+        const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
+
+        console.log(category);
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
         
-        const newExpense = { ... data, id: nextId};
-
+        const newExpense = { ... data, id: nextId, category: category.id};
+        
         expenses.push(newExpense);
         localStorage.setItem("expenses", JSON.stringify(expenses));
 
@@ -55,13 +62,15 @@ export default class LocalStorageService {
 
     async updateExpenses(id, data){
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+        const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
         
         const index = expenses.findIndex(exp => exp.id === id);
         if (index === -1) {
             throw new Error("Categoria não encontrada!");
         }
 
-        expenses[index] = { ...expenses[index], ...data, id};
+        expenses[index] = { ...expenses[index], ...data, id, category};
 
         localStorage.setItem("expenses", JSON.stringify(expenses));
         
@@ -69,7 +78,12 @@ export default class LocalStorageService {
     }
 
     async deleteExpenses(id) {
-        //return this.stragegy.deleteExpense(id);
+        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+        const newExpenseArray = expenses.filter(exp => exp.id !== id);
+
+        localStorage.setItem("expenses", JSON.stringify(newExpenseArray));
+
     }
 
     //Categories
@@ -119,6 +133,9 @@ export default class LocalStorageService {
     async deleteCategory(id) {
         const categories = JSON.parse(localStorage.getItem("categories")) || [];
         
+        const newCategoryArray = categories.filter(cat => cat.id !== id);
+
+        localStorage.setItem("categories", JSON.stringify(newCategoryArray));
 
     }
     
