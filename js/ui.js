@@ -43,6 +43,20 @@ function formatDate(dateStr) {
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
 }
+getTodayDate();
+
+export function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+}
+
+
+    
+    
 
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");

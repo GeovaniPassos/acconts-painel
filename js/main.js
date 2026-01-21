@@ -1,5 +1,5 @@
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate } from "./ui.js";
 
 //botao para limpar localstorege, Remover quando for para produção
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -158,7 +158,6 @@ async function handleListClick(event) {
 export function init() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
-    //document.getElementById("btn-carregar").addEventListener("click", loading);
     
 }
 
@@ -168,12 +167,12 @@ document.addEventListener("DOMContentLoaded", init);
 const btnAbrir = document.getElementById("btn-open-form");
 const btnFechar = document.getElementById("btn-to-close");
 const modal = document.getElementById("modal");
-//const form = document.getElementById("expenses-form");
-//const tabela = document.getElementById("expenses-list");
+const dateInput = document.getElementById("date");
 
 // Abrir modal
 btnAbrir.addEventListener("click", () => {
     modal.style.display = "block";
+    dateInput.value = getTodayDate();
 });
 
 // Fechar modal
@@ -242,6 +241,4 @@ statusBtnForm.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
-    
-    
 });
