@@ -43,20 +43,27 @@ function formatDate(dateStr) {
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
 }
-getTodayDate();
+
+export function getDateParts(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return { year, month, day };
+}
 
 export function getTodayDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const { year, month, day } = getDateParts();
     
     return `${year}-${month}-${day}`;
 }
 
-
-    
-    
+export function getMonthFromTheCurrentPeriod() {
+       return getDateParts().month;
+}
+export function getYearFromTheCurrentPeriod() {
+    return getDateParts().year;
+}
 
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");

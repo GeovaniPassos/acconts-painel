@@ -44,6 +44,14 @@ export default class ApiService {
         return this.request(`/expenses/${id}`, { method: "DELETE" });
     }
 
+    async getExpensesByPeriod(startDate, endDate) {
+        return this.request(`/expenses/by-period?startDate=${startDate}&endDate=${endDate}`, { method: "GET" });
+    }
+
+    async getExpensesByMonth(year, month) {
+        return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" })
+    }
+
     //Metodos para acessar as categorias
     async getCategory() {
         return this.request("/categories", { method: "GET" });

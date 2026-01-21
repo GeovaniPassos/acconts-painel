@@ -1,5 +1,6 @@
+import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod } from "./ui.js";
 
 //botao para limpar localstorege, Remover quando for para produção
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -9,13 +10,23 @@ btnLimparLocalstorege.addEventListener('click', () => {
 });
 
 let expenseData = [];
-const service = new Service("local");
+const varialble = "api";
+const service = new Service(varialble);
+
+const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
+if (varialble === "local") {
+    btnClearLocalStorege.style.display = "visible";
+} else {
+    btnClearLocalStorege.style.display = "none";
+}
 refreshExpenses();
 
 async function refreshExpenses() {
     try {
         setLoading(true);
-        expenseData = await service.getExpenses();
+
+        expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
+        //expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -241,4 +252,35 @@ statusBtnForm.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
+
+    
 });
+
+initFlatpickr();
+
+function initFlatpickr() {
+    const element = document.getElementById("month-filter");
+    
+    if (!element) {
+        console.error("Erro: Elemento #month-filter não encontrado no DOM!");
+        return;
+    }
+
+    flatpickr(element, {
+        locale: "pt",
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: true,
+                dateFormat: "Y-m",
+                altFormat: "F \\de Y"
+            })
+        ],
+        defaultDate: new Date(),
+        onChange: function(selectedDates, dateStr) {
+            currentPeriod = dateStr;
+            refreshExpenses();
+        }
+    });
+    console.log("Flatpickr inicializado com sucesso!");
+}
+
