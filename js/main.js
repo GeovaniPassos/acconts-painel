@@ -1,6 +1,6 @@
 import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem } from "./ui.js";
 
 //botao para limpar localstorege, Remover quando for para produção
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -252,35 +252,32 @@ statusBtnForm.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
-
     
 });
 
 initFlatpickr();
 
 function initFlatpickr() {
-    const element = document.getElementById("month-filter");
-    
-    if (!element) {
-        console.error("Erro: Elemento #month-filter não encontrado no DOM!");
-        return;
-    }
+    const element = document.getElementById("date-range");
 
     flatpickr(element, {
+        mode: "range",
         locale: "pt",
-        plugins: [
-            new monthSelectPlugin({
-                shorthand: true,
-                dateFormat: "Y-m",
-                altFormat: "F \\de Y"
-            })
-        ],
-        defaultDate: new Date(),
-        onChange: function(selectedDates, dateStr) {
-            currentPeriod = dateStr;
-            refreshExpenses();
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d/m/Y",
+        onClose: async function(selectedDates, dateStr) {
+            if (selectedDates.length === 2) {
+                const startDate = selectedDates[0].toISOString().split('T')[0];
+                const endDate = selectedDates[1].toISOString().split('T')[0];
+                
+                console.log("Filtrando de: ", startDate, "até ", endDate);
+                const retorno = await service.getExpensesByPeriod(startDate, endDate);
+                console.log(retorno);
+                renderExpensesList(retorno);
+            }
         }
     });
-    console.log("Flatpickr inicializado com sucesso!");
+
 }
 
