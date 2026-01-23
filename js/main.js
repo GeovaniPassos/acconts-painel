@@ -271,9 +271,7 @@ function initFlatpickr() {
                 const startDate = selectedDates[0].toISOString().split('T')[0];
                 const endDate = selectedDates[1].toISOString().split('T')[0];
                 
-                console.log("Filtrando de: ", startDate, "até ", endDate);
                 const retorno = await service.getExpensesByPeriod(startDate, endDate);
-                console.log(retorno);
                 renderExpensesList(retorno);
             }
         }

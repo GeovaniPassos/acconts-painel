@@ -301,15 +301,15 @@ button {
 
 /* Ajustando o input de filtro */
 #month-filter {
-    padding: 10px 15px;
+    padding: 5px 10px;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: 4px;
     background-color: #fff;
     cursor: pointer;
     font-weight: bold;
     color: #34495e;
     text-align: center;
-    width: 200px;
+    width: 100px;
 }
 
 #month-filter:hover {
@@ -318,7 +318,7 @@ button {
 
 /* Customizando o calendário do Flatpickr para ser mais moderno */
 .flatpickr-monthSelect-month {
-    border-radius: 5px !important;
+    border-radius: 2px !important;
 }
 
 .flatpickr-monthSelect-month.selected {
