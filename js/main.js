@@ -10,7 +10,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 });
 
 let expenseData = [];
-const varialble = "api";
+const varialble = "local";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -249,10 +249,17 @@ statusBtnForm.addEventListener("click", () => {
     toggleStatusVisual(statusBtnForm, !isPaid);
 });
 
+const nameFilter = document.getElementById("name-filter");
+
+nameFilter.addEventListener('input', (event) => {
+    const nameExpense = event.target.value();
+    const expenses = getExpensesByName(nameExpense);
+    renderExpensesList(expenses);
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
-    
 });
 
 initFlatpickr();

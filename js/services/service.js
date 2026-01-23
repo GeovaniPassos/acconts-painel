@@ -34,6 +34,10 @@ export default class Service {
         return this.stragegy.getExpensesByMonth(year, month);
     }
 
+    getExpensesByName(nameExpense) {
+        return this.stragegy.getExpensesByName(nameExpense);
+    }
+
     //Categories
     getCategory() {
         return this.stragegy.getCategory();
