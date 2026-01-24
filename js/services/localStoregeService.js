@@ -157,11 +157,16 @@ export default class LocalStorageService {
         });
     }
 
-    async getExpensesByName(nameExpense) {
+    async getExpensesByName(name) {
         const expenses = await this.getExpenses();
 
+        if (!name || !name.trim()) return expenses;
+
+        const search = name.toLowerCase().trim();
+        
         return expenses.filter(expense => {
-            return expense.name === nameExpense;
+            return expense.name?.toLowerCase().includes(search);
+            //console.log(expense.name.toLowerCase().includes(search))
         });
     }
 }

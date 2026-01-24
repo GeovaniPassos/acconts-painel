@@ -35,12 +35,20 @@
 </section>
   <button id="btn-clear-localstorege" style="background-color: gray;">Reset LocalStorege</button>
   <button id="btn-open-form"> + Adicionar Despesa</button>
+
   <div class="filter-container">
+    <div class="filter-group">
+      <label for="date-range">Filtrar Período</label>
+      <input type="text" id="date-range" readonly placeholder="Selecione o mês">
+    </div>
+    <div class="filter-group">
+      <label for="name-filter">Filtrar por nome</label>
+      <input type="text" id="searchName" placeholder="Pesquise pelo nome">
+    </div>
+    <div class="filter-group button-group">
+      <button id="btn-searchName">Buscar</button>
+    </div>
     
-    <label for="date-range">Filtrar Período:</label>
-    <input type="text" id="date-range" readonly placeholder="Selecione o mês">
-    <label for="name-filter">Filtrar por nome:</label>
-    <input type="text" id="name-filter" placeholder="Pesquise a despesa">
   </div>
   <!-- Modal formulario novo-->
   <div id="modal" class="modal">

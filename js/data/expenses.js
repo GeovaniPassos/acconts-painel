@@ -1,7 +1,7 @@
 export const expenses = [
     {
     id: 1,
-    name: "Conta de agua",
+    name: "Agua",
     description: "",
     category: 1,
     payment: false,
@@ -10,7 +10,7 @@ export const expenses = [
     },
     {
     id: 2,
-    name: "Conta de luz",
+    name: "Luz",
     description: "",
     category: 1,
     payment: false,

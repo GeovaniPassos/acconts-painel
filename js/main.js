@@ -249,13 +249,24 @@ statusBtnForm.addEventListener("click", () => {
     toggleStatusVisual(statusBtnForm, !isPaid);
 });
 
-const nameFilter = document.getElementById("name-filter");
+const searchName = document.getElementById("searchName");
+const btnsearchName = document.getElementById("btn-searchName");
 
-nameFilter.addEventListener('input', (event) => {
-    const nameExpense = event.target.value();
-    const expenses = getExpensesByName(nameExpense);
-    renderExpensesList(expenses);
+btnsearchName.addEventListener('click', async () => {
+    const name = searchName.value;
+    const expense = await service.getExpensesByName(name);
+    console.log(expense);
+    renderExpensesList(expense);
+    updateSummary(expense)
 });
+
+//Aceitar o input com a tecla enter
+document.getElementById("searchName")
+    .addEventListener('keydown', function(UIEvent) {
+        if (UIEvent.key == 'Enter') {
+            document.getElementById("btn-searchName").click();
+        }
+    });
 
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
