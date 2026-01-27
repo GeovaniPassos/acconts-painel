@@ -166,7 +166,6 @@ export default class LocalStorageService {
         
         return expenses.filter(expense => {
             return expense.name?.toLowerCase().includes(search);
-            //console.log(expense.name.toLowerCase().includes(search))
         });
     }
 }

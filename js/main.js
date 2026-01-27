@@ -10,7 +10,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 });
 
 let expenseData = [];
-const varialble = "local";
+const varialble = "api";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -26,7 +26,6 @@ async function refreshExpenses() {
         setLoading(true);
 
         expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
-        //expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -255,7 +254,6 @@ const btnsearchName = document.getElementById("btn-searchName");
 btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
     const expense = await service.getExpensesByName(name);
-    console.log(expense);
     renderExpensesList(expense);
     updateSummary(expense)
 });
