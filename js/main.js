@@ -1,5 +1,6 @@
+import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem } from "./ui.js";
 
 //botao para limpar localstorege, Remover quando for para produção
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -9,13 +10,23 @@ btnLimparLocalstorege.addEventListener('click', () => {
 });
 
 let expenseData = [];
-const service = new Service("local");
+const varialble = "local";
+const service = new Service(varialble);
+
+const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
+if (varialble === "local") {
+    btnClearLocalStorege.style.display = "visible";
+} else {
+    btnClearLocalStorege.style.display = "none";
+}
 refreshExpenses();
 
 async function refreshExpenses() {
     try {
         setLoading(true);
-        expenseData = await service.getExpenses();
+
+        expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
+        //expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -158,7 +169,6 @@ async function handleListClick(event) {
 export function init() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
-    //document.getElementById("btn-carregar").addEventListener("click", loading);
     
 }
 
@@ -168,12 +178,12 @@ document.addEventListener("DOMContentLoaded", init);
 const btnAbrir = document.getElementById("btn-open-form");
 const btnFechar = document.getElementById("btn-to-close");
 const modal = document.getElementById("modal");
-//const form = document.getElementById("expenses-form");
-//const tabela = document.getElementById("expenses-list");
+const dateInput = document.getElementById("date");
 
 // Abrir modal
 btnAbrir.addEventListener("click", () => {
     modal.style.display = "block";
+    dateInput.value = getTodayDate();
 });
 
 // Fechar modal
@@ -239,9 +249,51 @@ statusBtnForm.addEventListener("click", () => {
     toggleStatusVisual(statusBtnForm, !isPaid);
 });
 
+const searchName = document.getElementById("searchName");
+const btnsearchName = document.getElementById("btn-searchName");
+
+btnsearchName.addEventListener('click', async () => {
+    const name = searchName.value;
+    const expense = await service.getExpensesByName(name);
+    console.log(expense);
+    renderExpensesList(expense);
+    updateSummary(expense)
+});
+
+//Aceitar o input com a tecla enter
+document.getElementById("searchName")
+    .addEventListener('keydown', function(UIEvent) {
+        if (UIEvent.key == 'Enter') {
+            document.getElementById("btn-searchName").click();
+        }
+    });
+
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
-    
-    
 });
+
+initFlatpickr();
+
+function initFlatpickr() {
+    const element = document.getElementById("date-range");
+
+    flatpickr(element, {
+        mode: "range",
+        locale: "pt",
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d/m/Y",
+        onClose: async function(selectedDates, dateStr) {
+            if (selectedDates.length === 2) {
+                const startDate = selectedDates[0].toISOString().split('T')[0];
+                const endDate = selectedDates[1].toISOString().split('T')[0];
+                
+                const retorno = await service.getExpensesByPeriod(startDate, endDate);
+                renderExpensesList(retorno);
+            }
+        }
+    });
+
+}
+
