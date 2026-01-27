@@ -1,5 +1,3 @@
-import { deleteExpenses } from "./api.js";
-
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
@@ -46,6 +44,27 @@ function formatDate(dateStr) {
     return `${day}/${month}/${year}`;
 }
 
+export function getDateParts(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return { year, month, day };
+}
+
+export function getTodayDate() {
+    const { year, month, day } = getDateParts();
+    
+    return `${year}-${month}-${day}`;
+}
+
+export function getMonthFromTheCurrentPeriod() {
+       return getDateParts().month;
+}
+export function getYearFromTheCurrentPeriod() {
+    return getDateParts().year;
+}
+
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
     const modal = document.getElementById("modal");
@@ -82,9 +101,8 @@ export function fillFormForEdit(expenses) {
 
 export function clearForm() {
     const form = document.getElementById("expenses-form");
-    form.requestFullscreen();
-    form.dataset.mode = "create";
     form.dataset.id = "";
+    form.reset();
 }
 
 export function showMessage(type, text) {

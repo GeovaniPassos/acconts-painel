@@ -3,6 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <title>Sistema de Controle de Contas</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
@@ -25,13 +33,28 @@
         <p id="total-pendente">R$ 0,00</p>
     </div>
 </section>
+  <button id="btn-clear-localstorege" style="background-color: gray;">Reset LocalStorege</button>
+  <button id="btn-open-form"> + Adicionar Despesa</button>
 
-  <button id="btn-open-form">Adicionar Despesa</button>
+  <div class="filter-container">
+    <div class="filter-group">
+      <label for="date-range">Filtrar Período</label>
+      <input type="text" id="date-range" readonly placeholder="Selecione o mês">
+    </div>
+    <div class="filter-group">
+      <label for="name-filter">Filtrar por nome</label>
+      <input type="text" id="searchName" placeholder="Pesquise pelo nome">
+    </div>
+    <div class="filter-group button-group">
+      <button id="btn-searchName">Buscar</button>
+    </div>
+    
+  </div>
   <!-- Modal formulario novo-->
   <div id="modal" class="modal">
     <div class="modal-content">  
       <span id="btn-to-close" class="close">&times;</span>
-      <h2>Nova Despesa</h2>
+      <h2 class="modal-title">Nova Despesa</h2>
         <div class="form">
           <form id="expenses-form">
             
@@ -59,7 +82,7 @@
             <button type="button" class="badge status-pending" id="status" data-paid="false">Pendente</button>
             </br>
             <label for="date">Data Venc:</label>
-            <input class="input-date" type="date" id="date" name="date" >
+            <input class="input-date" type="date" id="date" name="date" required>
             </br>
             <button class="button-form" type="submit">Salvar</button>
           </form>
