@@ -39,7 +39,7 @@ export function renderExpensesItem(expense) {
     return li;
 }
 
-function formatDate(dateStr) {
+export function formatDate(dateStr) {
     if (!dateStr) return "-";
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
@@ -77,6 +77,11 @@ export function fillFormForEdit(expenses) {
     form.name.value = expenses.name;
     form.value.value = expenses.value;
     form.description.value = expenses.description || "";
+    
+    if (expenses.paymentDate) {
+        form.paymentDate.value = formatDate(expenses.paymentDate);
+    }
+    
 
     if (expenses.date) {
         form.date.value = expenses.date.split("T")[0];
@@ -89,6 +94,8 @@ export function fillFormForEdit(expenses) {
     const statusBtn = document.getElementById("status");
     const isPaid = expenses.payment === true || expenses.payment === "true";
     toggleStatusVisual(document.getElementById("status"), isPaid);
+    //const paymentDate = document.querySelector(".expense-payment-date");
+
 
     statusBtn.dataset.paid = isPaid;
     statusBtn.textContent = isPaid ? "Pago" : "Pendente";

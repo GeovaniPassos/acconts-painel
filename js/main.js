@@ -1,6 +1,6 @@
 import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate } from "./ui.js";
 
 //botao para limpar localstorege, Remover quando for para produção
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -39,7 +39,9 @@ async function refreshExpenses() {
 async function handleSaveExpenses(event) {
     event.preventDefault();
     const form = event.target;
-     
+    
+    console.log(form)
+
     const categoryTyped = document.getElementById('category-input').value.trim();
     const data = {
        
@@ -48,6 +50,7 @@ async function handleSaveExpenses(event) {
         categoryName: categoryTyped,
         value: Number(form.value.value),
         payment: form.status.dataset.paid === "true",
+        paymentDate: form.paymentDate.value,
         date: form.date.value
     };
     
@@ -113,7 +116,6 @@ async function handleListClickPayment(event) {
     const id = Number(li.dataset.id);
     
     const element = document.querySelector(`.expense-paymentDate-${id}`);
-    console.log(element);
 
     const badge = event.target.closest(".badge");
     if(badge) {
@@ -123,13 +125,11 @@ async function handleListClickPayment(event) {
                 const expense = await service.togglePayment(id);
                 
                 toggleStatusVisual(badge, expense.payment);
-                
                 if (expense.payment) {
-                    element.innerHTML = `${expense.paymentDate}`
+                    element.innerHTML = `${formatDate(expense.paymentDate)}`
                 } else {
                     element.innerHTML = `-`
                 }
-                
 
                 updateSummary(expenseData);
                 
@@ -260,7 +260,6 @@ const btnsearchName = document.getElementById("btn-searchName");
 btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
     const expense = await service.getExpensesByName(name);
-    console.log(expense);
     renderExpensesList(expense);
     updateSummary(expense)
 });

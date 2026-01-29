@@ -247,6 +247,11 @@ button {
   outline: none;
 }
 
+.expense-payment-date {
+  width: 130px;
+  margin-left: 0px;
+}
+
 .badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -281,6 +286,10 @@ button {
     background-color: #e74c3c !important;
     color: white !important;
     border: none;
+}
+
+.btn-form-status {
+  margin: 0px;
 }
 
 .info-group.status {
@@ -378,3 +387,4 @@ button {
     width: 40%;
   }
 }
+
