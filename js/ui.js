@@ -27,6 +27,7 @@ export function renderExpensesItem(expense) {
 
         <div class="info-group status">
             <span class="badge ${statusClass}">${statusText}</span>
+            <span class="expense-date expense-paymentDate-${expense.id}">${formatDate(expense.paymentDate)}</span>
         </div>
 
         <div class="actions">
@@ -123,7 +124,6 @@ export function setLoading(isLoading) {
 // Botão de alterar o status do pagamento
 export function toggleStatusVisual(element, isPaid) {
     if (!element) return;
-
     element.dataset.paid = isPaid;
     
     element.textContent = isPaid ? "Pago" : "Pendente";

@@ -10,7 +10,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 });
 
 let expenseData = [];
-const varialble = "local";
+const varialble = "api";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -107,25 +107,30 @@ async function handleSaveExpenses(event) {
     
 }
 
-async function handleListClick(event) {
+async function handleListClickPayment(event) {
     const li = event.target.closest("li");
     if (!li) return;
     const id = Number(li.dataset.id);
     
+    const element = document.querySelector(`.expense-paymentDate-${id}`);
+    console.log(element);
+
     const badge = event.target.closest(".badge");
     if(badge) {
         const expense = expenseData.find(e => e.id === id);
         if (expense) {
             try {
-                const currentStatus = (expense.payment === true || expense.payment === "true");
-                const newStatus = !currentStatus;
-
-                await service.updateExpenses(id, { ...expense, payment: newStatus });
+                const expense = await service.togglePayment(id);
                 
-                expense.payment = newStatus;
-
-                toggleStatusVisual(badge, newStatus);
+                toggleStatusVisual(badge, expense.payment);
                 
+                if (expense.payment) {
+                    element.innerHTML = `${expense.paymentDate}`
+                } else {
+                    element.innerHTML = `-`
+                }
+                
+
                 updateSummary(expenseData);
                 
                 showMessage("success", "Status atualizado!");
@@ -168,7 +173,7 @@ async function handleListClick(event) {
 
 export function init() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
-    document.getElementById("expenses-list").addEventListener("click", handleListClick);
+    document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
     
 }
 
@@ -270,7 +275,7 @@ document.getElementById("searchName")
 
 document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
-    document.getElementById("expenses-list").addEventListener("click", handleListClick);
+    document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 });
 
 initFlatpickr();

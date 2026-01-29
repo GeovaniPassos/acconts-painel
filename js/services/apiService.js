@@ -49,7 +49,11 @@ export default class ApiService {
     }
 
     async getExpensesByMonth(year, month) {
-        return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" })
+        return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
+    }
+
+    async togglePayment(id) {
+        return this.request(`/expenses/${id}/toggle-payment`, { method: "PATCH" });
     }
 
     //Metodos para acessar as categorias

@@ -192,9 +192,7 @@ button {
 
 }
 
-
 /*Select com valores totais das despesas*/
-
 .summary-cards {
     display: flex;
     gap: 15px;
@@ -260,6 +258,8 @@ button {
     /*transition: transform 0.1s ease;*/
     user-select: none;
     transition: filter 0.2s;
+
+    margin: 20px;
 }
 
 .badge:hover {
@@ -271,7 +271,6 @@ button {
 }
 
 .status-paid {
-
     background-color: #27ae60 !important;
     color: white !important;
     border: none;
@@ -282,6 +281,11 @@ button {
     background-color: #e74c3c !important;
     color: white !important;
     border: none;
+}
+
+.info-group.status {
+  display: block;
+  text-align: justify;
 }
 
 /* Ajustando o input de filtro */

@@ -38,6 +38,10 @@ export default class Service {
         return this.stragegy.getExpensesByName(nameExpense);
     }
 
+    togglePayment(id) {
+        return this.stragegy.togglePayment(id);
+    }
+
     //Categories
     getCategory() {
         return this.stragegy.getCategory();
