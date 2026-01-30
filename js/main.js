@@ -10,7 +10,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 });
 
 let expenseData = [];
-const varialble = "api";
+const varialble = "local";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");

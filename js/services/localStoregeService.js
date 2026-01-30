@@ -82,6 +82,21 @@ export default class LocalStorageService {
 
     }
 
+    async togglePayment(id) {
+        const expenses = JSON.parse(localStorage.getItem("expenses"));
+        
+        const index = expenses.findIndex(exp => exp.id === Number(id));
+        if (index === -1) {
+            throw new Error("Despesa não encontrada!");
+        }
+        const payment = index;
+        console.log(payment);
+
+        expenses[index] = { ...expenses[index], ...data, id, category};
+
+
+    }
+
     //Categories
     async getCategory() {
         const categories = JSON.parse(localStorage.getItem("categories")) || [];
