@@ -281,7 +281,7 @@ document.getElementById("searchName")
 
     document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
-    document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
+    //document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 });
 
 initFlatpickr();

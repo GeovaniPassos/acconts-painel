@@ -57,7 +57,7 @@ export function getDateParts(date = new Date()) {
     return { year, month, day };
 }
 
-//Função para pegar a data formatarada ?? (novamente?)
+//Função para pegar formatar a data igual vem da API
 export function getTodayDate() {
     const { year, month, day } = getDateParts();
     
@@ -140,7 +140,7 @@ export function setLoading(isLoading) {
     loader.style.display = isLoading ? "block" : "none";
 }
 
-// Botão de alterar o status do pagamento
+// Botão de alterar o status do pagamento visualmente
 export function toggleStatusVisual(element, isPaid) {
     if (!element) return;
     element.dataset.paid = isPaid;

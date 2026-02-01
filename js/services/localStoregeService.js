@@ -1,5 +1,6 @@
 import { categories } from "../data/category.js";
 import { expenses } from "../data/expenses.js";
+import { getTodayDate } from "../ui.js";
 
 export default class LocalStorageService {
     constructor() {
@@ -84,16 +85,18 @@ export default class LocalStorageService {
 
     async togglePayment(id) {
         const expenses = JSON.parse(localStorage.getItem("expenses"));
-        
+
         const index = expenses.findIndex(exp => exp.id === Number(id));
+        
         if (index === -1) {
             throw new Error("Despesa não encontrada!");
         }
-        const payment = index;
-        console.log(payment);
 
-        expenses[index] = { ...expenses[index], ...data, id, category};
+        expenses[index] = { ...expenses[index], payment: !expenses[index].payment, datePayment: getTodayDate()};
 
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        console.log(expenses[index])
+        return expenses[index];
     }
 
     async getExpensesByPeriod(startDate, endDate) {
