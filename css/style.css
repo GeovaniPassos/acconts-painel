@@ -34,8 +34,6 @@ button {
   cursor: pointer;
 }
 
-
-
 /* Estilo do modal */
 .modal {
   display: none; /* escondido por padrão */
@@ -61,6 +59,10 @@ button {
   justify-content: center;
   align-items: center;
   margin-bottom: 30px;
+}
+
+#messages {
+  height: 20px;
 }
 
 #expenses-form {
@@ -143,6 +145,10 @@ button {
     transform: scale(0.95); /* Efeito de clique (afunda levemente) */
 }
 
+.expense-payment-date {
+  width: 135px;
+}
+
 /* Ajustes para Celular (Responsividade) */
 @media (max-width: 600px) {
     .expense-item {
@@ -164,8 +170,8 @@ button {
 .inline-autocomplete {
     position: relative;
     display: flex;
-    top: 15px;
-    left: 15px;
+    top: 18px;
+    justify-content: end;
   }
 
 
@@ -173,6 +179,7 @@ button {
     background: transparent; /* Permite ver o ghost-text atrás */
     position: relative;
     color: #000000;
+    margin-left: 20px;
 }
 
 .ghost-text {
@@ -184,11 +191,9 @@ button {
     height: 22.5px;
     width: 194.5px;
     text-align: start;
-    left: 75px;
+    left: 96px;
     padding: 8px;
-    margin: 5px;
-    
-    top: 3px;
+    top: 8px;
 
 }
 
@@ -247,8 +252,7 @@ button {
   outline: none;
 }
 
-.expense-payment-date {
-  width: 130px;
+.payment-date {
   margin-left: 0px;
 }
 
@@ -279,13 +283,16 @@ button {
     background-color: #27ae60 !important;
     color: white !important;
     border: none;
+    margin-left: 0px;
+    margin-right: 30px;
 }
 
 .status-pending {
-    
     background-color: #e74c3c !important;
     color: white !important;
     border: none;
+    margin-left: 0px;
+    margin-right: 40px;
 }
 
 .btn-form-status {

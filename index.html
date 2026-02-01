@@ -16,8 +16,7 @@
 <body>
   <h1>Sistema de Controle de Contas</h1>
 
-  <div id="messages"></div>
-  <div id="loader" style="display:none;">Carregando...</div>
+  
 
   <section id="summary-container" class="summary-cards">
     <div class="card total">
@@ -33,6 +32,7 @@
         <p id="total-pendente">R$ 0,00</p>
     </div>
 </section>
+  
   <button id="btn-clear-localstorege" style="background-color: gray;">Reset LocalStorege</button>
   <button id="btn-open-form"> + Adicionar Despesa</button>
 
@@ -50,6 +50,8 @@
     </div>
     
   </div>
+  <div id="messages"></div>
+  <div id="loader">Carregando...</div>
   <!-- Modal formulario novo-->
   <div id="modal" class="modal">
     <div class="modal-content">  
@@ -72,7 +74,7 @@
             <label for="name">Nome:</label>
             <input type="text" id="name" name="name" required>
             </br>
-            <label for="name">Descrição:</label>
+            <label for="description">Descrição:</label>
             <input type="text" id="description" name="description">
             </br>
             <label for="value">Valor:</label>

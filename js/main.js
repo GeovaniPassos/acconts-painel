@@ -53,11 +53,11 @@ async function handleSaveExpenses(event) {
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
-        payment: form.status.dataset.paid === "true",
-        paymentDate: form.paymentDate.value,
+        payment: form.status.dataset,
+        paymentDate: form.paymentDate.dataset,
         date: form.date.value
     };
-    
+    console.log(data);
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
@@ -120,7 +120,7 @@ async function handleListClickPayment(event) {
     if (!li) return;
     const id = Number(li.dataset.id);
     
-    const element = document.querySelector(`.expense-paymentDate-${id}`);
+    const element = document.querySelector(`.expense-payment-date-${id}`);
 
     const badge = event.target.closest(".badge");
     if(badge) {
@@ -296,7 +296,7 @@ function initFlatpickr() {
         dateFormat: "Y-m-d",
         altInput: true,
         altFormat: "d/m/Y",
-        onClose: async function(selectedDates, dateStr) {
+        onClose: async function(selectedDates) {
             if (selectedDates.length === 2) {
                 const startDate = selectedDates[0].toISOString().split('T')[0];
                 const endDate = selectedDates[1].toISOString().split('T')[0];

@@ -46,6 +46,10 @@ export default class LocalStorageService {
         const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
+
+        if (data.payment) {
+            paymentDate: getTodayDate();
+        }
         
         const newExpense = { ... data, id: nextId, category: category.id};
         
@@ -92,10 +96,9 @@ export default class LocalStorageService {
             throw new Error("Despesa não encontrada!");
         }
 
-        expenses[index] = { ...expenses[index], payment: !expenses[index].payment, datePayment: getTodayDate()};
+        expenses[index] = { ...expenses[index], payment: !expenses[index].payment, paymentDate: getTodayDate()};
 
         localStorage.setItem("expenses", JSON.stringify(expenses));
-        console.log(expenses[index])
         return expenses[index];
     }
 

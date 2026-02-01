@@ -23,13 +23,15 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group finance">
-            <span class="expense-value">R$ ${Number(expense.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
+                    'pt-BR', { minimumFractionDigits: 2 })}</span>
             <span class="expense-date">${formatDate(expense.date)}</span>
         </div>
 
         <div class="info-group status">
             <span class="badge ${statusClass}">${statusText}</span>
-            <span class="expense-date expense-paymentDate-${expense.id}">${formatDate(expense.paymentDate)}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">
+                ${formatDate(expense.paymentDate)}</span>
         </div>
 
         <div class="actions">
@@ -41,7 +43,7 @@ export function renderExpensesItem(expense) {
     return li;
 }
 
-//Função para formatar uma data
+//Função para formatar datas
 export function formatDate(dateStr) {
     if (!dateStr) return "-";
     const [year, month, day] = dateStr.split("-");
@@ -103,7 +105,7 @@ export function fillFormForEdit(expenses) {
     const statusBtn = document.getElementById("status");
     const isPaid = expenses.payment === true || expenses.payment === "true";
     toggleStatusVisual(document.getElementById("status"), isPaid);
-    //const paymentDate = document.querySelector(".expense-payment-date");
+    const paymentDate = document.querySelector(`.expense-payment-date-${id}`);
 
 
     statusBtn.dataset.paid = isPaid;

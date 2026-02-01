@@ -6,7 +6,7 @@ export const expenses = [
     category: 1,
     payment: false,
     value: 100.34,
-    datePayment: "",
+    paymentDate: "",
     date: "2026-02-18"
     },
     {
@@ -16,7 +16,7 @@ export const expenses = [
     category: 1,
     payment: false,
     value: 158.34,
-    datePayment: "2026-02-18",
+    paymentDate: "",
     date: "2026-02-18"
     },
     {
@@ -26,7 +26,7 @@ export const expenses = [
     category: 3,
     payment: true,
     value: 253.21,
-    datePayment: "2026-02-18",
+    paymentDate: "2026-02-18",
     date: "2026-02-18"
     },
     {
@@ -36,7 +36,7 @@ export const expenses = [
     category: 2,
     payment: true,
     value: 78.71,
-    datePayment: "2026-02-18",
+    paymentDate: "2026-02-18",
     date: "2026-02-18"
     }
 ];
