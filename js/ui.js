@@ -1,9 +1,11 @@
+// Função para renderizar a lista de despesas
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
     expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
 }
 
+//Função para renderizar a lista de despesas
 export function renderExpensesItem(expense) {
     const li = document.createElement("li");
     li.dataset.id = expense.id;
@@ -39,12 +41,14 @@ export function renderExpensesItem(expense) {
     return li;
 }
 
+//Função para formatar uma data
 export function formatDate(dateStr) {
     if (!dateStr) return "-";
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
 }
 
+//Função para retornar a data em partes
 export function getDateParts(date = new Date()) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -53,19 +57,24 @@ export function getDateParts(date = new Date()) {
     return { year, month, day };
 }
 
+//Função para pegar a data formatarada ?? (novamente?)
 export function getTodayDate() {
     const { year, month, day } = getDateParts();
     
     return `${year}-${month}-${day}`;
 }
 
+// Função para pegar o mes atual
 export function getMonthFromTheCurrentPeriod() {
        return getDateParts().month;
 }
+
+// Função para pegar o ano atual 
 export function getYearFromTheCurrentPeriod() {
     return getDateParts().year;
 }
 
+// Função para preencher o formulário para edição
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
     const modal = document.getElementById("modal");
@@ -107,12 +116,14 @@ export function fillFormForEdit(expenses) {
     modal.style.display = "block";
 }
 
+//  Função para limpar o formulário
 export function clearForm() {
     const form = document.getElementById("expenses-form");
     form.dataset.id = "";
     form.reset();
 }
 
+// Função para mostrar as mensagens de retorno
 export function showMessage(type, text) {
     const box = document.getElementById("messages");
     box.textContent = text;
@@ -123,6 +134,7 @@ export function showMessage(type, text) {
     }, 3000);
 }
 
+// Função para definir o carregamento da pagina e realizar o bloqueio dá mesma
 export function setLoading(isLoading) {
     const loader = document.getElementById("loader");
     loader.style.display = isLoading ? "block" : "none";
@@ -145,6 +157,7 @@ export function toggleStatusVisual(element, isPaid) {
     }
 }
 
+//  Função para atualizar a resumo dos valores das despesas
 export function updateSummary(expenses) {
     // Calculando os valores usando reduce
     const totals = expenses.reduce((acc, expense) => {
@@ -167,7 +180,7 @@ export function updateSummary(expenses) {
     document.getElementById('total-pendente').textContent = formatCurrency(totals.pending);
 }
 
-// Função auxiliar de formatação
+// Função auxiliar de formatação monetária
 function formatCurrency(value) {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }

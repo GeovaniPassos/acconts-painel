@@ -94,7 +94,40 @@ export default class LocalStorageService {
 
         expenses[index] = { ...expenses[index], ...data, id, category};
 
+    }
 
+    async getExpensesByPeriod(startDate, endDate) {
+        const expenses = await this.getExpenses();
+
+        return expenses.filter(expense => {
+            if (!expense.date) return false;
+
+            return expense.date >= startDate &&
+                expense.date <= endDate;
+        });
+    }
+
+    async getExpensesByMonth(year, month) {
+        const expenses = await this.getExpenses();
+
+        const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
+
+        return expenses.filter(expense => {
+            return expense.date.substring(0, 7) === yearMonth;
+        });
+    }
+
+    async getExpensesByName(name) {
+        const expenses = await this.getExpenses();
+
+        if (!name || !name.trim()) return expenses;
+
+        const search = name.toLowerCase().trim();
+        
+        return expenses.filter(expense => {
+            return expense.name?.toLowerCase().includes(search);
+            //console.log(expense.name.toLowerCase().includes(search))
+        });
     }
 
     //Categories
@@ -151,37 +184,5 @@ export default class LocalStorageService {
 
     }
 
-    async getExpensesByPeriod(startDate, endDate) {
-        const expenses = await this.getExpenses();
-
-        return expenses.filter(expense => {
-            if (!expense.date) return false;
-
-            return expense.date >= startDate &&
-                expense.date <= endDate;
-        });
-    }
-
-    async getExpensesByMonth(year, month) {
-        const expenses = await this.getExpenses();
-
-        const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
-
-        return expenses.filter(expense => {
-            return expense.date.substring(0, 7) === yearMonth;
-        });
-    }
-
-    async getExpensesByName(name) {
-        const expenses = await this.getExpenses();
-
-        if (!name || !name.trim()) return expenses;
-
-        const search = name.toLowerCase().trim();
-        
-        return expenses.filter(expense => {
-            return expense.name?.toLowerCase().includes(search);
-            //console.log(expense.name.toLowerCase().includes(search))
-        });
-    }
+    
 }
