@@ -29,7 +29,6 @@ async function refreshExpenses() {
         setLoading(true);
 
         expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
-        //expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -43,21 +42,22 @@ async function refreshExpenses() {
 async function handleSaveExpenses(event) {
     event.preventDefault();
     const form = event.target;
-    
-    console.log(form)
-
     const categoryTyped = document.getElementById('category-input').value.trim();
+    const paymentForm = form.dataset.status;
+    console.log(paymentForm);
+    let paymentDateForm = paymentForm ? 
+            paymentDateForm = getTodayDate() : paymentDateForm = "";
+
     const data = {
        
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
-        payment: form.status.dataset,
-        paymentDate: form.paymentDate.dataset,
+        payment: paymentForm,
+        paymentDate: paymentDateForm,
         date: form.date.value
     };
-    console.log(data);
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
@@ -100,7 +100,7 @@ async function handleSaveExpenses(event) {
 
         //Reset do botão de status
         const statusBtn = document.getElementById("status");
-        statusBtn.dataset.pago = "false";
+        statusBtn.dataset.paid = "false";
         statusBtn.textContent = "Pendente";
         
         // fecha o modal e atualiza a lista de despesas
