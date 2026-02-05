@@ -41,23 +41,34 @@ async function refreshExpenses() {
 // Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
     event.preventDefault();
+    debugger
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();
-    const paymentForm = form.dataset.status;
-    console.log(paymentForm);
-    let paymentDateForm = paymentForm ? 
-            paymentDateForm = getTodayDate() : paymentDateForm = "";
+    const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
+
+    let paymentDateForm;
+
+    btnFormStatus.addEventListener('click', () => {
+        toggleStatusVisual();
+        paymentDateForm
+    });
+
+    if(paymentForm) { 
+        document.querySelector(".expense-payment-date").value = paymentDateForm;
+    }
 
     const data = {
-       
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
+
         payment: paymentForm,
         paymentDate: paymentDateForm,
         date: form.date.value
     };
+    if (paymentDateForm) document.querySelector(".expense-payment-date").innerHTML = paymentDateForm;
+
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
@@ -99,9 +110,9 @@ async function handleSaveExpenses(event) {
         document.getElementById('ghost-text').textContent = "";
 
         //Reset do botão de status
-        const statusBtn = document.getElementById("status");
-        statusBtn.dataset.paid = "false";
-        statusBtn.textContent = "Pendente";
+        const status = document.getElementById("btn-form-status");
+        status.dataset.paid = "false";
+        status.textContent = "Pendente";
         
         // fecha o modal e atualiza a lista de despesas
         modal.style.display = "none";
@@ -252,12 +263,24 @@ input.addEventListener('keydown', (e) => {
     }
 });
 
-const statusBtnForm = document.getElementById("status");
+const btnTableStatus = document.querySelectorAll(".btn-table-status");
 
 // Evento para alterar status do botão de pagamento
-statusBtnForm.addEventListener("click", () => {
-    const isPaid = statusBtnForm.dataset.paid === "true";
-    toggleStatusVisual(statusBtnForm, !isPaid);
+btnTableStatus.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const isPaid = btn.dataset.paid === "true";
+        toggleStatusVisual(btn, !isPaid);
+    });
+});
+
+const statusbtnForm = document.querySelector(".btn-form-status");
+const paymentDateForm = document.querySelector(".expense-payment-date");
+// Evento para alterar o status dentro do formulário
+statusbtnForm.addEventListener("click", () => {
+    const isPaid = statusbtnForm.dataset.paid === "true";
+    toggleStatusVisual(statusbtnForm, !isPaid);
+    
+    paymentDateForm.value = isPaid ? "" : formatDate(getTodayDate());
 });
 
 const searchName = document.getElementById("searchName");

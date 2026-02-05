@@ -29,7 +29,7 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group status">
-            <span class="badge ${statusClass}">${statusText}</span>
+            <span class="badge btn-table-status ${statusClass}">${statusText}</span>
             <span class="expense-date payment-date expense-payment-date-${expense.id}">
                 ${formatDate(expense.paymentDate)}</span>
         </div>
@@ -102,9 +102,9 @@ export function fillFormForEdit(expenses) {
     categoryInput.value = expenses.categoryName;
     document.getElementById('ghost-text').textContent = "";
 
-    const statusBtn = document.getElementById("status");
+    const statusBtn = document.getElementById("btn-form-status");
     const isPaid = expenses.payment === true || expenses.payment === "true";
-    toggleStatusVisual(document.getElementById("status"), isPaid);
+    toggleStatusVisual(statusBtn, isPaid);
     const paymentDate = document.querySelector(`.expense-payment-date-${id}`);
 
 
