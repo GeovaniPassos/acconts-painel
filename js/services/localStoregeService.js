@@ -40,15 +40,16 @@ export default class LocalStorageService {
     }   
 
     async createExpenses(data) {
+        console.log(data);
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
         const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
-
-        if (data.payment) {
-            paymentDate: getTodayDate();
+        debugger
+        if (data.payment === "true" && data.paymentDate == "") {
+            data.paymentDate = getTodayDate();
         }
         
         const newExpense = { ... data, id: nextId, category: category.id};
@@ -69,6 +70,12 @@ export default class LocalStorageService {
         if (index === -1) {
             throw new Error("Categoria não encontrada!");
         }
+        
+        // Adiciona data atual se pagamento for true e data estiver vazia
+        if (data.payment === "true" && data.paymentDate == "") {
+            data.paymentDate = getTodayDate();
+        }
+        
         category = Number(category.id);
         id = Number(id);
         expenses[index] = { ...expenses[index], ...data, id, category};
@@ -96,7 +103,12 @@ export default class LocalStorageService {
             throw new Error("Despesa não encontrada!");
         }
 
-        expenses[index] = { ...expenses[index], payment: !expenses[index].payment, paymentDate: getTodayDate()};
+        const newPayment = !expenses[index].payment;
+        expenses[index] = { 
+            ...expenses[index], 
+            payment: newPayment, 
+            paymentDate: newPayment ? getTodayDate() : ""
+        };
 
         localStorage.setItem("expenses", JSON.stringify(expenses));
         return expenses[index];
@@ -189,6 +201,4 @@ export default class LocalStorageService {
         localStorage.setItem("categories", JSON.stringify(newCategoryArray));
 
     }
-
-    
 }

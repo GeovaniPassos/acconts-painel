@@ -1,6 +1,6 @@
 import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, formatDateApi } from "./ui.js";
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -41,33 +41,21 @@ async function refreshExpenses() {
 // Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
     event.preventDefault();
-    debugger
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
-
-    let paymentDateForm;
-
-    btnFormStatus.addEventListener('click', () => {
-        toggleStatusVisual();
-        paymentDateForm
-    });
-
-    if(paymentForm) { 
-        document.querySelector(".expense-payment-date").value = paymentDateForm;
-    }
+    let paymentDate = document.querySelector(".expense-payment-date").value;
+    paymentDate = paymentForm == "true" ? formatDateApi(paymentDate) : "";
 
     const data = {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
-
         payment: paymentForm,
-        paymentDate: paymentDateForm,
+        paymentDate: paymentDate,
         date: form.date.value
     };
-    if (paymentDateForm) document.querySelector(".expense-payment-date").innerHTML = paymentDateForm;
 
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
@@ -110,9 +98,10 @@ async function handleSaveExpenses(event) {
         document.getElementById('ghost-text').textContent = "";
 
         //Reset do botão de status
-        const status = document.getElementById("btn-form-status");
-        status.dataset.paid = "false";
-        status.textContent = "Pendente";
+        clearForm();
+
+        // Limpa o campo de data de pagamento
+        document.querySelector(".expense-payment-date").value = "";
         
         // fecha o modal e atualiza a lista de despesas
         modal.style.display = "none";
@@ -130,9 +119,7 @@ async function handleListClickPayment(event) {
     const li = event.target.closest("li");
     if (!li) return;
     const id = Number(li.dataset.id);
-    
     const element = document.querySelector(`.expense-payment-date-${id}`);
-
     const badge = event.target.closest(".badge");
     if(badge) {
         const expense = expenseData.find(e => e.id === id);
@@ -191,7 +178,6 @@ async function handleListClickPayment(event) {
 export function init() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
     document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
-    
 }
 
 document.addEventListener("DOMContentLoaded", init);
@@ -280,7 +266,7 @@ statusbtnForm.addEventListener("click", () => {
     const isPaid = statusbtnForm.dataset.paid === "true";
     toggleStatusVisual(statusbtnForm, !isPaid);
     
-    paymentDateForm.value = isPaid ? "" : formatDate(getTodayDate());
+    paymentDateForm.value = !isPaid ? formatDate(getTodayDate()) : "";
 });
 
 const searchName = document.getElementById("searchName");

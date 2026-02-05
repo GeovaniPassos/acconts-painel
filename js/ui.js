@@ -60,6 +60,14 @@ export function getDateParts(date = new Date()) {
 }
 
 //Função para pegar formatar a data igual vem da API
+export function formatDateApi(date) {
+    if (!date || date.trim() === "") return "";
+    const [day, month, year] = date.split('/');
+
+    return `${year}-${month}-${day}`;
+}
+
+//Função para pegar a data atual e formatar a data igual vem da API
 export function getTodayDate() {
     const { year, month, day } = getDateParts();
     
@@ -81,37 +89,26 @@ export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
     const modal = document.getElementById("modal");
     const modalTitle = document.querySelector(".modal-title");
-
     form.dataset.mode = "edit";
     form.dataset.id = expenses.id;
-
-    form.name.value = expenses.name;
-    form.value.value = expenses.value;
-    form.description.value = expenses.description || "";
     
-    if (expenses.paymentDate) {
-        form.paymentDate.value = formatDate(expenses.paymentDate);
-    }
-    
-
-    if (expenses.date) {
-        form.date.value = expenses.date.split("T")[0];
-    }
-
     const categoryInput = document.getElementById('category-input');
     categoryInput.value = expenses.categoryName;
     document.getElementById('ghost-text').textContent = "";
+    
+    form.name.value = expenses.name;
+    form.value.value = expenses.value;
+    form.description.value = expenses.description || "";
 
-    const statusBtn = document.getElementById("btn-form-status");
+    const statusBtn = document.querySelector(".btn-form-status");
     const isPaid = expenses.payment === true || expenses.payment === "true";
     toggleStatusVisual(statusBtn, isPaid);
-    const paymentDate = document.querySelector(`.expense-payment-date-${id}`);
-
-
-    statusBtn.dataset.paid = isPaid;
-    statusBtn.textContent = isPaid ? "Pago" : "Pendente";
-
-    statusBtn.classList.toggle("btn-paid", isPaid);
+    
+    form.paymentDate.value = formatDate(expenses.paymentDate) || "";
+    
+    if (expenses.date) {
+        form.date.value = expenses.date.split("T")[0];
+    }
 
     if (modalTitle) modalTitle.textContent = "Editar despesa";
 
@@ -123,6 +120,16 @@ export function clearForm() {
     const form = document.getElementById("expenses-form");
     form.dataset.id = "";
     form.reset();
+    
+    // Reset do botão de status
+    const statusBtn = document.querySelector(".btn-form-status");
+    statusBtn.dataset.paid = "false";
+    statusBtn.classList.add("status-pending");
+    statusBtn.classList.remove("status-paid");
+    statusBtn.textContent = "Pendente";
+    
+    // Limpa o campo de data de pagamento
+    document.querySelector(".expense-payment-date").value = "";
 }
 
 // Função para mostrar as mensagens de retorno
