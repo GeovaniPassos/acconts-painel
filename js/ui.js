@@ -1,9 +1,11 @@
+// Função para renderizar a lista de despesas
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
     expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
 }
 
+//Função para renderizar a lista de despesas
 export function renderExpensesItem(expense) {
     const li = document.createElement("li");
     li.dataset.id = expense.id;
@@ -13,7 +15,6 @@ export function renderExpensesItem(expense) {
 
     const statusClass = idPaid ? "status-paid" : "status-pending";
     const statusText = idPaid ? "Pago" : "Pendente";
-
     li.innerHTML = `
         <div class="info-group main">
             <strong class="expense-name">${expense.name}</strong>
@@ -21,12 +22,15 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group finance">
-            <span class="expense-value">R$ ${Number(expense.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
+                    'pt-BR', { minimumFractionDigits: 2 })}</span>
             <span class="expense-date">${formatDate(expense.date)}</span>
         </div>
 
         <div class="info-group status">
-            <span class="badge ${statusClass}">${statusText}</span>
+            <span class="badge btn-table-status ${statusClass}">${statusText}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">
+                ${formatDate(expense.paymentDate)}</span>
         </div>
 
         <div class="actions">
@@ -38,12 +42,20 @@ export function renderExpensesItem(expense) {
     return li;
 }
 
-function formatDate(dateStr) {
-    if (!dateStr) return "-";
+//Função para formatar datas
+export function formatDate(dateStr) {
+    if (!dateStr) return "";
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
 }
 
+export function formatDateApi(dateStr) {
+    if (!dateStr) return "";
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month}-${day}`;
+}
+
+//Função para retornar a data em partes
 export function getDateParts(date = new Date()) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -52,59 +64,70 @@ export function getDateParts(date = new Date()) {
     return { year, month, day };
 }
 
+//Função para pegar a data atual e formatar a data igual vem da API
 export function getTodayDate() {
     const { year, month, day } = getDateParts();
-    
-    return `${year}-${month}-${day}`;
+    return `${day}/${month}/${year}`;
 }
 
+// Função para pegar o mes atual
 export function getMonthFromTheCurrentPeriod() {
        return getDateParts().month;
 }
+
+// Função para pegar o ano atual 
 export function getYearFromTheCurrentPeriod() {
     return getDateParts().year;
 }
 
+// Função para preencher o formulário para edição
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
     const modal = document.getElementById("modal");
     const modalTitle = document.querySelector(".modal-title");
-
     form.dataset.mode = "edit";
     form.dataset.id = expenses.id;
-
+    const categoryInput = document.getElementById('category-input');
+    categoryInput.value = expenses.categoryName;
+    document.getElementById('ghost-text').textContent = "";
+    
     form.name.value = expenses.name;
     form.value.value = expenses.value;
     form.description.value = expenses.description || "";
 
+    const statusBtn = document.querySelector(".btn-form-status");
+    const isPaid = expenses.payment === true || expenses.payment === "true";
+    toggleStatusVisual(statusBtn, isPaid);
+    
+    form.paymentDate.value = formatDate(expenses.paymentDate) || "";
+    
     if (expenses.date) {
         form.date.value = expenses.date.split("T")[0];
     }
-
-    const categoryInput = document.getElementById('category-input');
-    categoryInput.value = expenses.categoryName;
-    document.getElementById('ghost-text').textContent = "";
-
-    const statusBtn = document.getElementById("status");
-    const isPaid = expenses.payment === true || expenses.payment === "true";
-    toggleStatusVisual(document.getElementById("status"), isPaid);
-
-    statusBtn.dataset.paid = isPaid;
-    statusBtn.textContent = isPaid ? "Pago" : "Pendente";
-
-    statusBtn.classList.toggle("btn-paid", isPaid);
 
     if (modalTitle) modalTitle.textContent = "Editar despesa";
 
     modal.style.display = "block";
 }
 
+//  Função para limpar o formulário
 export function clearForm() {
     const form = document.getElementById("expenses-form");
     form.dataset.id = "";
     form.reset();
+    
+    // Reset do botão de status
+    const statusBtn = document.querySelector(".btn-form-status");
+    statusBtn.dataset.paid = "false";
+    statusBtn.classList.add("status-pending");
+    statusBtn.classList.remove("status-paid");
+    statusBtn.textContent = "Pendente";
+    
+    // Limpa o campo de data de pagamento
+    //document.querySelector(".expense-payment-date").value = "";
 }
 
+// Função para mostrar as mensagens de retorno
 export function showMessage(type, text) {
     const box = document.getElementById("messages");
     box.textContent = text;
@@ -115,15 +138,15 @@ export function showMessage(type, text) {
     }, 3000);
 }
 
+// Função para definir o carregamento da pagina e realizar o bloqueio dá mesma
 export function setLoading(isLoading) {
     const loader = document.getElementById("loader");
     loader.style.display = isLoading ? "block" : "none";
 }
 
-// Botão de alterar o status do pagamento
+// Botão de alterar o status do pagamento visualmente
 export function toggleStatusVisual(element, isPaid) {
     if (!element) return;
-
     element.dataset.paid = isPaid;
     
     element.textContent = isPaid ? "Pago" : "Pendente";
@@ -138,6 +161,7 @@ export function toggleStatusVisual(element, isPaid) {
     }
 }
 
+//  Função para atualizar a resumo dos valores das despesas
 export function updateSummary(expenses) {
     // Calculando os valores usando reduce
     const totals = expenses.reduce((acc, expense) => {
@@ -160,7 +184,7 @@ export function updateSummary(expenses) {
     document.getElementById('total-pendente').textContent = formatCurrency(totals.pending);
 }
 
-// Função auxiliar de formatação
+// Função auxiliar de formatação monetária
 function formatCurrency(value) {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }

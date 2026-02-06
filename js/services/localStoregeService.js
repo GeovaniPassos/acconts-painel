@@ -1,5 +1,6 @@
 import { categories } from "../data/category.js";
 import { expenses } from "../data/expenses.js";
+import { getDateParts } from "../ui.js";
 
 export default class LocalStorageService {
     constructor() {
@@ -39,12 +40,16 @@ export default class LocalStorageService {
     }   
 
     async createExpenses(data) {
+        console.log(data);
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
         const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
+        if (data.payment === "true" && data.paymentDate == "") {
+            data.paymentDate = this.formateDateLocalstore();
+        }
         
         const newExpense = { ... data, id: nextId, category: category.id};
         
@@ -64,6 +69,11 @@ export default class LocalStorageService {
         if (index === -1) {
             throw new Error("Categoria não encontrada!");
         }
+        
+        // Adiciona data atual se pagamento for true e data estiver vazia
+        if (data.payment === "true" && data.paymentDate == "") {
+            data.paymentDate = this.formateDateLocalstore();
+        }
         category = Number(category.id);
         id = Number(id);
         expenses[index] = { ...expenses[index], ...data, id, category};
@@ -80,6 +90,59 @@ export default class LocalStorageService {
 
         localStorage.setItem("expenses", JSON.stringify(newExpenseArray));
 
+    }
+
+    async togglePayment(id) {
+        const expenses = JSON.parse(localStorage.getItem("expenses"));
+        const index = expenses.findIndex(exp => exp.id === Number(id));
+        
+        if (index === -1) {
+            throw new Error("Despesa não encontrada!");
+        }
+
+        const newPayment = !expenses[index].payment;
+        expenses[index] = { 
+            ...expenses[index], 
+            payment: newPayment, 
+            paymentDate: newPayment ? this.formateDateLocalstore() : ""
+        };
+        console.log(expenses[index]);
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        return expenses[index];
+    }
+
+    async getExpensesByPeriod(startDate, endDate) {
+        const expenses = await this.getExpenses();
+
+        return expenses.filter(expense => {
+            if (!expense.date) return false;
+
+            return expense.date >= startDate &&
+                expense.date <= endDate;
+        });
+    }
+
+    async getExpensesByMonth(year, month) {
+        const expenses = await this.getExpenses();
+
+        const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
+
+        return expenses.filter(expense => {
+            return expense.date.substring(0, 7) === yearMonth;
+        });
+    }
+
+    async getExpensesByName(name) {
+        const expenses = await this.getExpenses();
+
+        if (!name || !name.trim()) return expenses;
+
+        const search = name.toLowerCase().trim();
+        
+        return expenses.filter(expense => {
+            return expense.name?.toLowerCase().includes(search);
+            //console.log(expense.name.toLowerCase().includes(search))
+        });
     }
 
     //Categories
@@ -136,37 +199,8 @@ export default class LocalStorageService {
 
     }
 
-    async getExpensesByPeriod(startDate, endDate) {
-        const expenses = await this.getExpenses();
-
-        return expenses.filter(expense => {
-            if (!expense.date) return false;
-
-            return expense.date >= startDate &&
-                expense.date <= endDate;
-        });
-    }
-
-    async getExpensesByMonth(year, month) {
-        const expenses = await this.getExpenses();
-
-        const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
-
-        return expenses.filter(expense => {
-            return expense.date.substring(0, 7) === yearMonth;
-        });
-    }
-
-    async getExpensesByName(name) {
-        const expenses = await this.getExpenses();
-
-        if (!name || !name.trim()) return expenses;
-
-        const search = name.toLowerCase().trim();
-        
-        return expenses.filter(expense => {
-            return expense.name?.toLowerCase().includes(search);
-            //console.log(expense.name.toLowerCase().includes(search))
-        });
+    formateDateLocalstore() {
+        const dataAtual = getDateParts();
+        return String(`${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`);
     }
 }

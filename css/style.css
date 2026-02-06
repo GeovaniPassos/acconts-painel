@@ -34,8 +34,6 @@ button {
   cursor: pointer;
 }
 
-
-
 /* Estilo do modal */
 .modal {
   display: none; /* escondido por padrão */
@@ -63,6 +61,10 @@ button {
   margin-bottom: 30px;
 }
 
+#messages {
+  height: 20px;
+}
+
 #expenses-form {
   text-align: right;
   margin: 0px 10px;
@@ -77,8 +79,9 @@ button {
 
 .close {
   float: right;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
+  
 }
 
 .input-data {
@@ -122,7 +125,7 @@ button {
 .expense-value { font-weight: bold; color: #2c3e50; }
 .expense-date { font-size: 0.8rem; color: #777; }
 
-/* Badges de Status */
+/* Botões de Status */
 .badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -141,6 +144,10 @@ button {
 
 .badge:active {
     transform: scale(0.95); /* Efeito de clique (afunda levemente) */
+}
+
+.expense-payment-date {
+  width: 135px;
 }
 
 /* Ajustes para Celular (Responsividade) */
@@ -164,8 +171,8 @@ button {
 .inline-autocomplete {
     position: relative;
     display: flex;
-    top: 15px;
-    left: 15px;
+    top: 18px;
+    justify-content: end;
   }
 
 
@@ -173,6 +180,7 @@ button {
     background: transparent; /* Permite ver o ghost-text atrás */
     position: relative;
     color: #000000;
+    margin-left: 20px;
 }
 
 .ghost-text {
@@ -184,17 +192,13 @@ button {
     height: 22.5px;
     width: 194.5px;
     text-align: start;
-    left: 75px;
+    left: 96px;
     padding: 8px;
-    margin: 5px;
-    
-    top: 3px;
+    top: 8px;
 
 }
 
-
 /*Select com valores totais das despesas*/
-
 .summary-cards {
     display: flex;
     gap: 15px;
@@ -249,6 +253,10 @@ button {
   outline: none;
 }
 
+.payment-date {
+  margin-left: 0px;
+}
+
 .badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -260,6 +268,8 @@ button {
     /*transition: transform 0.1s ease;*/
     user-select: none;
     transition: filter 0.2s;
+
+    margin: 20px;
 }
 
 .badge:hover {
@@ -271,17 +281,28 @@ button {
 }
 
 .status-paid {
-
     background-color: #27ae60 !important;
     color: white !important;
     border: none;
+    margin-left: 0px;
+    margin-right: 30px;
 }
 
 .status-pending {
-    
     background-color: #e74c3c !important;
     color: white !important;
     border: none;
+    margin-left: 0px;
+    margin-right: 40px;
+}
+
+.btn-form-status {
+  margin: 0px;
+}
+
+.info-group.status {
+  display: block;
+  text-align: justify;
 }
 
 /* Ajustando o input de filtro */
@@ -374,3 +395,4 @@ button {
     width: 40%;
   }
 }
+

@@ -1,19 +1,21 @@
 import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, getDateParts, formatDateApi } from "./ui.js";
 
-//botao para limpar localstorege, Remover quando for para produção
+// Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
 btnLimparLocalstorege.addEventListener('click', () => {
     localStorage.clear();
     window.alert('LocalStorege resetado!');
 });
 
+// Variáveis para guardar a lista de depesas
 let expenseData = [];
 const varialble = "local";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
+
 if (varialble === "local") {
     btnClearLocalStorege.style.display = "visible";
 } else {
@@ -21,12 +23,12 @@ if (varialble === "local") {
 }
 refreshExpenses();
 
+// Função para recarregar a lista de despesas
 async function refreshExpenses() {
     try {
         setLoading(true);
 
         expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
-        //expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -36,21 +38,24 @@ async function refreshExpenses() {
     }
 }
 
+// Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
     event.preventDefault();
     const form = event.target;
-     
     const categoryTyped = document.getElementById('category-input').value.trim();
+    const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
+    let paymentDate = document.querySelector(".expense-payment-date").value;
+    paymentDate = paymentForm == "true" ? paymentDate : "";
     const data = {
-       
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
-        payment: form.status.dataset.paid === "true",
+        payment: paymentForm,
+        paymentDate: formatDateApi(paymentDate),
         date: form.date.value
     };
-    
+
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
@@ -92,9 +97,10 @@ async function handleSaveExpenses(event) {
         document.getElementById('ghost-text').textContent = "";
 
         //Reset do botão de status
-        const statusBtn = document.getElementById("status");
-        statusBtn.dataset.pago = "false";
-        statusBtn.textContent = "Pendente";
+        clearForm();
+
+        // Limpa o campo de data de pagamento
+        document.querySelector(".expense-payment-date").value = "";
         
         // fecha o modal e atualiza a lista de despesas
         modal.style.display = "none";
@@ -107,25 +113,27 @@ async function handleSaveExpenses(event) {
     
 }
 
-async function handleListClick(event) {
+// Função para lidar com o clique no pagamento da despesa
+async function handleListClickPayment(event) {
     const li = event.target.closest("li");
     if (!li) return;
     const id = Number(li.dataset.id);
-    
+    const element = document.querySelector(`.expense-payment-date-${id}`);
     const badge = event.target.closest(".badge");
     if(badge) {
         const expense = expenseData.find(e => e.id === id);
         if (expense) {
             try {
-                const currentStatus = (expense.payment === true || expense.payment === "true");
-                const newStatus = !currentStatus;
-
-                await service.updateExpenses(id, { ...expense, payment: newStatus });
+                const expense = await service.togglePayment(id);
                 
-                expense.payment = newStatus;
+                toggleStatusVisual(badge, expense.payment);
+                if (expense.payment) {
+                    element.innerHTML = `${formatDate(expense.paymentDate)}`
+                    console.log(expense.paymentDate)
+                } else {
+                    element.innerHTML = ``
+                }
 
-                toggleStatusVisual(badge, newStatus);
-                
                 updateSummary(expenseData);
                 
                 showMessage("success", "Status atualizado!");
@@ -166,33 +174,34 @@ async function handleListClick(event) {
     
 }
 
+// Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
 export function init() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
-    document.getElementById("expenses-list").addEventListener("click", handleListClick);
-    
+    document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 }
 
 document.addEventListener("DOMContentLoaded", init);
 
-// MODAL
+// Variáveis relacionadas ao modal
 const btnAbrir = document.getElementById("btn-open-form");
 const btnFechar = document.getElementById("btn-to-close");
 const modal = document.getElementById("modal");
 const dateInput = document.getElementById("date");
 
-// Abrir modal
+// Evento para abrir modal
 btnAbrir.addEventListener("click", () => {
     modal.style.display = "block";
-    dateInput.value = getTodayDate();
+    const dataAtual = getDateParts();
+    dateInput.value = `${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`;
 });
 
-// Fechar modal
+// Evento para fechar modal
 btnFechar.addEventListener("click", () => {
     clearForm();
     modal.style.display = "none";
 });
 
-// Fechar clicando fora do modal
+// Evento para fechar ao clicar fora do modal
 window.addEventListener("click", (event) => {
   if (event.target === modal) {
     clearForm();
@@ -200,7 +209,7 @@ window.addEventListener("click", (event) => {
   }
 });
 
-//Sugestão da categoria
+// Váriaveis para sugestão da categoria no formulário
 const categoriesData = await service.getCategory();
 const categories = categoriesData.map(cat => cat.name);
 
@@ -229,7 +238,7 @@ input.addEventListener('input', () => {
     }
 });
 
-// Aceitar a sugestão com Tab ou Seta para Direita
+// Evento para aceitar a sugestão com Tab ou Seta para Direita
 input.addEventListener('keydown', (e) => {
     if ((e.key === 'Tab' || e.key === 'ArrowRight') && ghost.textContent) {
         // Se houver uma sugestão, preenche o input e cancela o comportamento padrão
@@ -241,26 +250,37 @@ input.addEventListener('keydown', (e) => {
     }
 });
 
-const statusBtnForm = document.getElementById("status");
+const btnTableStatus = document.querySelectorAll(".btn-table-status");
 
-//alterar status do botão
-statusBtnForm.addEventListener("click", () => {
-    const isPaid = statusBtnForm.dataset.paid === "true";
-    toggleStatusVisual(statusBtnForm, !isPaid);
+// Evento para alterar status do botão de pagamento
+btnTableStatus.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const isPaid = btn.dataset.paid === "true";
+        toggleStatusVisual(btn, !isPaid);
+    });
+});
+
+const statusbtnForm = document.querySelector(".btn-form-status");
+const paymentDateForm = document.querySelector(".expense-payment-date");
+// Evento para alterar o status dentro do formulário
+statusbtnForm.addEventListener("click", () => {
+    const isPaid = statusbtnForm.dataset.paid === "true";
+    toggleStatusVisual(statusbtnForm, !isPaid);
+    paymentDateForm.value = !isPaid ? getTodayDate() : "";
 });
 
 const searchName = document.getElementById("searchName");
 const btnsearchName = document.getElementById("btn-searchName");
 
+// Evento para buscar a lista de depesas pelo nome
 btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
     const expense = await service.getExpensesByName(name);
-    console.log(expense);
     renderExpensesList(expense);
     updateSummary(expense)
 });
 
-//Aceitar o input com a tecla enter
+// Evento para aceitar o input de busca por nome com a tecla enter
 document.getElementById("searchName")
     .addEventListener('keydown', function(UIEvent) {
         if (UIEvent.key == 'Enter') {
@@ -268,13 +288,14 @@ document.getElementById("searchName")
         }
     });
 
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
     refreshExpenses();
-    document.getElementById("expenses-list").addEventListener("click", handleListClick);
+    //document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 });
 
 initFlatpickr();
 
+// Função para acionar o Flatpickr (Calendário personalizado)
 function initFlatpickr() {
     const element = document.getElementById("date-range");
 
@@ -284,7 +305,7 @@ function initFlatpickr() {
         dateFormat: "Y-m-d",
         altInput: true,
         altFormat: "d/m/Y",
-        onClose: async function(selectedDates, dateStr) {
+        onClose: async function(selectedDates) {
             if (selectedDates.length === 2) {
                 const startDate = selectedDates[0].toISOString().split('T')[0];
                 const endDate = selectedDates[1].toISOString().split('T')[0];
