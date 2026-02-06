@@ -45,7 +45,7 @@ export function renderExpensesItem(expense) {
 
 //Função para formatar datas
 export function formatDate(dateStr) {
-    if (!dateStr) return "-";
+    if (!dateStr) return "";
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
 }
@@ -59,19 +59,10 @@ export function getDateParts(date = new Date()) {
     return { year, month, day };
 }
 
-//Função para pegar formatar a data igual vem da API
-export function formatDateApi(date) {
-    if (!date || date.trim() === "") return "";
-    const [day, month, year] = date.split('/');
-
-    return `${year}-${month}-${day}`;
-}
-
 //Função para pegar a data atual e formatar a data igual vem da API
 export function getTodayDate() {
     const { year, month, day } = getDateParts();
-    
-    return `${year}-${month}-${day}`;
+    return `${year}/${month}/${day}`;
 }
 
 // Função para pegar o mes atual

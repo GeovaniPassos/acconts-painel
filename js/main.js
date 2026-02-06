@@ -1,6 +1,6 @@
 import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, formatDateApi } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, getDateParts } from "./ui.js";
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -11,7 +11,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-const varialble = "api";
+const varialble = "local";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -41,11 +41,12 @@ async function refreshExpenses() {
 // Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
     event.preventDefault();
+    debugger
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
     let paymentDate = document.querySelector(".expense-payment-date").value;
-    paymentDate = paymentForm == "true" ? formatDateApi(paymentDate) : "";
+    paymentDate = paymentForm == "true" ? formatDate(paymentDate) : "";
     const data = {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
@@ -129,6 +130,7 @@ async function handleListClickPayment(event) {
                 toggleStatusVisual(badge, expense.payment);
                 if (expense.payment) {
                     element.innerHTML = `${formatDate(expense.paymentDate)}`
+                    console.log(expense.paymentDate)
                 } else {
                     element.innerHTML = ``
                 }
@@ -190,7 +192,8 @@ const dateInput = document.getElementById("date");
 // Evento para abrir modal
 btnAbrir.addEventListener("click", () => {
     modal.style.display = "block";
-    dateInput.value = getTodayDate();
+    const dataAtual = getDateParts();
+    dateInput.value = `${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`;
 });
 
 // Evento para fechar modal

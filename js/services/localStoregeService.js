@@ -1,6 +1,6 @@
 import { categories } from "../data/category.js";
 import { expenses } from "../data/expenses.js";
-import { getTodayDate } from "../ui.js";
+import { getDateParts } from "../ui.js";
 
 export default class LocalStorageService {
     constructor() {
@@ -49,7 +49,7 @@ export default class LocalStorageService {
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
         debugger
         if (data.payment === "true" && data.paymentDate == "") {
-            data.paymentDate = getTodayDate();
+            data.paymentDate = this.formateDateLocalstore();
         }
         
         const newExpense = { ... data, id: nextId, category: category.id};
@@ -73,7 +73,7 @@ export default class LocalStorageService {
         
         // Adiciona data atual se pagamento for true e data estiver vazia
         if (data.payment === "true" && data.paymentDate == "") {
-            data.paymentDate = getTodayDate();
+            data.paymentDate = this.formateDateLocalstore();
         }
         
         category = Number(category.id);
@@ -96,7 +96,6 @@ export default class LocalStorageService {
 
     async togglePayment(id) {
         const expenses = JSON.parse(localStorage.getItem("expenses"));
-
         const index = expenses.findIndex(exp => exp.id === Number(id));
         
         if (index === -1) {
@@ -107,9 +106,9 @@ export default class LocalStorageService {
         expenses[index] = { 
             ...expenses[index], 
             payment: newPayment, 
-            paymentDate: newPayment ? getTodayDate() : ""
+            paymentDate: newPayment ? this.formateDateLocalstore() : ""
         };
-
+        console.log(expenses[index]);
         localStorage.setItem("expenses", JSON.stringify(expenses));
         return expenses[index];
     }
@@ -200,5 +199,10 @@ export default class LocalStorageService {
 
         localStorage.setItem("categories", JSON.stringify(newCategoryArray));
 
+    }
+
+    formateDateLocalstore() {
+        const dataAtual = getDateParts();
+        return String(`${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`);
     }
 }
