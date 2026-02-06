@@ -47,7 +47,6 @@ export default class LocalStorageService {
         const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
-        debugger
         if (data.payment === "true" && data.paymentDate == "") {
             data.paymentDate = this.formateDateLocalstore();
         }
@@ -75,7 +74,6 @@ export default class LocalStorageService {
         if (data.payment === "true" && data.paymentDate == "") {
             data.paymentDate = this.formateDateLocalstore();
         }
-        
         category = Number(category.id);
         id = Number(id);
         expenses[index] = { ...expenses[index], ...data, id, category};

@@ -1,6 +1,6 @@
 import LocalStorageService from "./services/localStoregeService.js";
 import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, getDateParts } from "./ui.js";
+import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, getDateParts, formatDateApi } from "./ui.js";
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -41,19 +41,18 @@ async function refreshExpenses() {
 // Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
     event.preventDefault();
-    debugger
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
     let paymentDate = document.querySelector(".expense-payment-date").value;
-    paymentDate = paymentForm == "true" ? formatDate(paymentDate) : "";
+    paymentDate = paymentForm == "true" ? paymentDate : "";
     const data = {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
         value: Number(form.value.value),
         payment: paymentForm,
-        paymentDate: paymentDate,
+        paymentDate: formatDateApi(paymentDate),
         date: form.date.value
     };
 
@@ -267,8 +266,7 @@ const paymentDateForm = document.querySelector(".expense-payment-date");
 statusbtnForm.addEventListener("click", () => {
     const isPaid = statusbtnForm.dataset.paid === "true";
     toggleStatusVisual(statusbtnForm, !isPaid);
-    
-    paymentDateForm.value = !isPaid ? formatDate(getTodayDate()) : "";
+    paymentDateForm.value = !isPaid ? getTodayDate() : "";
 });
 
 const searchName = document.getElementById("searchName");

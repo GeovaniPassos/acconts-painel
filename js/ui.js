@@ -15,7 +15,6 @@ export function renderExpensesItem(expense) {
 
     const statusClass = idPaid ? "status-paid" : "status-pending";
     const statusText = idPaid ? "Pago" : "Pendente";
-
     li.innerHTML = `
         <div class="info-group main">
             <strong class="expense-name">${expense.name}</strong>
@@ -50,6 +49,12 @@ export function formatDate(dateStr) {
     return `${day}/${month}/${year}`;
 }
 
+export function formatDateApi(dateStr) {
+    if (!dateStr) return "";
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month}-${day}`;
+}
+
 //Função para retornar a data em partes
 export function getDateParts(date = new Date()) {
     const year = date.getFullYear();
@@ -62,7 +67,7 @@ export function getDateParts(date = new Date()) {
 //Função para pegar a data atual e formatar a data igual vem da API
 export function getTodayDate() {
     const { year, month, day } = getDateParts();
-    return `${year}/${month}/${day}`;
+    return `${day}/${month}/${year}`;
 }
 
 // Função para pegar o mes atual
