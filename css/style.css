@@ -322,6 +322,10 @@ button {
     border-color: #3498db;
 }
 
+#parcelas {
+  width: 135px;
+}
+
 /* Customizando o calendário do Flatpickr para ser mais moderno */
 .flatpickr-monthSelect-month {
     border-radius: 2px !important;
