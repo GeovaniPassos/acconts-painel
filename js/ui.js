@@ -91,7 +91,6 @@ export function fillFormForEdit(expenses) {
     const modalTitle = document.querySelector(".modal-title");
     form.dataset.mode = "edit";
     form.dataset.id = expenses.id;
-    
     const categoryInput = document.getElementById('category-input');
     categoryInput.value = expenses.categoryName;
     document.getElementById('ghost-text').textContent = "";
@@ -129,7 +128,7 @@ export function clearForm() {
     statusBtn.textContent = "Pendente";
     
     // Limpa o campo de data de pagamento
-    document.querySelector(".expense-payment-date").value = "";
+    //document.querySelector(".expense-payment-date").value = "";
 }
 
 // Função para mostrar as mensagens de retorno

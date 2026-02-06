@@ -11,7 +11,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-const varialble = "local";
+const varialble = "api";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -46,7 +46,6 @@ async function handleSaveExpenses(event) {
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
     let paymentDate = document.querySelector(".expense-payment-date").value;
     paymentDate = paymentForm == "true" ? formatDateApi(paymentDate) : "";
-
     const data = {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
@@ -131,7 +130,7 @@ async function handleListClickPayment(event) {
                 if (expense.payment) {
                     element.innerHTML = `${formatDate(expense.paymentDate)}`
                 } else {
-                    element.innerHTML = `-`
+                    element.innerHTML = ``
                 }
 
                 updateSummary(expenseData);
