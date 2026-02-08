@@ -22,9 +22,14 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group finance">
-            <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
-                    'pt-BR', { minimumFractionDigits: 2 })}</span>
-            <span class="expense-date">${formatDate(expense.date)}</span>
+            <div class="group-value-date">
+                <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
+                        'pt-BR', { minimumFractionDigits: 2 })}</span>
+                <span class="expense-date">${formatDate(expense.date)}</span>
+            </div>
+            <div class="group-installments">
+                <span class="expense-installments">${expense.installments}</span>
+            </div>
         </div>
 
         <div class="info-group status">

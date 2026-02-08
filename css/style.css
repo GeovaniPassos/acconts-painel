@@ -104,7 +104,7 @@ button {
 /* O item da lista (Desktop) */
 .expense-item {
     display: grid;
-    grid-template-columns: 2fr 1.5fr 1fr 100px; /* Alinha as colunas */
+    grid-template-columns: 0.8fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
     align-items: center;
     background: #fff;
     padding: 12px 16px;
@@ -120,10 +120,32 @@ button {
     flex-direction: column; /* Nome em cima, categoria embaixo */
 }
 
+.info-group.finance {
+    display: contents;
+  }
+
+.group-value-date {
+  display: grid;
+}
+
+.group-installments {
+  display: flex;
+}
+
+.info-group.expense-installments {
+  display: flex;
+}
+
 .expense-name { font-size: 1rem; color: #333; }
 .expense-category { font-size: 0.8rem; color: #777; }
 .expense-value { font-weight: bold; color: #2c3e50; }
 .expense-date { font-size: 0.8rem; color: #777; }
+
+.expense-installments { 
+  font-size: 0.8rem;
+  color: #777; 
+} 
+
 
 /* Botões de Status */
 .badge {
@@ -159,6 +181,7 @@ button {
 
     .info-group.finance {
         text-align: right; /* Valor e data alinhados à direita */
+        flex-direction: column;
     }
 
     .info-group.status, .actions {
@@ -302,7 +325,7 @@ button {
 
 .info-group.status {
   display: block;
-  text-align: justify;
+  text-align: center;
 }
 
 /* Ajustando o input de filtro */
@@ -397,6 +420,14 @@ button {
 
   #btn-searchName {
     width: 40%;
+  }
+}
+
+@media (min-width: 1500px) {
+  body {
+    width: 1400px;
+    margin: 40px auto;
+    padding: 0px 40px;
   }
 }
 
