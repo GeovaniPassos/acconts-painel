@@ -28,7 +28,7 @@ export function renderExpensesItem(expense) {
                 <span class="expense-date">${formatDate(expense.date)}</span>
             </div>
             <div class="group-installments">
-                <span class="expense-installments">${expense.installments}</span>
+                <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
             </div>
         </div>
 

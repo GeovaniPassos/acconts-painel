@@ -40,23 +40,54 @@ export default class LocalStorageService {
     }   
 
     async createExpenses(data) {
+        debugger
         console.log(data);
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
-        const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
+        const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
+        
+        if (!category) {
+            throw new Error("Categoria não encontrada!");
+        }
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
-        if (data.payment === "true" && data.paymentDate == "") {
-            data.paymentDate = this.formateDateLocalstore();
+        const totInstallments = data.totalInstallments;
+        const dateRef = new Date(data.date);
+        const desiredDate = dateRef.getUTCDate(); 
+        
+        const createdExpenses = [];
+        
+        for(let i = 1; i <= totInstallments; i++) {
+            let dateInstallment = new Date(dateRef);
+            dateInstallment.setUTCMonth(dateRef.getUTCMonth() + i - 1);
+
+            if (dateInstallment.getUTCDate() !== desiredDate) {
+                dateInstallment.setUTCDate(0);
+            }
+
+            const formattedDate = dateInstallment.toISOString().split('T')[0];
+            console.log(formattedDate);
+
+            const paymentDate = (data.payment === "true" && data.paymentDate === "") 
+                ? this.formateDateLocalstore() 
+                : data.paymentDate;
+
+            const newExpense = { 
+                ...data, 
+                id: nextId + i - 1, 
+                category: category.id, 
+                installment: i, 
+                date: formattedDate,
+                paymentDate: paymentDate
+            };
+        
+            expenses.push(newExpense);
+            createdExpenses.push(newExpense);
         }
         
-        const newExpense = { ... data, id: nextId, category: category.id};
-        
-        expenses.push(newExpense);
         localStorage.setItem("expenses", JSON.stringify(expenses));
-
-        return newExpense;
+        return createdExpenses;
     }   
 
     async updateExpenses(id, data){

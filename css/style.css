@@ -49,7 +49,7 @@ button {
   margin: 8% auto;
   padding: 5px;
   border-radius: 8px;
-  width: 50%;
+  width: 35%;
   text-align: center;
   min-width: 350px;
 }
@@ -215,7 +215,7 @@ button {
     height: 22.5px;
     width: 194.5px;
     text-align: start;
-    left: 96px;
+    left: 115px;
     padding: 8px;
     top: 8px;
 
@@ -325,7 +325,7 @@ button {
 
 .info-group.status {
   display: block;
-  text-align: center;
+  text-align: justify;
 }
 
 /* Ajustando o input de filtro */
@@ -345,7 +345,7 @@ button {
     border-color: #3498db;
 }
 
-#parcelas {
+#installments {
   width: 135px;
 }
 

@@ -50,11 +50,15 @@ async function handleSaveExpenses(event) {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
+        installment: 1,
+        totalInstallments: Number(form.installments.value),
         value: Number(form.value.value),
         payment: paymentForm,
         paymentDate: formatDateApi(paymentDate),
         date: form.date.value
     };
+
+    console.log(data);
 
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
