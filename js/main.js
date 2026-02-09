@@ -58,8 +58,6 @@ async function handleSaveExpenses(event) {
         date: form.date.value
     };
 
-    console.log(data);
-
     if (!data.name || isNaN(data.value || !data.categoryName)) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
@@ -133,7 +131,6 @@ async function handleListClickPayment(event) {
                 toggleStatusVisual(badge, expense.payment);
                 if (expense.payment) {
                     element.innerHTML = `${formatDate(expense.paymentDate)}`
-                    console.log(expense.paymentDate)
                 } else {
                     element.innerHTML = ``
                 }

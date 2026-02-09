@@ -40,8 +40,6 @@ export default class LocalStorageService {
     }   
 
     async createExpenses(data) {
-        debugger
-        console.log(data);
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
@@ -67,7 +65,6 @@ export default class LocalStorageService {
             }
 
             const formattedDate = dateInstallment.toISOString().split('T')[0];
-            console.log(formattedDate);
 
             const paymentDate = (data.payment === "true" && data.paymentDate === "") 
                 ? this.formateDateLocalstore() 
@@ -137,7 +134,6 @@ export default class LocalStorageService {
             payment: newPayment, 
             paymentDate: newPayment ? this.formateDateLocalstore() : ""
         };
-        console.log(expenses[index]);
         localStorage.setItem("expenses", JSON.stringify(expenses));
         return expenses[index];
     }
@@ -172,7 +168,6 @@ export default class LocalStorageService {
         
         return expenses.filter(expense => {
             return expense.name?.toLowerCase().includes(search);
-            //console.log(expense.name.toLowerCase().includes(search))
         });
     }
 
