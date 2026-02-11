@@ -18,6 +18,10 @@ export default class Service {
         return this.stragegy.createExpenses(data);
     }
 
+    addInstallments(data) {
+        return this.stragegy.addInstallments(data);
+    }
+
     updateExpenses(id, data){
         return this.stragegy.updateExpenses(id, data);
     }

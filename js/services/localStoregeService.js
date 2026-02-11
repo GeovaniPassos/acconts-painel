@@ -52,7 +52,7 @@ export default class LocalStorageService {
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
         const totInstallments = data.totalInstallments;
         const dateRef = new Date(data.date);
-        const desiredDate = dateRef.getUTCDate(); 
+        const desiredDate = dateRef.getUTCDate();
         
         const createdExpenses = [];
         
@@ -85,13 +85,47 @@ export default class LocalStorageService {
         
         localStorage.setItem("expenses", JSON.stringify(expenses));
         return createdExpenses;
-    }   
+    }  
+    
+    async addInstallments(data) {
+        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
+        debugger
+        const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
 
-    async updateExpenses(id, data){
+        if (!category) {
+            throw new Error("Categoria não encontrada!");
+        }
+
+        const expensesList = expenses.find(exp => exp.name.toLowerCase() === data.name.toLowerCase());
+
+        if (!expensesList) {
+            throw new Error("Despesa não encontrada!");
+        }
+        
+        const expenseRef = expensesList.find(exp => exp.installment === 1);
+        return console.log(expenseRef);
+        
+
+        const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
+        //const dateRef = 
+
+        for(let i = 1; i <= data.totalInstallments; i++) {
+            
+        }
+
+        //const totInstallments = expensesList.totalInstallments + data.totInstallments;
+        //const dateRef = new Date(expense.date);
+
+        //const desiredDate = dateRef.getUTCDate();
+
+    }
+
+    async updateExpenses(id, data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
-        let category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
+        let category = categories.find(cat => cat.name.toLowerCase() == data.categoryName.toLowerCase());
         
         const index = expenses.findIndex(exp => exp.id === Number(id));
         if (index === -1) {

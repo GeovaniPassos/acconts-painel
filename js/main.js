@@ -90,7 +90,8 @@ async function handleSaveExpenses(event) {
             expenseData = await service.updateExpenses(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
         } else {
-            expenseData = await service.createExpenses(data);
+            expenseData = await service.addInstallments(data);
+            //expenseData = await service.createExpenses(data);
             showMessage("success", "Conta criada.");
         }
 
