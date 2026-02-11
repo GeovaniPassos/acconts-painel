@@ -114,7 +114,7 @@ async function handleSaveExpenses(event) {
     }
     
 }
-
+ 
 // Função para lidar com o clique no pagamento da despesa
 async function handleListClickPayment(event) {
     const li = event.target.closest("li");
@@ -276,9 +276,9 @@ const btnsearchName = document.getElementById("btn-searchName");
 // Evento para buscar a lista de depesas pelo nome
 btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
-    const expense = await service.getExpensesByName(name);
-    renderExpensesList(expense);
-    updateSummary(expense)
+    expenseData = await service.getExpensesByName(name);
+    renderExpensesList(expenseData);
+    updateSummary(expenseData)
 });
 
 // Evento para aceitar o input de busca por nome com a tecla enter

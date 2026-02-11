@@ -10,8 +10,9 @@ export const expenses = [
     value: 100.34,
     paymentDate: "",
     date: "2026-02-18"
-    },{
-    id: 1,
+    },
+    {
+    id: 5,
     name: "Agua",
     description: "",
     category: 1,
@@ -23,7 +24,7 @@ export const expenses = [
     date: "2026-03-18"
     },
     {
-    id: 1,
+    id: 6,
     name: "Agua",
     description: "",
     category: 1,
@@ -35,7 +36,7 @@ export const expenses = [
     date: "2026-04-18"
     },
     {
-    id: 1,
+    id: 7,
     name: "Agua",
     description: "",
     category: 1,
@@ -47,7 +48,7 @@ export const expenses = [
     date: "2026-05-18"
     },
     {
-    id: 1,
+    id: 8,
     name: "Agua",
     description: "",
     category: 1,
@@ -59,7 +60,7 @@ export const expenses = [
     date: "2026-06-18"
     },
     {
-    id: 1,
+    id: 9,
     name: "Agua",
     description: "",
     category: 1,
@@ -71,7 +72,7 @@ export const expenses = [
     date: "2026-07-18"
     },
     {
-    id: 1,
+    id: 10,
     name: "Agua",
     description: "",
     category: 1,
@@ -88,7 +89,7 @@ export const expenses = [
     description: "",
     category: 1,
     installment: 1,
-    totalInstallments: 12,
+    totalInstallments: 1,
     payment: false,
     value: 158.34,
     paymentDate: "",

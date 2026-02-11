@@ -33,9 +33,8 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group status">
-            <span class="badge btn-table-status ${statusClass}">${statusText}</span>
-            <span class="expense-date payment-date expense-payment-date-${expense.id}">
-                ${formatDate(expense.paymentDate)}</span>
+            <span class="badge btn-table-status ${statusClass}" data-paid="false">${statusText}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">${formatDate(expense.paymentDate)}</span>
         </div>
 
         <div class="actions">
