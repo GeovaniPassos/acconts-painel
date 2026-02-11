@@ -87,10 +87,10 @@ async function handleSaveExpenses(event) {
         }
 
         if (form.dataset.mode === "edit" && form.dataset.id) {
-            await service.updateExpenses(form.dataset.id, data);
+            expenseData = await service.updateExpenses(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
         } else {
-            await service.createExpenses(data);
+            expenseData = await service.createExpenses(data);
             showMessage("success", "Conta criada.");
         }
 
@@ -106,10 +106,10 @@ async function handleSaveExpenses(event) {
         
         // fecha o modal e atualiza a lista de despesas
         modal.style.display = "none";
-        await refreshExpenses();
     } catch (e) {
         showMessage("error", `Erro: ${e.message}`);
     } finally {
+        refreshExpenses();
         setLoading(false);
     }
     
@@ -152,10 +152,10 @@ async function handleListClickPayment(event) {
             setLoading(true);
             await service.deleteExpenses(id);
             showMessage("success", "Conta excluída.");
-            await refreshExpenses();
         } catch (e) {
             showMessage("error", `Erro ao excluir: ${e.message}`);
         } finally {
+            refreshExpenses();
             setLoading(false);
         }
     }
@@ -278,7 +278,7 @@ btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
     expenseData = await service.getExpensesByName(name);
     renderExpensesList(expenseData);
-    updateSummary(expenseData)
+    updateSummary(expenseData);
 });
 
 // Evento para aceitar o input de busca por nome com a tecla enter
