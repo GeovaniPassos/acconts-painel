@@ -1,6 +1,7 @@
 // Função para renderizar a lista de despesas
 export function renderExpensesList(expenses) {
     if(!expenses) {
+        updateSummary(expenses);
         return document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
     } 
     const ul = document.getElementById("expenses-list");
@@ -180,6 +181,7 @@ export function toggleStatusVisual(element, isPaid) {
 
 //  Função para atualizar a resumo dos valores das despesas
 export function updateSummary(expenses) {
+    if (expenses == null) expenses = [];
     // Calculando os valores usando reduce
     const totals = expenses.reduce((acc, expense) => {
         const value = Number(expense.value) || 0;

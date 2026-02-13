@@ -173,7 +173,6 @@ async function handleListClickPayment(event) {
             setLoading(false);
         }
     }
-    
 }
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
@@ -313,11 +312,8 @@ function initFlatpickr() {
                 const endDate = selectedDates[1].toISOString().split('T')[0];
                 
                 const retorno = await service.getExpensesByPeriod(startDate, endDate);
-                if(!retorno) {
-                    document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
-                } else {
-                    renderExpensesList(retorno);
-                }
+
+                renderExpensesList(retorno);
             }
         }
     });
