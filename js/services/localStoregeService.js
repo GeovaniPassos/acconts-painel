@@ -90,29 +90,32 @@ export default class LocalStorageService {
     async addInstallments(data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
-        debugger
         const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
 
         if (!category) {
             throw new Error("Categoria não encontrada!");
         }
-
-        const expensesList = expenses.find(exp => exp.name.toLowerCase() === data.name.toLowerCase());
+        
+        const expensesList = expenses.find(exp => exp.name.toLowerCase() == data.name.toLowerCase());
+        console.log(expensesList)
 
         if (!expensesList) {
             throw new Error("Despesa não encontrada!");
         }
         
-        const expenseRef = expensesList.find(exp => exp.installment === 1);
-        return console.log(expenseRef);
+        const expenseRef = await expensesList.reduce((previous, current) => {
+                previous.installment > current.installment ? current : previous;
+        });
+
+        console.log(`Despesa: ${expenseRef}`);
         
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
         //const dateRef = 
 
-        for(let i = 1; i <= data.totalInstallments; i++) {
+        // for(let i = 1; i <= data.totalInstallments; i++) {
             
-        }
+        // }
 
         //const totInstallments = expensesList.totalInstallments + data.totInstallments;
         //const dateRef = new Date(expense.date);
