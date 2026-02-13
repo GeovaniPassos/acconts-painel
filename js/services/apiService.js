@@ -74,6 +74,10 @@ export default class ApiService {
         return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
     }
 
+    async getExpensesByName(expenseName) {
+        return this.request(`/expenses/search?name=${expenseName}`, { method: "GET" });
+    }
+
     async togglePayment(id) {
         return this.request(`/expenses/${id}/toggle-payment`, { method: "PATCH" });
     }

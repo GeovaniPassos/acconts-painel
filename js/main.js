@@ -11,7 +11,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-const varialble = "local";
+const varialble = "api";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -90,8 +90,8 @@ async function handleSaveExpenses(event) {
             expenseData = await service.updateExpenses(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
         } else {
-            expenseData = await service.addInstallments(data);
-            //expenseData = await service.createExpenses(data);
+            //expenseData = await service.addInstallments(data); //Implementar a separação de função no futuro
+            expenseData = await service.createExpenses(data);
             showMessage("success", "Conta criada.");
         }
 
