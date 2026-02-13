@@ -11,7 +11,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-const varialble = "local";
+const varialble = "api";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -50,6 +50,8 @@ async function handleSaveExpenses(event) {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped,
+        installment: 1,
+        totalInstallments: Number(form.installments.value),
         value: Number(form.value.value),
         payment: paymentForm,
         paymentDate: formatDateApi(paymentDate),
@@ -85,10 +87,11 @@ async function handleSaveExpenses(event) {
         }
 
         if (form.dataset.mode === "edit" && form.dataset.id) {
-            await service.updateExpenses(form.dataset.id, data);
+            expenseData = await service.updateExpenses(form.dataset.id, data);
             showMessage("success", "Conta atualizada.");
         } else {
-            await service.createExpenses(data);
+            //expenseData = await service.addInstallments(data); //Implementar a separação de função no futuro
+            expenseData = await service.createExpenses(data);
             showMessage("success", "Conta criada.");
         }
 
@@ -104,15 +107,15 @@ async function handleSaveExpenses(event) {
         
         // fecha o modal e atualiza a lista de despesas
         modal.style.display = "none";
-        await refreshExpenses();
     } catch (e) {
         showMessage("error", `Erro: ${e.message}`);
     } finally {
+        refreshExpenses();
         setLoading(false);
     }
     
 }
-
+ 
 // Função para lidar com o clique no pagamento da despesa
 async function handleListClickPayment(event) {
     const li = event.target.closest("li");
@@ -129,7 +132,6 @@ async function handleListClickPayment(event) {
                 toggleStatusVisual(badge, expense.payment);
                 if (expense.payment) {
                     element.innerHTML = `${formatDate(expense.paymentDate)}`
-                    console.log(expense.paymentDate)
                 } else {
                     element.innerHTML = ``
                 }
@@ -151,10 +153,10 @@ async function handleListClickPayment(event) {
             setLoading(true);
             await service.deleteExpenses(id);
             showMessage("success", "Conta excluída.");
-            await refreshExpenses();
         } catch (e) {
             showMessage("error", `Erro ao excluir: ${e.message}`);
         } finally {
+            refreshExpenses();
             setLoading(false);
         }
     }
@@ -171,7 +173,6 @@ async function handleListClickPayment(event) {
             setLoading(false);
         }
     }
-    
 }
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
@@ -275,9 +276,9 @@ const btnsearchName = document.getElementById("btn-searchName");
 // Evento para buscar a lista de depesas pelo nome
 btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
-    const expense = await service.getExpensesByName(name);
-    renderExpensesList(expense);
-    updateSummary(expense)
+    expenseData = await service.getExpensesByName(name);
+    renderExpensesList(expenseData);
+    updateSummary(expenseData);
 });
 
 // Evento para aceitar o input de busca por nome com a tecla enter
@@ -311,6 +312,7 @@ function initFlatpickr() {
                 const endDate = selectedDates[1].toISOString().split('T')[0];
                 
                 const retorno = await service.getExpensesByPeriod(startDate, endDate);
+
                 renderExpensesList(retorno);
             }
         }

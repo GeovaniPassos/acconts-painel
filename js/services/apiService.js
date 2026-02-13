@@ -7,14 +7,29 @@ export default class ApiService {
             headers: {"Content-Type": "application/json" },
             ...options
         });
+
         if (!resp.ok) {
-            const message = await resp.text().catch(() => "");
-            throw new Error(message || `Erro ${resp.status}`);
+            let errorMessage = `Erro ${resp.status}`;
+
+            try {
+                const errBody = await resp.json();
+                if (errBody?.message) errorMessage = errBody.message;
+            } catch (_) {}
+
+            throw new Error(errorMessage);
         }
 
         // Para respostas sem corpo
         const contentType = resp.headers.get("content-type") || "";
-        return contentType.includes("application/json") ? resp.json() : null;
+        if (!contentType.includes("application/json")) return null;
+
+        const response = await resp.json();
+
+        if (response.success === false) {
+            throw new Error(response.message || "Error na operação");
+        }
+
+        return response.data;
     }
 
     //Metodos para acessar as despesas
@@ -31,6 +46,13 @@ export default class ApiService {
             method: "POST",
             body: JSON.stringify(data)
         });
+    }
+
+    async addInstallments(data) {
+        return this.request("/expenses/addInstallments" , {
+            method: "POST",
+            body: JSON.stringify(data)
+        })
     }
 
     async updateExpenses(id, data) {
@@ -50,6 +72,10 @@ export default class ApiService {
 
     async getExpensesByMonth(year, month) {
         return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
+    }
+
+    async getExpensesByName(expenseName) {
+        return this.request(`/expenses/search?name=${expenseName}`, { method: "GET" });
     }
 
     async togglePayment(id) {

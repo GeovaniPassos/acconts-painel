@@ -40,30 +40,95 @@ export default class LocalStorageService {
     }   
 
     async createExpenses(data) {
-        console.log(data);
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
-        const category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
+        const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
+        
+        if (!category) {
+            throw new Error("Categoria não encontrada!");
+        }
 
         const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
-        if (data.payment === "true" && data.paymentDate == "") {
-            data.paymentDate = this.formateDateLocalstore();
+        const totInstallments = data.totalInstallments;
+        const dateRef = new Date(data.date);
+        const desiredDate = dateRef.getUTCDate();
+        
+        const createdExpenses = [];
+        
+        for(let i = 1; i <= totInstallments; i++) {
+            let dateInstallment = new Date(dateRef);
+            dateInstallment.setUTCMonth(dateRef.getUTCMonth() + i - 1);
+
+            if (dateInstallment.getUTCDate() !== desiredDate) {
+                dateInstallment.setUTCDate(0);
+            }
+
+            const formattedDate = dateInstallment.toISOString().split('T')[0];
+
+            const paymentDate = (data.payment === "true" && data.paymentDate === "") 
+                ? this.formateDateLocalstore() 
+                : data.paymentDate;
+
+            const newExpense = { 
+                ...data, 
+                id: nextId + i - 1, 
+                category: category.id, 
+                installment: i, 
+                date: formattedDate,
+                paymentDate: paymentDate
+            };
+        
+            expenses.push(newExpense);
+            createdExpenses.push(newExpense);
         }
         
-        const newExpense = { ... data, id: nextId, category: category.id};
-        
-        expenses.push(newExpense);
         localStorage.setItem("expenses", JSON.stringify(expenses));
+        return createdExpenses;
+    }  
+    
+    async addInstallments(data) {
+        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
+        const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
 
-        return newExpense;
-    }   
+        if (!category) {
+            throw new Error("Categoria não encontrada!");
+        }
+        
+        const expensesList = expenses.find(exp => exp.name.toLowerCase() == data.name.toLowerCase());
+        console.log(expensesList)
 
-    async updateExpenses(id, data){
+        if (!expensesList) {
+            throw new Error("Despesa não encontrada!");
+        }
+        
+        const expenseRef = await expensesList.reduce((previous, current) => {
+                previous.installment > current.installment ? current : previous;
+        });
+
+        console.log(`Despesa: ${expenseRef}`);
+        
+
+        const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
+        //const dateRef = 
+
+        // for(let i = 1; i <= data.totalInstallments; i++) {
+            
+        // }
+
+        //const totInstallments = expensesList.totalInstallments + data.totInstallments;
+        //const dateRef = new Date(expense.date);
+
+        //const desiredDate = dateRef.getUTCDate();
+
+    }
+
+    async updateExpenses(id, data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
 
-        let category = categories.find(cat =>  cat.name.toLowerCase() == data.categoryName.toLowerCase());
+        let category = categories.find(cat => cat.name.toLowerCase() == data.categoryName.toLowerCase());
         
         const index = expenses.findIndex(exp => exp.id === Number(id));
         if (index === -1) {
@@ -106,7 +171,6 @@ export default class LocalStorageService {
             payment: newPayment, 
             paymentDate: newPayment ? this.formateDateLocalstore() : ""
         };
-        console.log(expenses[index]);
         localStorage.setItem("expenses", JSON.stringify(expenses));
         return expenses[index];
     }
@@ -141,7 +205,6 @@ export default class LocalStorageService {
         
         return expenses.filter(expense => {
             return expense.name?.toLowerCase().includes(search);
-            //console.log(expense.name.toLowerCase().includes(search))
         });
     }
 

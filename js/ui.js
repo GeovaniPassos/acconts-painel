@@ -1,8 +1,13 @@
 // Função para renderizar a lista de despesas
 export function renderExpensesList(expenses) {
+    if(!expenses) {
+        updateSummary(expenses);
+        return document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
+    } 
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
     expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
+    updateSummary(expenses);
 }
 
 //Função para renderizar a lista de despesas
@@ -22,15 +27,19 @@ export function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group finance">
-            <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
-                    'pt-BR', { minimumFractionDigits: 2 })}</span>
-            <span class="expense-date">${formatDate(expense.date)}</span>
+            <div class="group-value-date">
+                <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
+                        'pt-BR', { minimumFractionDigits: 2 })}</span>
+                <span class="expense-date">${formatDate(expense.date)}</span>
+            </div>
+            <div class="group-installments">
+                <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
+            </div>
         </div>
 
         <div class="info-group status">
-            <span class="badge btn-table-status ${statusClass}">${statusText}</span>
-            <span class="expense-date payment-date expense-payment-date-${expense.id}">
-                ${formatDate(expense.paymentDate)}</span>
+            <span class="badge btn-table-status ${statusClass}" data-paid="false">${statusText}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">${formatDate(expense.paymentDate)}</span>
         </div>
 
         <div class="actions">
@@ -85,6 +94,7 @@ export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
     const modal = document.getElementById("modal");
     const modalTitle = document.querySelector(".modal-title");
+    const textInstallment = document.querySelector(".installments");
     form.dataset.mode = "edit";
     form.dataset.id = expenses.id;
     const categoryInput = document.getElementById('category-input');
@@ -92,8 +102,14 @@ export function fillFormForEdit(expenses) {
     document.getElementById('ghost-text').textContent = "";
     
     form.name.value = expenses.name;
+    document.getElementById("name").disabled = true;
+
     form.value.value = expenses.value;
     form.description.value = expenses.description || "";
+
+    form.installments.value = expenses.installment;
+    textInstallment.textContent = "Número da parcela";
+    document.getElementById("installments").disabled = true;
 
     const statusBtn = document.querySelector(".btn-form-status");
     const isPaid = expenses.payment === true || expenses.payment === "true";
@@ -115,7 +131,10 @@ export function clearForm() {
     const form = document.getElementById("expenses-form");
     form.dataset.id = "";
     form.reset();
-    
+    document.getElementById("name").disabled = false;
+    document.getElementById("installments").disabled = false;
+    document.querySelector(".modal-title").textContent = "Nova Despesa"
+    document.querySelector(".installments").textContent = "Quantidade Parcelas:";
     // Reset do botão de status
     const statusBtn = document.querySelector(".btn-form-status");
     statusBtn.dataset.paid = "false";
@@ -163,6 +182,7 @@ export function toggleStatusVisual(element, isPaid) {
 
 //  Função para atualizar a resumo dos valores das despesas
 export function updateSummary(expenses) {
+    if (expenses == null) expenses = [];
     // Calculando os valores usando reduce
     const totals = expenses.reduce((acc, expense) => {
         const value = Number(expense.value) || 0;
