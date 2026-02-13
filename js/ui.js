@@ -7,6 +7,7 @@ export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
     expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
+    updateSummary(expenses);
 }
 
 //Função para renderizar a lista de despesas
