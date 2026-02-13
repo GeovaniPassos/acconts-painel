@@ -313,7 +313,11 @@ function initFlatpickr() {
                 const endDate = selectedDates[1].toISOString().split('T')[0];
                 
                 const retorno = await service.getExpensesByPeriod(startDate, endDate);
-                renderExpensesList(retorno);
+                if(!retorno) {
+                    document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
+                } else {
+                    renderExpensesList(retorno);
+                }
             }
         }
     });

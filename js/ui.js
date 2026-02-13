@@ -1,5 +1,8 @@
 // Função para renderizar a lista de despesas
 export function renderExpensesList(expenses) {
+    if(!expenses) {
+        return document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
+    } 
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
     expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
