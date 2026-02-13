@@ -34,8 +34,6 @@ button {
   cursor: pointer;
 }
 
-
-
 /* Estilo do modal */
 .modal {
   display: none; /* escondido por padrão */
@@ -51,7 +49,7 @@ button {
   margin: 8% auto;
   padding: 5px;
   border-radius: 8px;
-  width: 50%;
+  width: 35%;
   text-align: center;
   min-width: 350px;
 }
@@ -61,6 +59,10 @@ button {
   justify-content: center;
   align-items: center;
   margin-bottom: 30px;
+}
+
+#messages {
+  height: 20px;
 }
 
 #expenses-form {
@@ -77,8 +79,9 @@ button {
 
 .close {
   float: right;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
+  
 }
 
 .input-data {
@@ -101,7 +104,7 @@ button {
 /* O item da lista (Desktop) */
 .expense-item {
     display: grid;
-    grid-template-columns: 2fr 1.5fr 1fr 100px; /* Alinha as colunas */
+    grid-template-columns: 0.8fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
     align-items: center;
     background: #fff;
     padding: 12px 16px;
@@ -109,6 +112,7 @@ button {
     border-radius: 8px;
     border-left: 5px solid #ccc; /* Cor neutra inicial */
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-right: 5px solid #ccc;
 }
 
 /* Sub-grupos de informação */
@@ -117,12 +121,34 @@ button {
     flex-direction: column; /* Nome em cima, categoria embaixo */
 }
 
+.info-group.finance {
+    display: contents;
+  }
+
+.group-value-date {
+  display: grid;
+}
+
+.group-installments {
+  display: flex;
+}
+
+.info-group.expense-installments {
+  display: flex;
+}
+
 .expense-name { font-size: 1rem; color: #333; }
 .expense-category { font-size: 0.8rem; color: #777; }
 .expense-value { font-weight: bold; color: #2c3e50; }
 .expense-date { font-size: 0.8rem; color: #777; }
 
-/* Badges de Status */
+.expense-installments { 
+  font-size: 0.8rem;
+  color: #777; 
+} 
+
+
+/* Botões de Status */
 .badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -143,6 +169,10 @@ button {
     transform: scale(0.95); /* Efeito de clique (afunda levemente) */
 }
 
+.expense-payment-date {
+  width: 135px;
+}
+
 /* Ajustes para Celular (Responsividade) */
 @media (max-width: 600px) {
     .expense-item {
@@ -152,6 +182,7 @@ button {
 
     .info-group.finance {
         text-align: right; /* Valor e data alinhados à direita */
+        flex-direction: column;
     }
 
     .info-group.status, .actions {
@@ -164,8 +195,8 @@ button {
 .inline-autocomplete {
     position: relative;
     display: flex;
-    top: 15px;
-    left: 15px;
+    top: 18px;
+    justify-content: end;
   }
 
 
@@ -173,6 +204,7 @@ button {
     background: transparent; /* Permite ver o ghost-text atrás */
     position: relative;
     color: #000000;
+    margin-left: 20px;
 }
 
 .ghost-text {
@@ -184,17 +216,13 @@ button {
     height: 22.5px;
     width: 194.5px;
     text-align: start;
-    left: 75px;
+    left: 115px;
     padding: 8px;
-    margin: 5px;
-    
-    top: 3px;
+    top: 8px;
 
 }
 
-
 /*Select com valores totais das despesas*/
-
 .summary-cards {
     display: flex;
     gap: 15px;
@@ -249,6 +277,10 @@ button {
   outline: none;
 }
 
+.payment-date {
+  margin-left: 0px;
+}
+
 .badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -260,6 +292,8 @@ button {
     /*transition: transform 0.1s ease;*/
     user-select: none;
     transition: filter 0.2s;
+
+    margin: 20px;
 }
 
 .badge:hover {
@@ -271,17 +305,28 @@ button {
 }
 
 .status-paid {
-
     background-color: #27ae60 !important;
     color: white !important;
     border: none;
+    margin-left: 0px;
+    margin-right: 30px;
 }
 
 .status-pending {
-    
     background-color: #e74c3c !important;
     color: white !important;
     border: none;
+    margin-left: 0px;
+    margin-right: 40px;
+}
+
+.btn-form-status {
+  margin: 0px;
+}
+
+.info-group.status {
+  display: block;
+  text-align: justify;
 }
 
 /* Ajustando o input de filtro */
@@ -299,6 +344,10 @@ button {
 
 #month-filter:hover {
     border-color: #3498db;
+}
+
+#installments {
+  width: 135px;
 }
 
 /* Customizando o calendário do Flatpickr para ser mais moderno */
@@ -373,4 +422,17 @@ button {
   #btn-searchName {
     width: 40%;
   }
+
+  .expense-item {
+    grid-template-columns: 100px 120px 40px 80px 30px;
+  }
 }
+
+@media (min-width: 1500px) {
+  body {
+    width: 1400px;
+    margin: 40px auto;
+    padding: 0px 40px;
+  }
+}
+

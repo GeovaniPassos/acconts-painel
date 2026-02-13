@@ -18,6 +18,10 @@ export default class Service {
         return this.stragegy.createExpenses(data);
     }
 
+    addInstallments(data) {
+        return this.stragegy.addInstallments(data);
+    }
+
     updateExpenses(id, data){
         return this.stragegy.updateExpenses(id, data);
     }
@@ -36,6 +40,10 @@ export default class Service {
 
     getExpensesByName(nameExpense) {
         return this.stragegy.getExpensesByName(nameExpense);
+    }
+
+    togglePayment(id) {
+        return this.stragegy.togglePayment(id);
     }
 
     //Categories

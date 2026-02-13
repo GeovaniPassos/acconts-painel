@@ -4,35 +4,119 @@ export const expenses = [
     name: "Agua",
     description: "",
     category: 1,
+    installment: 1,
+    totalInstallments: 7,
     payment: false,
     value: 100.34,
-    date: "2026-01-18"
+    paymentDate: "",
+    date: "2026-02-18"
+    },
+    {
+    id: 5,
+    name: "Agua",
+    description: "",
+    category: 1,
+    installment: 2,
+    totalInstallments: 7,
+    payment: false,
+    value: 100.34,
+    paymentDate: "",
+    date: "2026-03-18"
+    },
+    {
+    id: 6,
+    name: "Agua",
+    description: "",
+    category: 1,
+    installment: 3,
+    totalInstallments: 7,
+    payment: false,
+    value: 100.34,
+    paymentDate: "",
+    date: "2026-04-18"
+    },
+    {
+    id: 7,
+    name: "Agua",
+    description: "",
+    category: 1,
+    installment: 4,
+    totalInstallments: 7,
+    payment: false,
+    value: 100.34,
+    paymentDate: "",
+    date: "2026-05-18"
+    },
+    {
+    id: 8,
+    name: "Agua",
+    description: "",
+    category: 1,
+    installment: 5,
+    totalInstallments: 7,
+    payment: false,
+    value: 100.34,
+    paymentDate: "",
+    date: "2026-06-18"
+    },
+    {
+    id: 9,
+    name: "Agua",
+    description: "",
+    category: 1,
+    installment: 6,
+    totalInstallments: 7,
+    payment: false,
+    value: 100.34,
+    paymentDate: "",
+    date: "2026-07-18"
+    },
+    {
+    id: 10,
+    name: "Agua",
+    description: "",
+    category: 1,
+    installment: 7,
+    totalInstallments: 7,
+    payment: false,
+    value: 100.34,
+    paymentDate: "",
+    date: "2026-08-18"
     },
     {
     id: 2,
     name: "Luz",
     description: "",
     category: 1,
+    installment: 1,
+    totalInstallments: 1,
     payment: false,
     value: 158.34,
-    date: "2026-01-18"
+    paymentDate: "",
+    date: "2026-02-18"
     },
     {
     id: 3,
     name: "Mercado",
     description: "Misturas",
     category: 3,
+    installment: 1,
+    totalInstallments: 1,
     payment: true,
     value: 253.21,
-    date: "2026-01-18"
+    paymentDate: "2026-02-18",
+    date: "2026-02-18"
     },
     {
     id: 4,
     name: "Passeio",
     description: "",
     category: 2,
+    installment: 1,
+    totalInstallments: 1,
     payment: true,
     value: 78.71,
-    date: "2026-01-18"
+    paymentDate: "2026-02-18",
+    date: "2026-02-18"
     }
 ];

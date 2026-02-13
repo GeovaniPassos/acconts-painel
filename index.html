@@ -16,8 +16,7 @@
 <body>
   <h1>Sistema de Controle de Contas</h1>
 
-  <div id="messages"></div>
-  <div id="loader" style="display:none;">Carregando...</div>
+  
 
   <section id="summary-container" class="summary-cards">
     <div class="card total">
@@ -33,6 +32,7 @@
         <p id="total-pendente">R$ 0,00</p>
     </div>
 </section>
+  
   <button id="btn-clear-localstorege" style="background-color: gray;">Reset LocalStorege</button>
   <button id="btn-open-form"> + Adicionar Despesa</button>
 
@@ -42,7 +42,7 @@
       <input type="text" id="date-range" readonly placeholder="Selecione o mês">
     </div>
     <div class="filter-group">
-      <label for="name-filter">Filtrar por nome</label>
+      <label for="searchName">Filtrar por nome</label>
       <input type="text" id="searchName" placeholder="Pesquise pelo nome">
     </div>
     <div class="filter-group button-group">
@@ -50,6 +50,8 @@
     </div>
     
   </div>
+  <div id="messages"></div>
+  <div id="loader">Carregando...</div>
   <!-- Modal formulario novo-->
   <div id="modal" class="modal">
     <div class="modal-content">  
@@ -72,14 +74,21 @@
             <label for="name">Nome:</label>
             <input type="text" id="name" name="name" required>
             </br>
-            <label for="name">Descrição:</label>
+            <label for="description">Descrição:</label>
             <input type="text" id="description" name="description">
+            </br>
+            <label for="installments" class="installments">Quantidade Parcelas:</label>
+            <input type="number" id="installments" name="installments" step="1" value="1" min="1">
             </br>
             <label for="value">Valor:</label>
             <input type="number" id="value" name="value" step="0.01" required>
             </br>
+            <div class="form-payment">
             <label for="status">Status:</label>
-            <button type="button" class="badge status-pending" id="status" data-paid="false">Pendente</button>
+            <button type="button" class="badge status-pending btn-form-status" id="status" 
+                data-paid="false">Pendente</button>
+            <input type="text" name="paymentDate" id="status" class="expense-payment-date">
+            </div>
             </br>
             <label for="date">Data Venc:</label>
             <input class="input-date" type="date" id="date" name="date" required>
