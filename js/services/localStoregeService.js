@@ -199,7 +199,7 @@ export default class LocalStorageService {
     async getExpensesByName(name) {
         const expenses = await this.getExpenses();
 
-        if (!name || !name.trim()) return expenses;
+        if (!name || !name.trim()) return expenses = [];
 
         const search = name.toLowerCase().trim();
         

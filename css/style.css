@@ -331,19 +331,19 @@ button {
 
 /* Ajustando o input de filtro */
 #month-filter {
-    padding: 5px 10px;
-    border: 2px solid #e0e0e0;
-    border-radius: 4px;
-    background-color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    color: #34495e;
-    text-align: center;
-    width: 100px;
+  padding: 5px 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  color: #34495e;
+  text-align: center;
+  width: 100px;
 }
 
 #month-filter:hover {
-    border-color: #3498db;
+  border-color: #3498db;
 }
 
 #installments {
@@ -361,20 +361,25 @@ button {
 }
 
 .filter-container {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;           /* permite quebrar linha */
-    gap: 12px;
-    align-items: flex-end;     /* alinha botão com inputs */
+  grid-template-columns: 40vw 40vw 150px;
+  margin-top: 20px;
+  display: grid;
+  align-items: flex-end;     /* alinha botão com inputs */
 }
 
 /* cada filtro */
 .filter-group {
   display: flex;
   flex-direction: column;
-  min-width: 150px;          /* tamanho mínimo aceitável */
-  flex: 1 1 50px;           /* cresce, encolhe, base */
+ /*  min-width: 150px;         
+    flex: 1 1 10px; */          
 }
+
+.form-search-name {
+  display: contents;
+  align-items: flex-end;
+}
+
 
 /* botão */
 .button-group {
@@ -395,15 +400,15 @@ button {
   padding: 10px 16px;
   font-size: 14px;
   cursor: pointer;
+  background-color: #535353;
 }
 
-#btn-searchName {
-    background-color: #535353;
-  }
 
 /* 📱 telas pequenas */
 @media (max-width: 600px) {
   .filter-container {
+    grid-template-columns: 20vw 40vw 150px;
+    display: block;
     flex-direction: column;
   }
 
@@ -417,10 +422,6 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  #btn-searchName {
-    width: 40%;
   }
 
   .expense-item {

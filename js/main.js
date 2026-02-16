@@ -11,6 +11,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
+let categoriesData = [];
 const varialble = "api";
 const service = new Service(varialble);
 
@@ -27,7 +28,6 @@ refreshExpenses();
 async function refreshExpenses() {
     try {
         setLoading(true);
-
         expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
         renderExpensesList(expenseData);
         updateSummary(expenseData);
@@ -211,7 +211,7 @@ window.addEventListener("click", (event) => {
 });
 
 // Váriaveis para sugestão da categoria no formulário
-const categoriesData = await service.getCategory();
+categoriesData = await service.getCategory();
 const categories = categoriesData.map(cat => cat.name);
 
 const input = document.getElementById('category-input');
@@ -276,7 +276,9 @@ const btnsearchName = document.getElementById("btn-searchName");
 // Evento para buscar a lista de depesas pelo nome
 btnsearchName.addEventListener('click', async () => {
     const name = searchName.value;
+    if (!name) return ;
     expenseData = await service.getExpensesByName(name);
+
     renderExpensesList(expenseData);
     updateSummary(expenseData);
 });

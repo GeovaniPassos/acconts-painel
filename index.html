@@ -41,14 +41,15 @@
       <label for="date-range">Filtrar Período</label>
       <input type="text" id="date-range" readonly placeholder="Selecione o mês">
     </div>
-    <div class="filter-group">
-      <label for="searchName">Filtrar por nome</label>
-      <input type="text" id="searchName" placeholder="Pesquise pelo nome">
-    </div>
-    <div class="filter-group button-group">
-      <button id="btn-searchName">Buscar</button>
-    </div>
-    
+    <form id="searchName" class="form-search-name">
+      <div class="filter-group">
+        <label for="searchName">Filtrar por nome</label>
+        <input type="text" id="searchName" name="searchName" placeholder="Pesquise pelo nome" required>
+      </div>
+      <div class="filter-group button-group">
+        <button id="btn-searchName" form="searchName">Buscar</button>
+      </div>
+    </form>
   </div>
   <div id="messages"></div>
   <div id="loader">Carregando...</div>
