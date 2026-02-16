@@ -312,8 +312,8 @@ function initFlatpickr() {
             if (selectedDates.length === 2) {
                 const startDate = selectedDates[0].toISOString().split('T')[0];
                 const endDate = selectedDates[1].toISOString().split('T')[0];
-                
-                const retorno = await service.getExpensesByPeriod(startDate, endDate);
+                debugger
+                const retorno = await service.getExpensesByPeriod(startDate, endDate) || [];
 
                 renderExpensesList(retorno);
             }

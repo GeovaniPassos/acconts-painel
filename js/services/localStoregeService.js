@@ -294,4 +294,9 @@ export default class LocalStorageService {
             return expense.name?.toLowerCase().includes(search);
         });
     }
+
+    formateDateLocalstore() {
+        const dataAtual = getDateParts();
+        return String(`${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`);
+    }
 }
