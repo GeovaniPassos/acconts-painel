@@ -173,24 +173,6 @@ button {
   width: 135px;
 }
 
-/* Ajustes para Celular (Responsividade) */
-@media (max-width: 600px) {
-    .expense-item {
-        grid-template-columns: 1fr auto; /* Apenas duas colunas no celular */
-        gap: 10px;
-    }
-
-    .info-group.finance {
-        text-align: right; /* Valor e data alinhados à direita */
-        flex-direction: column;
-    }
-
-    .info-group.status, .actions {
-        grid-column: span 1; /* Organiza os botões e status abaixo */
-    }
-}
-
-
 /*Auto-complete do input da categoria*/
 .inline-autocomplete {
     position: relative;
@@ -260,14 +242,7 @@ button {
 .card.pending p { color: #e74c3c; }
 .card.pending { border-top: 5px solid #e74c3c; }
 
-@media (max-width: 600px) {
-    .card {
-        padding: 15px;
-    }
-    .card p {
-        font-size: 1.2rem;
-    }
-}
+
 
 /*Ajustar botão de status*/
 .btn-status {
@@ -348,6 +323,7 @@ button {
 
 #installments {
   width: 135px;
+  justify-content: center;
 }
 
 /* Customizando o calendário do Flatpickr para ser mais moderno */
@@ -361,18 +337,17 @@ button {
 }
 
 .filter-container {
-  grid-template-columns: 40vw 40vw 150px;
+  grid-template-columns: 350px 350px 150px;
   margin-top: 20px;
   display: grid;
   align-items: flex-end;     /* alinha botão com inputs */
+  justify-content: center;
 }
 
 /* cada filtro */
 .filter-group {
   display: flex;
   flex-direction: column;
- /*  min-width: 150px;         
-    flex: 1 1 10px; */          
 }
 
 .form-search-name {
@@ -405,9 +380,27 @@ button {
 
 
 /* 📱 telas pequenas */
+/* Ajustes para Celular (Responsividade) */
 @media (max-width: 600px) {
+
+  .card {
+      padding: 15px;
+  }
+  .card p {
+      font-size: 1.2rem;
+  }
+
+  .info-group.finance {
+      text-align: center; /* Valor e data alinhados à direita */
+      flex-direction: column;
+  }
+
+  .info-group.status, .actions {
+      grid-column: span 1; /* Organiza os botões e status abaixo */
+  }
+  
   .filter-container {
-    grid-template-columns: 20vw 40vw 150px;
+    grid-template-columns: 20px 40px 150px;
     display: block;
     flex-direction: column;
   }
@@ -425,7 +418,18 @@ button {
   }
 
   .expense-item {
-    grid-template-columns: 100px 120px 40px 80px 30px;
+    grid-template-columns: 20vw 20vw 8vw 20vw 5vw;
+  }
+}
+
+@media (max-width: 1000px) {
+  .filter-container {
+    grid-template-columns: 30vw 45vw 15vw;
+  }
+
+  .expense-item {
+    justify-content: center;
+    grid-template-columns: 20vw 20vw 8vw 23vw 5vw;
   }
 }
 
