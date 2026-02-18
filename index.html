@@ -15,9 +15,6 @@
 </head>
 <body>
   <h1>Sistema de Controle de Contas</h1>
-
-  
-
   <section id="summary-container" class="summary-cards">
     <div class="card total">
         <h3>Total Geral</h3>
@@ -41,13 +38,13 @@
       <label for="date-range">Filtrar Período</label>
       <input type="text" id="date-range" readonly placeholder="Selecione o mês">
     </div>
-    <form id="searchName" class="form-search-name">
+    <form id="searchForm" class="form-search-name">
       <div class="filter-group">
         <label for="searchName">Filtrar por nome</label>
         <input type="text" id="searchName" name="searchName" placeholder="Pesquise pelo nome" required>
       </div>
       <div class="filter-group button-group">
-        <button id="btn-searchName" form="searchName">Buscar</button>
+        <button id="btn-searchName" form="searchForm">Buscar</button>
       </div>
     </form>
   </div>

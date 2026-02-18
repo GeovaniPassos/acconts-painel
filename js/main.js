@@ -12,7 +12,7 @@ btnLimparLocalstorege.addEventListener('click', () => {
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
 let categoriesData = [];
-const varialble = "local";
+const varialble = "api";
 const service = new Service(varialble);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
@@ -29,6 +29,20 @@ async function refreshExpenses() {
     try {
         setLoading(true);
         expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
+        renderExpensesList(expenseData);
+        updateSummary(expenseData);
+    } catch (e) {
+        showMessage("error", `Falha ao carregar: ${e.message}`);
+    } finally {
+        setLoading(false);
+    }
+}
+
+// Função para carregar todas as despesas (sem filtro de mês)
+async function loadAllExpenses() {
+    try {
+        setLoading(true);
+        expenseData = await service.getExpenses();
         renderExpensesList(expenseData);
         updateSummary(expenseData);
     } catch (e) {
@@ -272,27 +286,33 @@ statusbtnForm.addEventListener("click", () => {
 
 const searchName = document.getElementById("searchName");
 const btnsearchName = document.getElementById("btn-searchName");
+const searchForm = document.getElementById("searchForm");
 
 // Evento para buscar a lista de depesas pelo nome
 btnsearchName.addEventListener('click', async () => {
-    const name = searchName.value;
-    if (!name) return ;
+    const name = searchName.value.trim();
     expenseData = await service.getExpensesByName(name);
-
     renderExpensesList(expenseData);
     updateSummary(expenseData);
+});
+
+// Evento para prevenir o envio do formulário
+searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    btnsearchName.click();
 });
 
 // Evento para aceitar o input de busca por nome com a tecla enter
 document.getElementById("searchName")
     .addEventListener('keydown', function(UIEvent) {
         if (UIEvent.key == 'Enter') {
-            document.getElementById("btn-searchName").click();
+            UIEvent.preventDefault();
+            btnsearchName.click();
         }
-    });
+});
 
-    document.addEventListener("DOMContentLoaded", () => {
-    refreshExpenses();
+document.addEventListener("DOMContentLoaded", () => {
+    loadAllExpenses();
     //document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 });
 
@@ -312,9 +332,7 @@ function initFlatpickr() {
             if (selectedDates.length === 2) {
                 const startDate = selectedDates[0].toISOString().split('T')[0];
                 const endDate = selectedDates[1].toISOString().split('T')[0];
-                debugger
                 const retorno = await service.getExpensesByPeriod(startDate, endDate) || [];
-
                 renderExpensesList(retorno);
             }
         }
