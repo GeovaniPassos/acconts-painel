@@ -1,93 +1,93 @@
 // Função para renderizar a lista de despesas
-export function renderExpensesList(expenses) {
-    if(!expenses) {
-        updateSummary(expenses);
-        return document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
-    } 
-    const ul = document.getElementById("expenses-list");
-    ul.innerHTML = "";
-    expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
-    updateSummary(expenses);
-}
+// export function renderExpensesList(expenses) {
+//     if(!expenses) {
+//         updateSummary(expenses);
+//         return document.getElementById("expenses-list").textContent = "Nenhuma despesa encontrada!";
+//     } 
+//     const ul = document.getElementById("expenses-list");
+//     ul.innerHTML = "";
+//     expenses.forEach( c => ul.appendChild(renderExpensesItem(c)));
+//     updateSummary(expenses);
+// }
 
-//Função para renderizar a lista de despesas
-export function renderExpensesItem(expense) {
-    const li = document.createElement("li");
-    li.dataset.id = expense.id;
-    li.className = "expense-item";
+// //Função para renderizar a lista de despesas
+// export function renderExpensesItem(expense) {
+//     const li = document.createElement("li");
+//     li.dataset.id = expense.id;
+//     li.className = "expense-item";
 
-    const idPaid = expense.payment === true || expense.payment === "true";
+//     const idPaid = expense.payment === true || expense.payment === "true";
 
-    const statusClass = idPaid ? "status-paid" : "status-pending";
-    const statusText = idPaid ? "Pago" : "Pendente";
-    li.innerHTML = `
-        <div class="info-group main">
-            <strong class="expense-name">${expense.name}</strong>
-            <span class="expense-category">${expense.categoryName}</span>
-        </div>
+//     const statusClass = idPaid ? "status-paid" : "status-pending";
+//     const statusText = idPaid ? "Pago" : "Pendente";
+//     li.innerHTML = `
+//         <div class="info-group main">
+//             <strong class="expense-name">${expense.name}</strong>
+//             <span class="expense-category">${expense.categoryName}</span>
+//         </div>
 
-        <div class="info-group finance">
-            <div class="group-value-date">
-                <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
-                        'pt-BR', { minimumFractionDigits: 2 })}</span>
-                <span class="expense-date">${formatDate(expense.date)}</span>
-            </div>
-            <div class="group-installments">
-                <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
-            </div>
-        </div>
+//         <div class="info-group finance">
+//             <div class="group-value-date">
+//                 <span class="expense-value">R$ ${Number(expense.value).toLocaleString(
+//                         'pt-BR', { minimumFractionDigits: 2 })}</span>
+//                 <span class="expense-date">${formatDate(expense.date)}</span>
+//             </div>
+//             <div class="group-installments">
+//                 <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
+//             </div>
+//         </div>
 
-        <div class="info-group status">
-            <span class="badge btn-table-status ${statusClass}" data-paid="false">${statusText}</span>
-            <span class="expense-date payment-date expense-payment-date-${expense.id}">${formatDate(expense.paymentDate)}</span>
-        </div>
+//         <div class="info-group status">
+//             <span class="badge btn-table-status ${statusClass}" data-paid="false">${statusText}</span>
+//             <span class="expense-date payment-date expense-payment-date-${expense.id}">${formatDate(expense.paymentDate)}</span>
+//         </div>
 
-        <div class="actions">
-            <button class="btn-edit btn-icon" title="Editar">✏️</button>
-            <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
-        </div>
-    `;
+//         <div class="actions">
+//             <button class="btn-edit btn-icon" title="Editar">✏️</button>
+//             <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
+//         </div>
+//     `;
 
-    return li;
-}
+//     return li;
+// }
 
-//Função para formatar datas
-export function formatDate(dateStr) {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year}`;
-}
+// //Função para formatar datas
+// export function formatDate(dateStr) {
+//     if (!dateStr) return "";
+//     const [year, month, day] = dateStr.split("-");
+//     return `${day}/${month}/${year}`;
+// }
 
-export function formatDateApi(dateStr) {
-    if (!dateStr) return "";
-    const [day, month, year] = dateStr.split("/");
-    return `${year}-${month}-${day}`;
-}
+// export function formatDateApi(dateStr) {
+//     if (!dateStr) return "";
+//     const [day, month, year] = dateStr.split("/");
+//     return `${year}-${month}-${day}`;
+// }
 
-//Função para retornar a data em partes
-export function getDateParts(date = new Date()) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+// //Função para retornar a data em partes
+// export function getDateParts(date = new Date()) {
+//     const year = date.getFullYear();
+//     const month = String(date.getMonth() + 1).padStart(2, '0');
+//     const day = String(date.getDate()).padStart(2, '0');
     
-    return { year, month, day };
-}
+//     return { year, month, day };
+// }
 
-//Função para pegar a data atual e formatar a data igual vem da API
-export function getTodayDate() {
-    const { year, month, day } = getDateParts();
-    return `${day}/${month}/${year}`;
-}
+// //Função para pegar a data atual e formatar a data igual vem da API
+// export function getTodayDate() {
+//     const { year, month, day } = getDateParts();
+//     return `${day}/${month}/${year}`;
+// }
 
-// Função para pegar o mes atual
-export function getMonthFromTheCurrentPeriod() {
-       return getDateParts().month;
-}
+// // Função para pegar o mes atual
+// export function getMonthFromTheCurrentPeriod() {
+//        return getDateParts().month;
+// }
 
-// Função para pegar o ano atual 
-export function getYearFromTheCurrentPeriod() {
-    return getDateParts().year;
-}
+// // Função para pegar o ano atual 
+// export function getYearFromTheCurrentPeriod() {
+//     return getDateParts().year;
+// }
 
 // Função para preencher o formulário para edição
 export function fillFormForEdit(expenses) {

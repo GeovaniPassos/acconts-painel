@@ -11,12 +11,12 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-const varialble = "api";
-const service = new Service(varialble);
+const variable = "api";
+const service = new Service(variable);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
 
-if (varialble === "local") {
+if (variable === "local") {
     btnClearLocalStorege.style.display = "visible";
 } else {
     btnClearLocalStorege.style.display = "none";
