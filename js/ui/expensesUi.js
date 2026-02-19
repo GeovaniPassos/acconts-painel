@@ -6,6 +6,7 @@ const expensesController = new ExpensesController();
 
 //Função para buscar a lista por mês e chamar o metodo para renderiza-la.
 export async function renderExpenseListForMouth() {
+    debugger
     const list = await expensesController.getListExpensesForMonth();
     renderExpensesList(list);
     updateSummary(list);

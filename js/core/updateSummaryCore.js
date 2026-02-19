@@ -1,4 +1,4 @@
-export function calculateExpenses(expesesList) {
+export function  calculateExpenses(expesesList) {
 
     const totals = expesesList.reduce((acc, expense) => {
         const value = Number(expense.value) || 0;
