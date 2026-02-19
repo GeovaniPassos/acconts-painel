@@ -13,7 +13,7 @@ export function formatDateApi(dateStr) {
 
 //Função para retornar a data em partes
 export function getDateParts(date = new Date()) {
-    const year = date.getFullYear();
+    const year = String(date.getFullYear());
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     
@@ -27,11 +27,13 @@ export function getTodayDate() {
 }
 
 // Função para pegar o mes atual
-export function getMonthFromTheCurrentPeriod() {
-    return getDateParts().month;
+export function getMonthAndYearFromCurrentPeriod() {
+    const yearCurrent = getDateParts().year;
+    const monthCurrent = getDateParts().month;
+    return { monthCurrent, yearCurrent };
 }
 
 // Função para pegar o ano atual 
-export function getYearFromTheCurrentPeriod() {
-    return getDateParts().year;
-}
+// export function getYearFromTheCurrentPeriod() {
+//     return getDateParts().year;
+// }

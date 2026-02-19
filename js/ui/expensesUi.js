@@ -1,26 +1,13 @@
-import { renderExpensesItem } from "../ui";
+import categoriesController from "../controllers/categoriesController.js";
+import ExpensesController from "../controllers/expensesController.js";
 
-// export function initExpenses() {
-//     expensesController.listExpenseForMonth(renderExpenses);
-// }
+const expensesController = new ExpensesController();
+const categoryController = new categoriesController();
 
-// export function refreshExpenses() {
-//     try {
-//         setLoading(true);
-
-//         //await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), 
-//         // getMonthFromTheCurrentPeriod());
-//         renderExpensesList(expenseData);
-//         updateSummary(expenseData);
-//     } catch (e) {
-//         showMessage("error", `Falha ao carregar: ${e.message}`);
-//     } finally {
-//         setLoading(false);
-//     }
-// }
-
-export function renderExpenseListForMouth() {
-    
+//Função para buscar a lista por mês e chamar o metodo para renderiza-la.
+export async function renderExpenseListForMouth() {
+    const list = await expensesController.getListExpensesForMonth();
+    renderExpensesList(list);
 }
 
 export function renderExpensesList(expenses) {

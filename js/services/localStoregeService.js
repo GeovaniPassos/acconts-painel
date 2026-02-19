@@ -1,6 +1,5 @@
 import { categories } from "../data/category.js";
 import { expenses } from "../data/expenses.js";
-import { getDateParts } from "../ui.js";
 
 export default class LocalStorageService {
     constructor() {

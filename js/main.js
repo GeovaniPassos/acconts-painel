@@ -1,6 +1,12 @@
-import LocalStorageService from "./services/localStoregeService.js";
-import Service from "./services/service.js";
-import { toggleStatusVisual, fillFormForEdit, renderExpensesList, setLoading, showMessage, updateSummary, clearForm, getTodayDate, getMonthFromTheCurrentPeriod, getYearFromTheCurrentPeriod, renderExpensesItem, formatDate, getDateParts, formatDateApi } from "./ui.js";
+import { VARIABLE_CONNECTION } from "./config/config.js";
+import { toggleStatusVisual, 
+    fillFormForEdit, 
+    setLoading, showMessage, 
+    updateSummary, 
+    clearForm } from "./ui.js";
+
+import { renderExpenseListForMouth } from "./ui/expensesUi.js"
+import { formatDate } from "./utils/date.js";
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -11,32 +17,32 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-const variable = "api";
-const service = new Service(variable);
+// const variable = "api";
+// const service = new Service(variable);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
-
+const variable = VARIABLE_CONNECTION;
 if (variable === "local") {
     btnClearLocalStorege.style.display = "visible";
 } else {
     btnClearLocalStorege.style.display = "none";
 }
-refreshExpenses();
-
+//refreshExpenses();
+renderExpenseListForMouth();
 // Função para recarregar a lista de despesas
-async function refreshExpenses() {
-    try {
-        setLoading(true);
-
-        expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
-        renderExpensesList(expenseData);
-        updateSummary(expenseData);
-    } catch (e) {
-        showMessage("error", `Falha ao carregar: ${e.message}`);
-    } finally {
-        setLoading(false);
-    }
-}
+// async function refreshExpenses() {
+//     try {
+//         setLoading(true);
+        
+//         expenseData = await service.getExpensesByMonth(getYearFromTheCurrentPeriod(), getMonthFromTheCurrentPeriod());
+//         renderExpensesList(expenseData);
+//         updateSummary(expenseData);
+//     } catch (e) {
+//         showMessage("error", `Falha ao carregar: ${e.message}`);
+//     } finally {
+//         setLoading(false);
+//     }
+// }
 
 // Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
@@ -211,7 +217,7 @@ window.addEventListener("click", (event) => {
 });
 
 // Váriaveis para sugestão da categoria no formulário
-const categoriesData = await service.getCategory();
+const categoriesData = getCategoriesNames();
 const categories = categoriesData.map(cat => cat.name);
 
 const input = document.getElementById('category-input');
