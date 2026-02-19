@@ -181,28 +181,28 @@ export function toggleStatusVisual(element, isPaid) {
 }
 
 //  Função para atualizar a resumo dos valores das despesas
-export function updateSummary(expenses) {
-    if (expenses == null) expenses = [];
-    // Calculando os valores usando reduce
-    const totals = expenses.reduce((acc, expense) => {
-        const value = Number(expense.value) || 0;
-        const isPaid = expense.payment === true || expense.payment === "true";
+// export function updateSummary(expenses) {
+//     if (expenses == null) expenses = [];
+//     // Calculando os valores usando reduce
+//     const totals = expenses.reduce((acc, expense) => {
+//         const value = Number(expense.value) || 0;
+//         const isPaid = expense.payment === true || expense.payment === "true";
 
-        acc.total += value;
-        if (isPaid) {
-            acc.paid += value;
-        } else {
-            acc.pending += value;
-        }
+//         acc.total += value;
+//         if (isPaid) {
+//             acc.paid += value;
+//         } else {
+//             acc.pending += value;
+//         }
         
-        return acc;
-    }, { total: 0, paid: 0, pending: 0 });
+//         return acc;
+//     }, { total: 0, paid: 0, pending: 0 });
 
-    // Atualizando o DOM com formatação de moeda brasileira
-    document.getElementById('total-geral').textContent = formatCurrency(totals.total);
-    document.getElementById('total-pago').textContent = formatCurrency(totals.paid);
-    document.getElementById('total-pendente').textContent = formatCurrency(totals.pending);
-}
+//     // Atualizando o DOM com formatação de moeda brasileira
+//     document.getElementById('total-geral').textContent = formatCurrency(totals.total);
+//     document.getElementById('total-pago').textContent = formatCurrency(totals.paid);
+//     document.getElementById('total-pendente').textContent = formatCurrency(totals.pending);
+// }
 
 // Função auxiliar de formatação monetária
 function formatCurrency(value) {

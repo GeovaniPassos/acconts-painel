@@ -1,15 +1,18 @@
-import { VARIABLE_CONNECTION } from "../config/config";
-import Service from "../services/service";
+import { VARIABLE_CONNECTION } from "../config/config.js";
+import { findCategoryByName } from "../core/categoriesCore.js";
+import Service from "../services/service.js";
 
-const service = new Service();
+const service = new Service(VARIABLE_CONNECTION);
 
 export default class categoriesController {
-    service = new Service(VARIABLE_CONNECTION);
 
-    async getCategoriesNames(){
-        const categoriesList = await service.getCategory();
-        categoriesList = categoriesList.map(cat => cat.name)
+    categoriesList = service.getCategory();
+
+    async getCategoriesNames(value){
+        
+        categoriesList = findCategoryByName(categoriesList, value);
 
         return categoriesList;
     }
+
 }

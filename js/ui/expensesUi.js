@@ -1,13 +1,14 @@
-import categoriesController from "../controllers/categoriesController.js";
 import ExpensesController from "../controllers/expensesController.js";
+import { formatDate } from "../utils/date.js";
+import { updateSummary } from "./sumary.js";
 
 const expensesController = new ExpensesController();
-const categoryController = new categoriesController();
 
 //Função para buscar a lista por mês e chamar o metodo para renderiza-la.
 export async function renderExpenseListForMouth() {
     const list = await expensesController.getListExpensesForMonth();
     renderExpensesList(list);
+    updateSummary(list);
 }
 
 export function renderExpensesList(expenses) {

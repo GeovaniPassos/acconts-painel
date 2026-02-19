@@ -2,11 +2,13 @@ import { VARIABLE_CONNECTION } from "./config/config.js";
 import { toggleStatusVisual, 
     fillFormForEdit, 
     setLoading, showMessage, 
-    updateSummary, 
     clearForm } from "./ui.js";
+import { findCategories } from "./ui/categoriesUi.js";
 
 import { renderExpenseListForMouth } from "./ui/expensesUi.js"
 import { formatDate } from "./utils/date.js";
+
+import { updateSummary } from "./ui/sumary.js";
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -17,8 +19,6 @@ btnLimparLocalstorege.addEventListener('click', () => {
 
 // Variáveis para guardar a lista de depesas
 let expenseData = [];
-// const variable = "api";
-// const service = new Service(variable);
 
 const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
 const variable = VARIABLE_CONNECTION;
@@ -28,6 +28,7 @@ if (variable === "local") {
     btnClearLocalStorege.style.display = "none";
 }
 //refreshExpenses();
+
 renderExpenseListForMouth();
 // Função para recarregar a lista de despesas
 // async function refreshExpenses() {
@@ -198,7 +199,7 @@ const dateInput = document.getElementById("date");
 // Evento para abrir modal
 btnAbrir.addEventListener("click", () => {
     modal.style.display = "block";
-    const dataAtual = getDateParts();
+    //const dataAtual = getDateParts();
     dateInput.value = `${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`;
 });
 
@@ -217,13 +218,14 @@ window.addEventListener("click", (event) => {
 });
 
 // Váriaveis para sugestão da categoria no formulário
-const categoriesData = getCategoriesNames();
-const categories = categoriesData.map(cat => cat.name);
+//const categoriesData = getCategoriesNames();   //deletar
+//const categories = categoriesData.map(cat => cat.name);
 
 const input = document.getElementById('category-input');
 const ghost = document.getElementById('ghost-text');
 
 input.addEventListener('input', () => {
+    
     const value = input.value;
     
     if (!value) {
@@ -231,18 +233,18 @@ input.addEventListener('input', () => {
         return;
     }
 
-    // Procura uma categoria ao digitar
-    const match = categories.find(cat => 
-        cat.toLowerCase().startsWith(value.toLowerCase())
-    );
+    //função para verificar se existe com a letra
 
-    if (match) {
-        // O ghost text precisa ser o que o usuário digitou + o resto da palavra
-        // Usamos o valor do input original para manter a capitalização do usuário
-        ghost.textContent = value + match.slice(value.length);
-    } else {
-        ghost.textContent = "";
-    }
+    // Procura uma categoria ao digitar
+    findCategories(value);
+
+    // if (match) {
+    //     // O ghost text precisa ser o que o usuário digitou + o resto da palavra
+    //     // Usamos o valor do input original para manter a capitalização do usuário
+    //     ghost.textContent = value + match.slice(value.length);
+    // } else {
+    //     ghost.textContent = "";
+    // }
 });
 
 // Evento para aceitar a sugestão com Tab ou Seta para Direita
@@ -296,7 +298,7 @@ document.getElementById("searchName")
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-    refreshExpenses();
+    //refreshExpenses();
     //document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 });
 
