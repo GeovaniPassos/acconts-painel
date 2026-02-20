@@ -10,6 +10,13 @@ import { formatDate } from "./utils/date.js";
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
 
+
+function initApp() {
+
+}
+
+document.addEventListener("DOMContentLoaded", initApp);
+
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
 btnLimparLocalstorege.addEventListener('click', () => {
@@ -196,26 +203,26 @@ const btnFechar = document.getElementById("btn-to-close");
 const modal = document.getElementById("modal");
 const dateInput = document.getElementById("date");
 
-// Evento para abrir modal
-btnAbrir.addEventListener("click", () => {
-    modal.style.display = "block";
-    //const dataAtual = getDateParts();
-    dateInput.value = `${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`;
-});
+// // Evento para abrir modal
+// btnAbrir.addEventListener("click", () => {
+//     modal.style.display = "block";
+//     //const dataAtual = getDateParts();
+//     dateInput.value = `${dataAtual.year}-${dataAtual.month}-${dataAtual.day}`;
+// });
 
-// Evento para fechar modal
-btnFechar.addEventListener("click", () => {
-    clearForm();
-    modal.style.display = "none";
-});
+// // Evento para fechar modal
+// btnFechar.addEventListener("click", () => {
+//     clearForm();
+//     modal.style.display = "none";
+// });
 
-// Evento para fechar ao clicar fora do modal
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    clearForm();
-    modal.style.display = "none";
-  }
-});
+// // Evento para fechar ao clicar fora do modal
+// window.addEventListener("click", (event) => {
+//   if (event.target === modal) {
+//     clearForm();
+//     modal.style.display = "none";
+//   }
+// });
 
 // Váriaveis para sugestão da categoria no formulário
 //const categoriesData = getCategoriesNames();   //deletar

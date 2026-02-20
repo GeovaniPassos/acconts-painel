@@ -14,3 +14,17 @@ export default class expensesController {
         return expensesList;
     }
 }
+
+export async function renderExpenseListForMouth() {
+    try {
+        setLoading(true);
+        
+        const list = await this.getListExpensesForMonth();
+        renderExpensesList(list);
+        updateSummary(list);
+    } catch (e) {
+        showMessage("error", `Falha ao carregar: ${e.message}`);
+    } finally {
+        setLoading(false);
+    }
+}
