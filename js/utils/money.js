@@ -3,3 +3,8 @@ export function formatCurrency(priceCents) {
 }
 
 export default formatCurrency;
+
+export function formatMoney(value) {
+    //return `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}

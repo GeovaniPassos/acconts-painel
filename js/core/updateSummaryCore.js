@@ -16,3 +16,4 @@ export function  calculateExpenses(expesesList) {
 
     return totals;
 }
+

@@ -1,7 +1,6 @@
 import { VARIABLE_CONNECTION } from "./config/config.js";
 import { toggleStatusVisual, 
     fillFormForEdit, 
-    setLoading, showMessage, 
     clearForm } from "./ui.js";
 import { findCategories } from "./ui/categoriesUi.js";
 
@@ -9,6 +8,7 @@ import { renderExpenseListForMouth } from "./ui/expensesUi.js"
 import { formatDate } from "./utils/date.js";
 
 import { updateSummary } from "./ui/sumary.js";
+import { showMessage, setLoading } from "./ui/feedback.js";
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');

@@ -89,6 +89,7 @@
 //     return getDateParts().year;
 // }
 
+
 // Função para preencher o formulário para edição
 export function fillFormForEdit(expenses) {
     const form = document.getElementById("expenses-form");
@@ -147,21 +148,21 @@ export function clearForm() {
 }
 
 // Função para mostrar as mensagens de retorno
-export function showMessage(type, text) {
-    const box = document.getElementById("messages");
-    box.textContent = text;
-    box.className = type;
-    setTimeout(() => { 
-        box.textContent = ""; 
-        box.className = "";
-    }, 3000);
-}
+// export function showMessage(type, text) {
+//     const box = document.getElementById("messages");
+//     box.textContent = text;
+//     box.className = type;
+//     setTimeout(() => { 
+//         box.textContent = ""; 
+//         box.className = "";
+//     }, 3000);
+// }
 
 // Função para definir o carregamento da pagina e realizar o bloqueio dá mesma
-export function setLoading(isLoading) {
-    const loader = document.getElementById("loader");
-    loader.style.display = isLoading ? "block" : "none";
-}
+// export function setLoading(isLoading) {
+//     const loader = document.getElementById("loader");
+//     loader.style.display = isLoading ? "block" : "none";
+// }
 
 // Botão de alterar o status do pagamento visualmente
 export function toggleStatusVisual(element, isPaid) {
@@ -205,6 +206,6 @@ export function toggleStatusVisual(element, isPaid) {
 // }
 
 // Função auxiliar de formatação monetária
-function formatCurrency(value) {
-    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
+// function formatCurrency(value) {
+//     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+// }
