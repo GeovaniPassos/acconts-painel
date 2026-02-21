@@ -1,25 +1,5 @@
-import ExpensesController from "../controllers/expensesController.js";
 import { formatDate } from "../utils/date.js";
 import { formatMoney } from "../utils/money.js";
-import { setLoading } from "./feedback.js";
-import { updateSummary } from "./sumary.js";
-
-const expensesController = new ExpensesController();
-
-//Função para buscar a lista por mês e chamar o metodo para renderiza-la.
-export async function renderExpenseListForMouth() {
-    try {
-        setLoading(true);
-        
-        const list = await expensesController.getListExpensesForMonth();
-        renderExpensesList(list);
-        updateSummary(list);
-    } catch (e) {
-        showMessage("error", `Falha ao carregar: ${e.message}`);
-    } finally {
-        setLoading(false);
-    }
-}
 
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");

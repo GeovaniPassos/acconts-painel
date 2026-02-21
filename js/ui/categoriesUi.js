@@ -1,9 +1,6 @@
-import categoriesController from "../controllers/categoriesController.js";
-
-const categoryController = new categoriesController();
+import { getCategoriesNames } from "../controllers/categoriesController.js";
 
 export function findCategories(value) {
 
-    categoryController.getCategoriesNames(value);
-    
+    return getCategoriesNames(value);
 }

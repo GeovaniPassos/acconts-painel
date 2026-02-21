@@ -1,18 +1,15 @@
 import { VARIABLE_CONNECTION } from "./config/config.js";
-import { toggleStatusVisual, 
-    fillFormForEdit, 
-    clearForm } from "./ui.js";
+import { fillFormForEdit } from "./ui.js";
 import { findCategories } from "./ui/categoriesUi.js";
 
-import { renderExpenseListForMouth } from "./ui/expensesUi.js"
 import { formatDate } from "./utils/date.js";
 
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
-
+import { initExpensesTable } from "./controllers/expensesController.js";
 
 function initApp() {
-
+    initExpensesTable();
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
@@ -36,7 +33,7 @@ if (variable === "local") {
 }
 //refreshExpenses();
 
-renderExpenseListForMouth();
+//renderExpenseListForMouth();
 // Função para recarregar a lista de despesas
 // async function refreshExpenses() {
 //     try {
@@ -266,15 +263,15 @@ input.addEventListener('keydown', (e) => {
     }
 });
 
-const btnTableStatus = document.querySelectorAll(".btn-table-status");
+// const btnTableStatus = document.querySelectorAll(".btn-table-status");
 
-// Evento para alterar status do botão de pagamento
-btnTableStatus.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const isPaid = btn.dataset.paid === "true";
-        toggleStatusVisual(btn, !isPaid);
-    });
-});
+// // Evento para alterar status do botão de pagamento
+// btnTableStatus.forEach(btn => {
+//     btn.addEventListener("click", () => {
+//         const isPaid = btn.dataset.paid === "true";
+//         toggleStatusVisual(btn, !isPaid);
+//     });
+// });
 
 const statusbtnForm = document.querySelector(".btn-form-status");
 const paymentDateForm = document.querySelector(".expense-payment-date");

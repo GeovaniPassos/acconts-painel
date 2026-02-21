@@ -4,15 +4,11 @@ import Service from "../services/service.js";
 
 const service = new Service(VARIABLE_CONNECTION);
 
-export default class categoriesController {
+let categoriesList = service.getCategory();
 
-    categoriesList = service.getCategory();
+export async function getCategoriesNames(value){
+    
+    categoriesList = findCategoryByName(categoriesList, value);
 
-    async getCategoriesNames(value){
-        
-        categoriesList = findCategoryByName(categoriesList, value);
-
-        return categoriesList;
-    }
-
+    return categoriesList;
 }
