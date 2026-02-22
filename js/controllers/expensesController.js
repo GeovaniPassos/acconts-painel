@@ -1,33 +1,43 @@
-import { getMonthAndYearFromCurrentPeriod } from "../utils/date.js";
-
-import Service from "../services/service.js";
 import { VARIABLE_CONNECTION } from "../config/config.js";
-import { setLoading, showMessage } from "../ui/feedback.js";
-import { renderExpensesList } from "../ui/expensesUi.js";
-import { updateSummary } from "../ui/sumary.js";
+import Service from "../services/service.js";
+
+import * as date from "../utils/date.js";
+import * as feedback from "../ui/feedback.js";
+import * as expenseUi from "../ui/expensesUi.js";
+import * as sumary from "../ui/sumary.js";
+import * as formUi from "../ui/formUi.js";
+import * as core from "../core/expensesCore.js";
 
 const service = new Service(VARIABLE_CONNECTION);
 
-export function initExpensesTable() {
+export function initExpenses() {
     renderExpenseListForMouth();
+    // trazer do main handleSaveExpenses
+    //formUi.bindFormSubmit(handleSaveExpenses);
 }
 
 export async function renderExpenseListForMouth() {
     try {
-        setLoading(true);
+        feedback.setLoading(true);
         const list = await getListExpensesForMonth();
-        renderExpensesList(list);
-        updateSummary(list);
+        expenseUi.renderExpensesList(list);
+        sumary.updateSummary(list);
     } catch (e) {
-        showMessage("error", `Falha ao carregar: ${e.message}`);
+        feedback.showMessage("error", `Falha ao carregar: ${e.message}`);
     } finally {
-        setLoading(false);
+        feedback.setLoading(false);
     }
 }
 
-export async function getListExpensesForMonth(){
-    const currentDate = getMonthAndYearFromCurrentPeriod();
+export async function getListExpensesForMonth() {
+    const currentDate = date.getMonthAndYearFromCurrentPeriod();
     const expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
     
     return expensesList;
+}
+
+export function handleEditExpenses(expense) {
+    //Função para normalizar dados Ex categoria_id = nome.categoria
+    const formModel = core.buildEditFormModel(expense);
+    formUi.fillFormForEdit(formModel);
 }

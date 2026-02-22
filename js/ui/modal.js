@@ -1,7 +1,8 @@
-// export function closeModal() {
-//     clearForm();
-//     modal.style.display = "none";
-// }
+import { getDateParts } from "../utils/date";
+
+const btnAbrir = document.getElementById("btn-open-form");
+const btnFechar = document.getElementById("btn-to-close");
+const modal = document.getElementById("modal");
 
 // Evento para abrir modal
 btnAbrir.addEventListener("click", () => {

@@ -91,41 +91,41 @@
 
 
 // Função para preencher o formulário para edição
-export function fillFormForEdit(expenses) {
-    const form = document.getElementById("expenses-form");
-    const modal = document.getElementById("modal");
-    const modalTitle = document.querySelector(".modal-title");
-    const textInstallment = document.querySelector(".installments");
-    form.dataset.mode = "edit";
-    form.dataset.id = expenses.id;
-    const categoryInput = document.getElementById('category-input');
-    categoryInput.value = expenses.categoryName;
-    document.getElementById('ghost-text').textContent = "";
+// export function fillFormForEdit(expenses) {
+//     const form = document.getElementById("expenses-form");
+//     const modal = document.getElementById("modal");
+//     const modalTitle = document.querySelector(".modal-title");
+//     const textInstallment = document.querySelector(".installments");
+//     form.dataset.mode = "edit";
+//     form.dataset.id = expenses.id;
+//     const categoryInput = document.getElementById('category-input');
+//     categoryInput.value = expenses.categoryName;
+//     document.getElementById('ghost-text').textContent = "";
     
-    form.name.value = expenses.name;
-    document.getElementById("name").disabled = true;
+//     form.name.value = expenses.name;
+//     document.getElementById("name").disabled = true;
 
-    form.value.value = expenses.value;
-    form.description.value = expenses.description || "";
+//     form.value.value = expenses.value;
+//     form.description.value = expenses.description || "";
 
-    form.installments.value = expenses.installment;
-    textInstallment.textContent = "Número da parcela";
-    document.getElementById("installments").disabled = true;
+//     form.installments.value = expenses.installment;
+//     textInstallment.textContent = "Número da parcela";
+//     document.getElementById("installments").disabled = true;
 
-    const statusBtn = document.querySelector(".btn-form-status");
-    const isPaid = expenses.payment === true || expenses.payment === "true";
-    toggleStatusVisual(statusBtn, isPaid);
+//     const statusBtn = document.querySelector(".btn-form-status");
+//     const isPaid = expenses.payment === true || expenses.payment === "true";
+//     toggleStatusVisual(statusBtn, isPaid);
     
-    form.paymentDate.value = formatDate(expenses.paymentDate) || "";
+//     form.paymentDate.value = formatDate(expenses.paymentDate) || "";
     
-    if (expenses.date) {
-        form.date.value = expenses.date.split("T")[0];
-    }
+//     if (expenses.date) {
+//         form.date.value = expenses.date.split("T")[0];
+//     }
 
-    if (modalTitle) modalTitle.textContent = "Editar despesa";
+//     if (modalTitle) modalTitle.textContent = "Editar despesa";
 
-    modal.style.display = "block";
-}
+//     modal.style.display = "block";
+// }
 
 //  Função para limpar o formulário
 // export function clearForm() {

@@ -1,18 +1,25 @@
 import { VARIABLE_CONNECTION } from "./config/config.js";
-import { fillFormForEdit } from "./ui.js";
 import { findCategories } from "./ui/categoriesUi.js";
 
 import { formatDate } from "./utils/date.js";
 
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
-import { initExpensesTable } from "./controllers/expensesController.js";
+import { initExpenses } from "./controllers/expensesController.js";
 
 function initApp() {
-    initExpensesTable();
+    initExpenses();
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
+
+// Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
+// export function init() {
+//     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
+//     document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
+// }
+
+// document.addEventListener("DOMContentLoaded", init);
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
 const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
@@ -186,13 +193,7 @@ async function handleListClickPayment(event) {
     }
 }
 
-// Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
-export function init() {
-    document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
-    document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
-}
 
-document.addEventListener("DOMContentLoaded", init);
 
 // Variáveis relacionadas ao modal
 const btnAbrir = document.getElementById("btn-open-form");
