@@ -6,12 +6,13 @@ import { formatDate } from "./utils/date.js";
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
 import { initExpenses } from "./controllers/expensesController.js";
+import { bindPaymentToggleButtons } from "./ui/paymentUi.js";
+import { initPayment } from "./controllers/paymentController.js";
 
-function initApp() {
+document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
-}
-
-document.addEventListener("DOMContentLoaded", initApp);
+    initPayment();
+});
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
 // export function init() {
