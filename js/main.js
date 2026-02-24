@@ -6,14 +6,24 @@ import { formatDate } from "./utils/date.js";
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
 import { initExpenses } from "./controllers/expensesController.js";
+<<<<<<< HEAD
 import { bindModal } from "./ui/modal.js";
+=======
+import { bindPaymentToggleButtons } from "./ui/paymentUi.js";
+import { initPayment } from "./controllers/paymentController.js";
+>>>>>>> 68c21dc8f3d86092e2091730b3222fca1c91215e
 
-function initApp() {
+document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
+<<<<<<< HEAD
     bindModal();
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
+=======
+    initPayment();
+});
+>>>>>>> 68c21dc8f3d86092e2091730b3222fca1c91215e
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
 // export function init() {

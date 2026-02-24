@@ -1,6 +1,6 @@
-import { VARIABLE_CONNECTION } from "../config/config";
+import { VARIABLE_CONNECTION } from "../config/config.js";
 
-import * as Service from "../services/service.js";
+import Service from "../services/service.js";
 import * as feedback from "../ui/feedback.js";
 import * as ui from "../ui/paymentUi.js";
 
