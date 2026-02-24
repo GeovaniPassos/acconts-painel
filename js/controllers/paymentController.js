@@ -3,6 +3,7 @@ import { VARIABLE_CONNECTION } from "../config/config.js";
 import Service from "../services/service.js";
 import * as feedback from "../ui/feedback.js";
 import * as ui from "../ui/paymentUi.js";
+import * as core from "../core/paymentCore.js";
 
 const service = new Service(VARIABLE_CONNECTION);
 
@@ -12,7 +13,8 @@ export function definePayment() {
     });
 }
 
-//falta testar e terminar a função
+//TODO: Falta ajustar a alteração na data, e se vai apenas incluir para não ter que 
+//carregar toda lista
 async function handleTogglePayment(event, button) {
     try {
         const li = button.closest("li");
@@ -20,9 +22,9 @@ async function handleTogglePayment(event, button) {
         
         const result = core.togglePaymenetStatus(button.dataset.paid);
 
-        const updated = await service.togglePayment(expenseId, result.isPaid);
+        await service.togglePayment(expenseId, result.isPaid);
 
-        ui.updatePaymentVisual(button, result.isPaid);
+        ui.toggleStatusVisual(button, result.isPaid);
 
     } catch(e){
         feedback.showMessage("Error", `Falha ao carregar: ${e.message}`);

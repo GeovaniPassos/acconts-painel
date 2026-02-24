@@ -1,4 +1,3 @@
-import { VARIABLE_CONNECTION } from "./config/config.js";
 import { findCategories } from "./ui/categoriesUi.js";
 
 import { formatDate } from "./utils/date.js";
@@ -8,7 +7,6 @@ import { showMessage, setLoading } from "./ui/feedback.js";
 import { initExpenses } from "./controllers/expensesController.js";
 import { bindModal } from "./ui/modal.js";
 import { releaseLocalstorage } from "./utils/localstoregeTests.js";
-import { bindPaymentToggleButtons } from "./ui/paymentUi.js";
 import { definePayment } from "./controllers/paymentController.js";
 
 document.addEventListener("DOMContentLoaded", () => {

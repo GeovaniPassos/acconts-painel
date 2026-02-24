@@ -10,6 +10,7 @@ export function clearLocalStorage() {
 
 export function releaseLocalstorage() {
     const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
+    clearLocalStorage();
     const variable = VARIABLE_CONNECTION;
     if (variable === "local") {
         btnClearLocalStorege.style.display = "visible";
