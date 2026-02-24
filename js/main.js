@@ -6,9 +6,11 @@ import { formatDate } from "./utils/date.js";
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
 import { initExpenses } from "./controllers/expensesController.js";
+import { bindModal } from "./ui/modal.js";
 
 function initApp() {
     initExpenses();
+    bindModal();
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
@@ -196,10 +198,10 @@ async function handleListClickPayment(event) {
 
 
 // Variáveis relacionadas ao modal
-const btnAbrir = document.getElementById("btn-open-form");
-const btnFechar = document.getElementById("btn-to-close");
-const modal = document.getElementById("modal");
-const dateInput = document.getElementById("date");
+// const btnAbrir = document.getElementById("btn-open-form");
+// const btnFechar = document.getElementById("btn-to-close");
+// const modal = document.getElementById("modal");
+// const dateInput = document.getElementById("date");
 
 // // Evento para abrir modal
 // btnAbrir.addEventListener("click", () => {

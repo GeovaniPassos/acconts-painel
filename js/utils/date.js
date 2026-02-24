@@ -5,7 +5,7 @@ export function formatDate(dateStr) {
     return `${day}/${month}/${year}`;
 }
 
-export function formatDateApi(dateStr) {
+export function formatDateCalendar(dateStr) {
     if (!dateStr) return "";
     const [day, month, year] = dateStr.split("/");
     return `${year}-${month}-${day}`;
