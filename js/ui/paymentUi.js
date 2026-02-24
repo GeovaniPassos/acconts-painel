@@ -27,7 +27,6 @@ export function bindPaymentToggleButtons(handlers) {
         const btn = event.target.closest(".btn-table-status");
         if (!btn) return;
 
-        console.log("botão clicado", btn.dataset.paid);
         if (handlers?.onToggle) handlers.onToggle(event, btn);
     });
 }

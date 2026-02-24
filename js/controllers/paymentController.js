@@ -25,7 +25,9 @@ async function handleTogglePayment(event, button) {
         await service.togglePayment(expenseId, result.isPaid);
 
         ui.toggleStatusVisual(button, result.isPaid);
+        
 
+        
     } catch(e){
         feedback.showMessage("Error", `Falha ao carregar: ${e.message}`);
     }

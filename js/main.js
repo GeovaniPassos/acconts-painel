@@ -321,7 +321,7 @@ document.getElementById("searchName")
 
 ////////////////////////////
 
-initFlatpickr();
+// initFlatpickr();
 
 // Função para acionar o Flatpickr (Calendário personalizado)
 function initFlatpickr() {
