@@ -6,24 +6,17 @@ import { formatDate } from "./utils/date.js";
 import { updateSummary } from "./ui/sumary.js";
 import { showMessage, setLoading } from "./ui/feedback.js";
 import { initExpenses } from "./controllers/expensesController.js";
-<<<<<<< HEAD
 import { bindModal } from "./ui/modal.js";
-=======
+import { releaseLocalstorage } from "./utils/localstoregeTests.js";
 import { bindPaymentToggleButtons } from "./ui/paymentUi.js";
-import { initPayment } from "./controllers/paymentController.js";
->>>>>>> 68c21dc8f3d86092e2091730b3222fca1c91215e
+import { definePayment } from "./controllers/paymentController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
-<<<<<<< HEAD
     bindModal();
-}
-
-document.addEventListener("DOMContentLoaded", initApp);
-=======
-    initPayment();
+    releaseLocalstorage();
+    definePayment();
 });
->>>>>>> 68c21dc8f3d86092e2091730b3222fca1c91215e
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
 // export function init() {
@@ -34,22 +27,22 @@ document.addEventListener("DOMContentLoaded", initApp);
 // document.addEventListener("DOMContentLoaded", init);
 
 // Botão para limpar localstorege, desabilitado emover quando for para produção (Falta melhorar em produção)
-const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
-btnLimparLocalstorege.addEventListener('click', () => {
-    localStorage.clear();
-    window.alert('LocalStorege resetado!');
-});
+// const btnLimparLocalstorege = document.getElementById('btn-clear-localstorege');
+// btnLimparLocalstorege.addEventListener('click', () => {
+//     localStorage.clear();
+//     window.alert('LocalStorege resetado!');
+// });
 
 // Variáveis para guardar a lista de depesas
-let expenseData = [];
+//let expenseData = [];
 
-const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
-const variable = VARIABLE_CONNECTION;
-if (variable === "local") {
-    btnClearLocalStorege.style.display = "visible";
-} else {
-    btnClearLocalStorege.style.display = "none";
-}
+// const btnClearLocalStorege = document.getElementById("btn-clear-localstorege");
+// const variable = VARIABLE_CONNECTION;
+// if (variable === "local") {
+//     btnClearLocalStorege.style.display = "visible";
+// } else {
+//     btnClearLocalStorege.style.display = "none";
+// }
 //refreshExpenses();
 
 //renderExpenseListForMouth();
@@ -238,6 +231,10 @@ async function handleListClickPayment(event) {
 //const categoriesData = getCategoriesNames();   //deletar
 //const categories = categoriesData.map(cat => cat.name);
 
+
+
+////////////////////////////
+
 const input = document.getElementById('category-input');
 const ghost = document.getElementById('ghost-text');
 
@@ -285,16 +282,20 @@ input.addEventListener('keydown', (e) => {
 //         toggleStatusVisual(btn, !isPaid);
 //     });
 // });
+////////////////////////////
 
-const statusbtnForm = document.querySelector(".btn-form-status");
-const paymentDateForm = document.querySelector(".expense-payment-date");
-// Evento para alterar o status dentro do formulário
-statusbtnForm.addEventListener("click", () => {
-    const isPaid = statusbtnForm.dataset.paid === "true";
-    toggleStatusVisual(statusbtnForm, !isPaid);
-    paymentDateForm.value = !isPaid ? getTodayDate() : "";
-});
+// const statusbtnForm = document.querySelector(".btn-form-status");
+// const paymentDateForm = document.querySelector(".expense-payment-date");
+// // Evento para alterar o status dentro do formulário
+// statusbtnForm.addEventListener("click", () => {
+//     const isPaid = statusbtnForm.dataset.paid === "true";
+//     toggleStatusVisual(statusbtnForm, !isPaid);
+//     paymentDateForm.value = !isPaid ? getTodayDate() : "";
+// });
 
+
+
+////////////////////////////
 const searchName = document.getElementById("searchName");
 const btnsearchName = document.getElementById("btn-searchName");
 
@@ -318,6 +319,9 @@ document.getElementById("searchName")
     //refreshExpenses();
     //document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
 });
+
+
+////////////////////////////
 
 initFlatpickr();
 

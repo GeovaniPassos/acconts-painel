@@ -6,9 +6,9 @@ import * as ui from "../ui/paymentUi.js";
 
 const service = new Service(VARIABLE_CONNECTION);
 
-export function initPayment() {
+export function definePayment() {
     ui.bindPaymentToggleButtons({
-        ontoggle: handleTogglePayment
+        onToggle: handleTogglePayment
     });
 }
 
