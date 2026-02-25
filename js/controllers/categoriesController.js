@@ -8,7 +8,7 @@ let categoriesList = service.getCategory();
 
 export async function getCategoriesNames(value){
     
-    categoriesList = findCategoryByName(categoriesList, value);
+    categoriesList = await findCategoryByName(categoriesList, value);
 
     return categoriesList;
 }

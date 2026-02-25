@@ -63,10 +63,9 @@ export function fillFormForEdit(expense) {
 
 //Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
-    console.log(event)
-    //definir o tipo de evento
+    //Para deixe o evento em espera enquanto não haver o clique
     event.preventDefault();
-
+    
     //localizar os elementos pre carregados (data, categoria, pagamento/data do pagamento)
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();

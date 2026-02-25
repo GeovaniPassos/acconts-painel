@@ -10,6 +10,7 @@ import { releaseLocalstorage } from "./utils/localstoregeTests.js";
 import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
 import { toggleStatusPayment } from "./ui/paymentUi.js";
+import { bindFormSubmit } from "./ui/formUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
@@ -239,7 +240,7 @@ async function handleListClickPayment(event) {
 ////////////////////////////
 
 const input = document.getElementById('category-input');
-const ghost = document.getElementById('ghost-text');
+const listCategory = document.getElementById('ghost-text');
 
 input.addEventListener('input', () => {
     
@@ -253,7 +254,17 @@ input.addEventListener('input', () => {
     //função para verificar se existe com a letra
 
     // Procura uma categoria ao digitar
-    findCategories(value);
+    const result = findCategories(value);
+
+    result.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        li.onclick = () => {
+            input.value = item;
+            list.innerHtml = "";
+        }
+        list.appendChild(li);
+    });
 
     // if (match) {
     //     // O ghost text precisa ser o que o usuário digitou + o resto da palavra
