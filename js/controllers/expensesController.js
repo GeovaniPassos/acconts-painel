@@ -41,3 +41,8 @@ export function handleEditExpenses(expense) {
     const formModel = core.buildEditFormModel(expense);
     formUi.fillFormForEdit(formModel);
 }
+
+export async function getExpenseByPeriod(startDate, endDate) {
+    const list = await service.getExpensesByPeriod(startDate, endDate);
+    expenseUi.renderExpensesList(list);
+}

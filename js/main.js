@@ -8,12 +8,14 @@ import { initExpenses } from "./controllers/expensesController.js";
 import { bindModal } from "./ui/modal.js";
 import { releaseLocalstorage } from "./utils/localstoregeTests.js";
 import { definePayment } from "./controllers/paymentController.js";
+import { initFlatpickr } from "./libs/flatpickr.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
     bindModal();
     releaseLocalstorage();
     definePayment();
+    initFlatpickr();
 });
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
@@ -324,26 +326,26 @@ document.getElementById("searchName")
 // initFlatpickr();
 
 // Função para acionar o Flatpickr (Calendário personalizado)
-function initFlatpickr() {
-    const element = document.getElementById("date-range");
+// function initFlatpickr() {
+//     const element = document.getElementById("date-range");
 
-    flatpickr(element, {
-        mode: "range",
-        locale: "pt",
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d/m/Y",
-        onClose: async function(selectedDates) {
-            if (selectedDates.length === 2) {
-                const startDate = selectedDates[0].toISOString().split('T')[0];
-                const endDate = selectedDates[1].toISOString().split('T')[0];
+//     flatpickr(element, {
+//         mode: "range",
+//         locale: "pt",
+//         dateFormat: "Y-m-d",
+//         altInput: true,
+//         altFormat: "d/m/Y",
+//         onClose: async function(selectedDates) {
+//             if (selectedDates.length === 2) {
+//                 const startDate = selectedDates[0].toISOString().split('T')[0];
+//                 const endDate = selectedDates[1].toISOString().split('T')[0];
                 
-                const retorno = await service.getExpensesByPeriod(startDate, endDate);
+//                 const retorno = await service.getExpensesByPeriod(startDate, endDate);
 
-                renderExpensesList(retorno);
-            }
-        }
-    });
+//                 renderExpensesList(retorno);
+//             }
+//         }
+//     });
 
-}
+// }
 
