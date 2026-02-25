@@ -1,4 +1,4 @@
-import { formatDate } from "../utils/date.js";
+import * as date from "../utils/date.js";
 
 export function toggleStatusVisual(element, isPaid) {
     if (!element) return;
@@ -39,14 +39,13 @@ export function toggleStatusPayment(){
     const paymentDateForm = document.querySelector(".expense-payment-date");
 
     statusbtnForm.addEventListener("click", () => {
-        //chamar o core para pensar o que fazer
         const isPaid = statusbtnForm.dataset.paid === "true";
         toggleStatusVisual(statusbtnForm, !isPaid);
-        paymentDateForm.value = !isPaid ? getTodayDate() : "";
+        paymentDateForm.value = !isPaid ? date.getTodayDate() : "";
     });
 }
 
 export function toggleDateStatusPayment(expense) {
     const paymentDateForm = document.querySelector(`.expense-payment-date-${expense.id}`);
-    paymentDateForm.textContent = expense.payment ? formatDate(expense.paymentDate) : "-";
+    paymentDateForm.textContent = expense.payment ? date.formatDate(expense.paymentDate) : "-";
 }

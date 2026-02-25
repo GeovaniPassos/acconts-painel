@@ -9,6 +9,7 @@ import { bindModal } from "./ui/modal.js";
 import { releaseLocalstorage } from "./utils/localstoregeTests.js";
 import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
+import { toggleStatusPayment } from "./ui/paymentUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
@@ -16,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     releaseLocalstorage();
     definePayment();
     initFlatpickr();
+    toggleStatusPayment();
+    bindFormSubmit();
 });
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
