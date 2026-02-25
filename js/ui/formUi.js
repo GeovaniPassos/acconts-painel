@@ -61,3 +61,81 @@ export function fillFormForEdit(model) {
 
     modal.style.display = "block";
 }
+
+//Função para lidar com o salvamento da despesa
+async function handleSaveExpenses(event) {
+    event.preventDefault();
+    const form = event.target;
+    const categoryTyped = document.getElementById('category-input').value.trim();
+    const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
+    let paymentDate = document.querySelector(".expense-payment-date").value;
+    paymentDate = paymentForm == "true" ? paymentDate : "";
+    const data = {
+        name: form.name.value.trim(),
+        description: form.description.value.trim(),
+        categoryName: categoryTyped,
+        installment: 1,
+        totalInstallments: Number(form.installments.value),
+        value: Number(form.value.value),
+        payment: paymentForm,
+        paymentDate: formatDateApi(paymentDate),
+        date: form.date.value
+    };
+
+    if (!data.name || isNaN(data.value || !data.categoryName)) {
+        showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
+        return;
+    }
+    try {
+        setLoading(true);
+        
+        const categoryExists = categories.some(cat => cat.toLowerCase() === categoryTyped.toLowerCase());
+        if (!categoryExists) {
+            try {
+                const categoryCreate = {
+                    name: categoryTyped,
+                    type: "EXPENSES"
+                };
+                
+                const newCategory = await service.createCategory(categoryCreate);
+
+                categories.push(newCategory.name);
+                if (typeof categoriesData != 'undefined') {
+                    categoriesData.push(newCategory);
+                }
+
+            } catch (e) {
+                showMessage("error", `Erro ao criar a categoria!`);
+            }
+        
+        }
+
+        if (form.dataset.mode === "edit" && form.dataset.id) {
+            expenseData = await service.updateExpenses(form.dataset.id, data);
+            showMessage("success", "Conta atualizada.");
+        } else {
+            //expenseData = await service.addInstallments(data); //Implementar a separação de função no futuro
+            expenseData = await service.createExpenses(data);
+            showMessage("success", "Conta criada.");
+        }
+
+        // Limpa o formulario
+        form.reset();
+        document.getElementById('ghost-text').textContent = "";
+
+        //Reset do botão de status
+        clearForm();
+
+        // Limpa o campo de data de pagamento
+        document.querySelector(".expense-payment-date").value = "";
+        
+        // fecha o modal e atualiza a lista de despesas
+        modal.style.display = "none";
+    } catch (e) {
+        showMessage("error", `Erro: ${e.message}`);
+    } finally {
+        refreshExpenses();
+        setLoading(false);
+    }
+    
+}
