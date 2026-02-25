@@ -1,3 +1,5 @@
+import { formatDate } from "../utils/date.js";
+
 export function toggleStatusVisual(element, isPaid) {
     if (!element) return;
     element.dataset.paid = isPaid;
@@ -27,7 +29,7 @@ export function bindPaymentToggleButtons(handlers) {
         const btn = event.target.closest(".btn-table-status");
         if (!btn) return;
 
-        if (handlers?.onToggle) handlers.onToggle(event, btn);
+        if (handlers?.onToggle) handlers.onToggle(btn);
     });
 }
 
@@ -44,5 +46,7 @@ export function toggleStatusPayment(){
     });
 }
 
-
-
+export function toggleDateStatusPayment(expense) {
+    const paymentDateForm = document.querySelector(`.expense-payment-date-${expense.id}`);
+    paymentDateForm.textContent = expense.payment ? formatDate(expense.paymentDate) : "-";
+}

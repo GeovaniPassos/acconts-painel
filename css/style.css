@@ -34,6 +34,17 @@ button {
   cursor: pointer;
 }
 
+/* .title {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+  padding-right: 120px;
+}
+
+.icon-title {
+  padding-right: 170px;
+} */
+
 /* Estilo do modal */
 .modal {
   display: none; /* escondido por padrão */

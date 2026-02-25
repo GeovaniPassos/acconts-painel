@@ -145,29 +145,29 @@ async function handleListClickPayment(event) {
     if (!li) return;
     const id = Number(li.dataset.id);
     const element = document.querySelector(`.expense-payment-date-${id}`);
-    const badge = event.target.closest(".badge");
-    if(badge) {
-        const expense = expenseData.find(e => e.id === id);
-        if (expense) {
-            try {
-                const expense = await service.togglePayment(id);
+    // const badge = event.target.closest(".badge");
+    // if(badge) {
+    //     const expense = expenseData.find(e => e.id === id);
+    //     if (expense) {
+    //         try {
+    //             const expense = await service.togglePayment(id);
                 
-                toggleStatusVisual(badge, expense.payment);
-                if (expense.payment) {
-                    element.innerHTML = `${formatDate(expense.paymentDate)}`
-                } else {
-                    element.innerHTML = ``
-                }
+    //             toggleStatusVisual(badge, expense.payment);
+    //             if (expense.payment) {
+    //                 element.innerHTML = `${formatDate(expense.paymentDate)}`
+    //             } else {
+    //                 element.innerHTML = ``
+    //             }
 
-                updateSummary(expenseData);
+    //             updateSummary(expenseData);
                 
-                showMessage("success", "Status atualizado!");
-            } catch (e) {
-                showMessage("error", "Erro ao mudar status.");
-            }
-        }
-        return;
-    }   
+    //             showMessage("success", "Status atualizado!");
+    //         } catch (e) {
+    //             showMessage("error", "Erro ao mudar status.");
+    //         }
+    //     }
+    //     return;
+    // }   
 
     const btnDelete = event.target.closest(".btn-delete");
     if (btnDelete) {

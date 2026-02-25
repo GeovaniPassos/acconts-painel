@@ -15,18 +15,15 @@ export function definePayment() {
 
 //TODO: Falta ajustar a alteração na data, e se vai apenas incluir para não ter que 
 //carregar toda lista
-async function handleTogglePayment(event, button) {
+async function handleTogglePayment(button) {
     try {
         const li = button.closest("li");
         const expenseId = Number(li.dataset.id);
         
-        const result = core.togglePaymenetStatus(button.dataset.paid);
+        const result = await service.togglePayment(expenseId);
 
-        await service.togglePayment(expenseId, result.isPaid);
-
-        ui.toggleStatusVisual(button, result.isPaid);
-        
-
+        ui.toggleStatusVisual(button, result.payment);
+        ui.toggleDateStatusPayment(result);
         
     } catch(e){
         feedback.showMessage("Error", `Falha ao carregar: ${e.message}`);

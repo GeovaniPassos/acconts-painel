@@ -38,7 +38,7 @@ function renderExpensesItem(expense) {
 
         <div class="info-group status">
             <span class="badge btn-table-status ${statusClass}" data-paid="${expense.payment}">${statusText}</span>
-            <span class="expense-date payment-date expense-payment-date-${expense.id}">${formatDate(expense.paymentDate)}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">${idPaid ? formatDate(expense.paymentDate) : "-"}</span>
         </div>
 
         <div class="actions">
