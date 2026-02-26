@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // }
  
 // Função para lidar com o clique no pagamento da despesa
-async function handleListClickPayment(event) {
+async function handleListClick(event) {
     const li = event.target.closest("li");
     if (!li) return;
     const id = Number(li.dataset.id);

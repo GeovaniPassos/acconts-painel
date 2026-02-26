@@ -36,7 +36,7 @@ export async function getListExpensesForMonth() {
     return expensesList;
 }
 
-export function handleEditExpenses(expense) {
+export function handleEditExpensesForm(expense) {
     //Função para normalizar dados Ex categoria_id = nome.categoria
     const formModel = core.buildEditFormModel(expense);
     formUi.fillFormForEdit(formModel);
@@ -45,4 +45,8 @@ export function handleEditExpenses(expense) {
 export async function getExpenseByPeriod(startDate, endDate) {
     const list = await service.getExpensesByPeriod(startDate, endDate);
     expenseUi.renderExpensesList(list);
+}
+
+export function handleSaveExpenses(){
+    
 }
