@@ -11,3 +11,23 @@ export function buildEditFormModel(expense) {
         date: expense.date
     };
 }
+
+export async function ensureCategoryExists(categoryTyped, categories, categoriesData, service) {
+    if (!categoryTyped) return null;
+    const categoryExists = categories.some(cat => cat.toLowerCase() === categoryTyped.toLowerCase());
+    if (categoryExists) return null;
+
+    const categoryCreate = {
+        name: categoryTyped,
+        type: "EXPENSES"
+    };
+
+    const newCategory = await service.createCategory(categoryCreate);
+
+    categories.push(newCategory.name);
+    if (typeof categoriesData !== 'undefined') {
+        categoriesData.push(newCategory);
+    }
+
+    return newCategory;
+}

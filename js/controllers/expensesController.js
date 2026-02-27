@@ -47,6 +47,91 @@ export async function getExpenseByPeriod(startDate, endDate) {
     expenseUi.renderExpensesList(list);
 }
 
-export function handleSaveExpenses(){
-    
+export async function edeleteExpense(id) {
+    try {
+        await service.deleteExpenses(id);
+        feedback.showMessage("success", "Conta excluída.");
+    } catch (e) {
+        feedback.showMessage("error", `Erro ao excluir: ${e.message}`);
+    } finally {
+        renderExpenseListForMouth();
+    }
+}
+
+export async function editExpense(id) {
+    try {
+        feedback.setLoading(true);
+        const expenses = await service.getExpensesById(id);
+        formUi.fillFormForEdit(expenses);
+    } catch (e) {
+        feedback.showMessage("error", `Error ao buscar a despesa: ${e.message}`);
+    } finally {
+        feedback.setLoading(false);
+    }
+}
+
+export async function handleSaveExpenses(data) {
+
+    if (!data.name || isNaN(data.value || !data.categoryName)) {
+        showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
+        return;
+    }
+
+    try {
+        setLoading(true);
+        
+        //Verificar existencia da categoria ou cria-la
+        // passa o nome da categoria, o backend checa se existe ou se é uma nova
+        const categoryExists = categories.some(cat => cat.toLowerCase() === categoryTyped.toLowerCase());
+        if (!categoryExists) {
+            try {
+                const categoryCreate = {
+                    name: categoryTyped,
+                    type: "EXPENSES"
+                };
+                
+                const newCategory = await service.createCategory(categoryCreate);
+
+                categories.push(newCategory.name);
+                if (typeof categoriesData != 'undefined') {
+                    categoriesData.push(newCategory);
+                }
+
+            } catch (e) {
+                showMessage("error", `Erro ao criar a categoria!`);
+            }
+        
+        }
+
+        //Salvar com base no modo edit ou criar se não for edit
+        if (form.dataset.mode === "edit" && form.dataset.id) {
+            expenseData = await service.updateExpenses(form.dataset.id, data);
+            showMessage("success", "Conta atualizada.");
+        } else {
+            //expenseData = await service.addInstallments(data); //Implementar a separação de função no futuro
+            expenseData = await service.createExpenses(data);
+            showMessage("success", "Conta criada.");
+        }
+
+        //controller chama uma função que faz tudo isso como padrão no Ui
+
+            // Limpa o formulario
+            form.reset();
+            document.getElementById('ghost-text').textContent = "";
+
+            //Reset do botão de status
+            clearForm();
+
+            // Limpa o campo de data de pagamento
+            document.querySelector(".expense-payment-date").value = "";
+            
+            // fecha o modal e atualiza a lista de despesas
+            modal.style.display = "none";
+    } catch (e) {
+        showMessage("error", `Erro: ${e.message}`);
+    } finally {
+        //Buscar lista novamente (Editar para preencher lista em vez de buscar todos itens novamente)
+        refreshExpenses();
+        setLoading(false);
+    }
 }

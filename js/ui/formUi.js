@@ -46,7 +46,7 @@ export function fillFormForEdit(expense) {
     form.value.value = expense.value;
     form.description.value = expense.description;
 
-    form.installments.value = expense.installments;
+    form.installments.value = expense.installment;
     textInstallment.textContent = "Número da parcela";
     document.getElementById("installments").disabled = true;
 
@@ -66,100 +66,33 @@ export function fillFormForEdit(expense) {
 
 //Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
-    //inicio no UI  
-        //Para deixe o evento em espera enquanto não haver o clique
-        event.preventDefault();
-    //função para pegar os elementos DOM / seta dados base
-        //localizar os elementos pre carregados (data, categoria, pagamento/data do pagamento)
-        const form = event.target;
-        const categoryTyped = document.getElementById('category-input').value.trim();
-        const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
-        let paymentDate = document.querySelector(".expense-payment-date").value;
-        paymentDate = paymentForm == "true" ? paymentDate : "";
-        //definir o que será editado/criado salvar em data para passar para create ou update
-        const data = {
-            name: form.name.value.trim(),
-            description: form.description.value.trim(),
-            categoryName: categoryTyped,
-            installment: 1,
-            totalInstallments: Number(form.installments.value),
-            value: Number(form.value.value),
-            payment: paymentForm,
-            paymentDate: formatDateCalendar(paymentDate),
-            date: form.date.value
-        };
-        //envia para o controller para saber o proximo passo
-        expensesController.handleSaveExpenses(data);
+    //Para deixe o evento em espera enquanto não haver o clique
+    event.preventDefault();
+
+    const form = event.target;
+    const categoryTyped = document.getElementById('category-input').value.trim();
+    const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
+    let paymentDate = document.querySelector(".expense-payment-date").value;
+    paymentDate = paymentForm == "true" ? paymentDate : "";
+
+    const data = {
+        name: form.name.value.trim(),
+        description: form.description.value.trim(),
+        categoryName: categoryTyped,
+        installment: 1,
+        totalInstallments: Number(form.installments.value),
+        value: Number(form.value.value),
+        payment: paymentForm,
+        paymentDate: formatDateCalendar(paymentDate),
+        date: form.date.value
+    };
+
+    expensesController.handleSaveExpenses(data);
         
-            //Checagem de inputs
-            if (!data.name || isNaN(data.value || !data.categoryName)) {
-                showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
-                return;
-            }
-        //retorna para o controller que chamara o salvamento, precisa passar o tipo (edit/create) e data
-     //setor que irá de fato enviar
-    // TryCatch para entrar no saveSubmit
-
-    try {
-        setLoading(true);
-        
-        //Verificar existencia da categoria ou cria-la
-        const categoryExists = categories.some(cat => cat.toLowerCase() === categoryTyped.toLowerCase());
-        if (!categoryExists) {
-            try {
-                const categoryCreate = {
-                    name: categoryTyped,
-                    type: "EXPENSES"
-                };
-                
-                const newCategory = await service.createCategory(categoryCreate);
-
-                categories.push(newCategory.name);
-                if (typeof categoriesData != 'undefined') {
-                    categoriesData.push(newCategory);
-                }
-
-            } catch (e) {
-                showMessage("error", `Erro ao criar a categoria!`);
-            }
-        
-        }
-
-        //Salvar com base no modo edit ou criar se não for edit
-        if (form.dataset.mode === "edit" && form.dataset.id) {
-            expenseData = await service.updateExpenses(form.dataset.id, data);
-            showMessage("success", "Conta atualizada.");
-        } else {
-            //expenseData = await service.addInstallments(data); //Implementar a separação de função no futuro
-            expenseData = await service.createExpenses(data);
-            showMessage("success", "Conta criada.");
-        }
-
-        //controller chama uma função que faz tudo isso como padrão no Ui
-
-            // Limpa o formulario
-            form.reset();
-            document.getElementById('ghost-text').textContent = "";
-
-            //Reset do botão de status
-            clearForm();
-
-            // Limpa o campo de data de pagamento
-            document.querySelector(".expense-payment-date").value = "";
-            
-            // fecha o modal e atualiza a lista de despesas
-            modal.style.display = "none";
-    } catch (e) {
-        showMessage("error", `Erro: ${e.message}`);
-    } finally {
-        //Buscar lista novamente (Editar para preencher lista em vez de buscar todos itens novamente)
-        refreshExpenses();
-        setLoading(false);
-    }
+    
     // O retorno fazer de modo que insere e atualiza a lista
     
 }
-//TODO: definir o clique primeiro antes do salvar 
 
 // Função para lidar com o clique no pagamento da despesa
 async function handleListClick(event) {
@@ -167,55 +100,15 @@ async function handleListClick(event) {
     if (!li) return;
     const id = Number(li.dataset.id);
     const element = document.querySelector(`.expense-payment-date-${id}`);
-    // const badge = event.target.closest(".badge");
-    // if(badge) {
-    //     const expense = expenseData.find(e => e.id === id);
-    //     if (expense) {
-    //         try {
-    //             const expense = await service.togglePayment(id);
-                
-    //             toggleStatusVisual(badge, expense.payment);
-    //             if (expense.payment) {
-    //                 element.innerHTML = `${formatDate(expense.paymentDate)}`
-    //             } else {
-    //                 element.innerHTML = ``
-    //             }
-
-    //             updateSummary(expenseData);
-                
-    //             showMessage("success", "Status atualizado!");
-    //         } catch (e) {
-    //             showMessage("error", "Erro ao mudar status.");
-    //         }
-    //     }
-    //     return;
-    // }   
 
     const btnDelete = event.target.closest(".btn-delete");
     if (btnDelete) {
         if (!confirm("Excluir está conta?")) return;
-        try {
-            setLoading(true);
-            await service.deleteExpenses(id);
-            showMessage("success", "Conta excluída.");
-        } catch (e) {
-            showMessage("error", `Erro ao excluir: ${e.message}`);
-        } finally {
-            refreshExpenses();
-            setLoading(false);
-        }
+        expensesController.edeleteExpense(id);
     }
 
     const btnEdit = event.target.closest(".btn-edit");
     if (btnEdit) {
-        try {
-            setLoading(true);
-            const expenses = await service.getExpensesById(id);
-            fillFormForEdit(expenses);
-        } catch (e) {
-            showMessage("error", `Error ao buscar a despesa: ${e.message}`);
-        } finally {
-            setLoading(false);
-        }
-    }
+        expensesController.editExpense(id);
+    }   
 }

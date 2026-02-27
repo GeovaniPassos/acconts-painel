@@ -25,6 +25,7 @@ async function handleTogglePayment(button) {
         ui.toggleStatusVisual(button, result.payment);
         ui.toggleDateStatusPayment(result);
         
+        
     } catch(e){
         feedback.showMessage("Error", `Falha ao carregar: ${e.message}`);
     }
