@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
 // export function init() {
 //     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
-//     document.getElementById("expenses-list").addEventListener("click", handleListClickPayment);
+//     document.getElementById("expenses-list").addEventListener("click", handleListClick);
 // }
 
 // document.addEventListener("DOMContentLoaded", init);

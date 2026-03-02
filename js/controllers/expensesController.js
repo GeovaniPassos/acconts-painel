@@ -47,6 +47,27 @@ export async function getExpenseByPeriod(startDate, endDate) {
     expenseUi.renderExpensesList(list);
 }
 
-export function handleSaveExpenses(){
-    
+export async function deleteExpense(id){
+    try {
+        setLoading(true);
+        await service.deleteExpenses(id);
+        showMessage("success", "Conta excluída.");
+    } catch (e) {
+        showMessage("error", `Erro ao excluir: ${e.message}`);
+    } finally {
+        getListExpensesForMonth();
+        setLoading(false);
+    }
+}
+
+export async function editExpense(id) {
+    try {
+        setLoading(true);
+        const expenses = await service.getExpensesById(id);
+        formUi.fillFormForEdit(expenses);
+    } catch (e) {
+        showMessage("error", `Error ao buscar a despesa: ${e.message}`);
+    } finally {
+        setLoading(false);
+    }
 }

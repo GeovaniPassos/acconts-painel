@@ -156,66 +156,6 @@ async function handleSaveExpenses(event) {
         refreshExpenses();
         setLoading(false);
     }
-    // O retorno fazer de modo que insere e atualiza a lista
+    // O retorno fazer de modo que insere ou atualiza a lista
     
-}
-//TODO: definir o clique primeiro antes do salvar 
-
-// Função para lidar com o clique no pagamento da despesa
-async function handleListClick(event) {
-    const li = event.target.closest("li");
-    if (!li) return;
-    const id = Number(li.dataset.id);
-    const element = document.querySelector(`.expense-payment-date-${id}`);
-    // const badge = event.target.closest(".badge");
-    // if(badge) {
-    //     const expense = expenseData.find(e => e.id === id);
-    //     if (expense) {
-    //         try {
-    //             const expense = await service.togglePayment(id);
-                
-    //             toggleStatusVisual(badge, expense.payment);
-    //             if (expense.payment) {
-    //                 element.innerHTML = `${formatDate(expense.paymentDate)}`
-    //             } else {
-    //                 element.innerHTML = ``
-    //             }
-
-    //             updateSummary(expenseData);
-                
-    //             showMessage("success", "Status atualizado!");
-    //         } catch (e) {
-    //             showMessage("error", "Erro ao mudar status.");
-    //         }
-    //     }
-    //     return;
-    // }   
-
-    const btnDelete = event.target.closest(".btn-delete");
-    if (btnDelete) {
-        if (!confirm("Excluir está conta?")) return;
-        try {
-            setLoading(true);
-            await service.deleteExpenses(id);
-            showMessage("success", "Conta excluída.");
-        } catch (e) {
-            showMessage("error", `Erro ao excluir: ${e.message}`);
-        } finally {
-            refreshExpenses();
-            setLoading(false);
-        }
-    }
-
-    const btnEdit = event.target.closest(".btn-edit");
-    if (btnEdit) {
-        try {
-            setLoading(true);
-            const expenses = await service.getExpensesById(id);
-            fillFormForEdit(expenses);
-        } catch (e) {
-            showMessage("error", `Error ao buscar a despesa: ${e.message}`);
-        } finally {
-            setLoading(false);
-        }
-    }
 }

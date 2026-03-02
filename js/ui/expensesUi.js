@@ -1,5 +1,6 @@
 import { formatDate } from "../utils/date.js";
 import { formatMoney } from "../utils/money.js";
+import * as expensesController from "../controllers/expensesController.js"
 
 export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
@@ -48,4 +49,21 @@ function renderExpensesItem(expense) {
     `;
 
     return li;
+}
+
+async function handleListClick(event) {
+    const li = event.target.closest("li");
+    if (!li) return;
+    const id = Number(li.dataset.id);
+
+    const btnDelete = event.target.closest(".btn-delete");
+    if (btnDelete) {
+        if (!confirm("Excluir está conta?")) return;
+        expensesController.deleteExpense(id);
+    }
+
+    const btnEdit = event.target.closest(".btn-edit");
+    if (btnEdit) {
+        expensesController.editExpense(id);
+    }
 }
