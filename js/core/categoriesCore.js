@@ -8,3 +8,12 @@ export function findCategoryByName(categoriesList, value) {
     
     return categoriesList;
 }
+
+export function newCategory(categoryName) {
+    const categoryCreate = {
+        name: categoryName,
+        type: "EXPENSES"
+    };
+    
+    return categoryCreate;
+}

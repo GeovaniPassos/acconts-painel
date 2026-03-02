@@ -1,7 +1,9 @@
 import { formatDate, formatDateCalendar } from "../utils/date.js";
 import { toggleStatusVisual } from "./paymentUi.js";
 import * as expensesController from "../controllers/expensesController.js";
+import * as categoryController from "../controllers/categoriesController.js";
 import { setLoading } from "./feedback.js";
+
 
 export function bindFormSubmit() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
@@ -21,9 +23,6 @@ export function clearForm() {
     statusBtn.classList.add("status-pending");
     statusBtn.classList.remove("status-paid");
     statusBtn.textContent = "Pendente";
-    
-    // Limpa o campo de data de pagamento
-    //document.querySelector(".expense-payment-date").value = "";
 }
 
 export function fillFormForEdit(expense) {
@@ -65,9 +64,7 @@ export function fillFormForEdit(expense) {
 
 //Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
-    //Para deixe o evento em espera enquanto não haver o clique
     event.preventDefault();
-
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
@@ -85,74 +82,40 @@ async function handleSaveExpenses(event) {
         paymentDate: formatDateCalendar(paymentDate),
         date: form.date.value
     };
-
-    expensesController.handleSaveExpenses(data);
-        
-            //Checagem de inputs
-            if (!data.name || isNaN(data.value || !data.categoryName)) {
-                showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
-                return;
-            }
-        //retorna para o controller que chamara o salvamento, precisa passar o tipo (edit/create) e data
-     //setor que irá de fato enviar
-    // TryCatch para entrar no saveSubmit
+    //Checagem de inputs
+    if (!data.name || isNaN(data.value || !data.categoryName)) {
+        showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
+        return;
+    }
 
     try {
         setLoading(true);
-        
-        //Verificar existencia da categoria ou cria-la
-        const categoryExists = categories.some(cat => cat.toLowerCase() === categoryTyped.toLowerCase());
-        if (!categoryExists) {
-            try {
-                const categoryCreate = {
-                    name: categoryTyped,
-                    type: "EXPENSES"
-                };
-                
-                const newCategory = await service.createCategory(categoryCreate);
-
-                categories.push(newCategory.name);
-                if (typeof categoriesData != 'undefined') {
-                    categoriesData.push(newCategory);
-                }
-
-            } catch (e) {
-                showMessage("error", `Erro ao criar a categoria!`);
-            }
-        
-        }
+        // verificar existencia da categoria ou cria-la. o método é async!
+        const category = await categoryController.checkCategory(data.categoryName);
+        data.categoryName = category.name; 
 
         //Salvar com base no modo edit ou criar se não for edit
         if (form.dataset.mode === "edit" && form.dataset.id) {
-            expenseData = await service.updateExpenses(form.dataset.id, data);
-            showMessage("success", "Conta atualizada.");
+            await expensesController.updateExpense(form.dataset.id, data);
         } else {
-            //expenseData = await service.addInstallments(data); //Implementar a separação de função no futuro
-            expenseData = await service.createExpenses(data);
-            showMessage("success", "Conta criada.");
+            await expensesController.createExpense(data);
         }
 
-        //controller chama uma função que faz tudo isso como padrão no Ui
+        // Limpa o formulario
+        form.reset();
+        document.getElementById('ghost-text').textContent = "";
 
-            // Limpa o formulario
-            form.reset();
-            document.getElementById('ghost-text').textContent = "";
+        //Reset do botão de status
+        clearForm();
 
-            //Reset do botão de status
-            clearForm();
-
-            // Limpa o campo de data de pagamento
-            document.querySelector(".expense-payment-date").value = "";
-            
-            // fecha o modal e atualiza a lista de despesas
-            modal.style.display = "none";
+        // Limpa o campo de data de pagamento
+        document.querySelector(".expense-payment-date").value = "";
+        
+        // fecha o modal e atualiza a lista de despesas
+        modal.style.display = "none";
     } catch (e) {
         showMessage("error", `Erro: ${e.message}`);
     } finally {
-        //Buscar lista novamente (Editar para preencher lista em vez de buscar todos itens novamente)
-        refreshExpenses();
         setLoading(false);
     }
-    // O retorno fazer de modo que insere ou atualiza a lista
-    
 }

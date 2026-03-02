@@ -36,8 +36,8 @@ export async function getListExpensesForMonth() {
     return expensesList;
 }
 
-export function handleEditExpensesForm(expenseId) {
-    //TODO: Criar a variavel global para armazenar a lista de despesas e não precisar buscar da api novamente
+export async function handleEditExpensesForm(expenseId) {
+    const expense = await service.getExpensesById(expenseId);
     const formModel = core.buildEditFormModel(expense);
     formUi.fillFormForEdit(formModel);
 }
@@ -45,4 +45,30 @@ export function handleEditExpensesForm(expenseId) {
 export async function getExpenseByPeriod(startDate, endDate) {
     const list = await service.getExpensesByPeriod(startDate, endDate);
     expenseUi.renderExpensesList(list);
+}
+
+export async function updateExpense(id, data) {
+    try {
+        feedback.setLoading(true);
+        await service.updateExpenses(id, data);
+        feedback.showMessage("success", "Despesa atualizada com sucesso.");
+        renderExpenseListForMouth();
+    } catch (e) {
+        feedback.showMessage("error", `Erro ao atualizar despesa: ${e.message}`);
+    } finally {
+        feedback.setLoading(false);
+    }
+}
+
+export async function createExpense(data) {
+    try {
+        feedback.setLoading(true);
+        await service.createExpenses(data);
+        feedback.showMessage("success", "Despesa criada com sucesso.");
+        renderExpenseListForMouth();
+    } catch (e) {
+        feedback.showMessage("error", `Erro ao criar despesa: ${e.message}`);
+    } finally {
+        feedback.setLoading(false);
+    }  
 }
