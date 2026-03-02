@@ -64,6 +64,10 @@ async function handleListClick(event) {
 
     const btnEdit = event.target.closest(".btn-edit");
     if (btnEdit) {
-        expensesController.editExpense(id);
+        expensesController.handleEditExpensesForm(id);
     }
+}
+
+export function bindExpensesListClick() {
+    document.getElementById("expenses-list").addEventListener("click", handleListClick);
 }

@@ -36,8 +36,8 @@ export async function getListExpensesForMonth() {
     return expensesList;
 }
 
-export function handleEditExpensesForm(expense) {
-    //Função para normalizar dados Ex categoria_id = nome.categoria
+export function handleEditExpensesForm(expenseId) {
+    //TODO: Criar a variavel global para armazenar a lista de despesas e não precisar buscar da api novamente
     const formModel = core.buildEditFormModel(expense);
     formUi.fillFormForEdit(formModel);
 }
@@ -45,8 +45,4 @@ export function handleEditExpensesForm(expense) {
 export async function getExpenseByPeriod(startDate, endDate) {
     const list = await service.getExpensesByPeriod(startDate, endDate);
     expenseUi.renderExpensesList(list);
-}
-
-export function handleSaveExpenses(){
-    
 }

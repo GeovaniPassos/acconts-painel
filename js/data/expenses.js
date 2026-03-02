@@ -93,7 +93,7 @@ export const expenses = [
     payment: false,
     value: 158.34,
     paymentDate: "",
-    date: "2026-02-18"
+    date: "2026-03-18"
     },
     {
     id: 3,
@@ -105,7 +105,7 @@ export const expenses = [
     payment: true,
     value: 253.21,
     paymentDate: "2026-02-18",
-    date: "2026-02-18"
+    date: "2026-03-18"
     },
     {
     id: 4,
@@ -117,6 +117,6 @@ export const expenses = [
     payment: true,
     value: 78.71,
     paymentDate: "2026-02-18",
-    date: "2026-02-18"
+    date: "2026-03-18"
     }
 ];

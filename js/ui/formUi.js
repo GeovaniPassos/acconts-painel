@@ -5,7 +5,6 @@ import { setLoading } from "./feedback.js";
 
 export function bindFormSubmit() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
-    document.getElementById("expenses-list").addEventListener("click", handleListClick);
 }
 
 export function clearForm() {

@@ -11,6 +11,7 @@ import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
 import { toggleStatusPayment } from "./ui/paymentUi.js";
 import { bindFormSubmit } from "./ui/formUi.js";
+import { bindExpensesListClick } from "./ui/expensesUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initExpenses();
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initFlatpickr();
     toggleStatusPayment();
     bindFormSubmit();
+    bindExpensesListClick();
 });
 
 // Função de inicialização do sistema, aonde vai carregar cada parte e adições de funções (Entender melhor essa parte)
