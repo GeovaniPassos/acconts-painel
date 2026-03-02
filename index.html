@@ -63,13 +63,16 @@
             
             <div class="inline-autocomplete">
               <p>Categoria:</p>
-              <span id="ghost-text" class="ghost-text"></span>
               <input type="text"
                       id="category-input"
-                      placeholder="Selecione a categoria..."
+                      placeholder="Digite a categoria"
                       autocomplete="off"
               >
-              
+
+              <div 
+                id="category-suggestions"
+                class="category-suggestions-box">
+              </div>
             </div>
             </br>
             <label for="name">Nome:</label>

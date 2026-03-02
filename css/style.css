@@ -211,18 +211,40 @@ button {
   }
 
 
-#category-input {
-    background: transparent; /* Permite ver o ghost-text atrás */
+/* #category-input {
+    background: transparent; 
     position: relative;
     color: #000000;
     margin-left: 20px;
+} */
+
+.category-suggestions-box{
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    width: 200px;
+    max-height: 180px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 40px;
+    left: 110px;
 }
 
-.ghost-text {
+.category-suggestion-item{
+    padding: 8px 10px;
+    cursor: pointer;
+    text-align: start;
+}
+
+.category-suggestion-item:hover{
+    background: #f0f0f0;
+}
+
+/* .ghost-text {
     position: absolute;
-    color: #535353; /* Cor cinza clarinha igual VS Code */
-    pointer-events: none; /* O usuário não interage com o texto de trás */
-    white-space: pre; /* Mantém espaços extras se houver */
+    color: #535353; 
+    pointer-events: none; 
+    white-space: pre; 
 
     height: 22.5px;
     width: 194.5px;
@@ -231,7 +253,7 @@ button {
     padding: 8px;
     top: 8px;
 
-}
+} */
 
 /*Select com valores totais das despesas*/
 .summary-cards {

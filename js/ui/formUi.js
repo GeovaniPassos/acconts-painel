@@ -36,7 +36,6 @@ export function fillFormForEdit(expense) {
 
     const categoryInput = document.getElementById('category-input');
     categoryInput.value = expense.categoryName;
-    document.getElementById('ghost-text').textContent = "";
     
     form.name.value = expense.name;
     document.getElementById("name").disabled = true;
@@ -103,8 +102,6 @@ async function handleSaveExpenses(event) {
 
         // Limpa o formulario
         form.reset();
-        document.getElementById('ghost-text').textContent = "";
-
         //Reset do botão de status
         clearForm();
 

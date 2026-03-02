@@ -1,4 +1,4 @@
-import { findCategories } from "./ui/categoriesUi.js";
+import { findCategories, initCategoryAutoComplete } from "./ui/categoriesUi.js";
 
 import { formatDate } from "./utils/date.js";
 
@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleStatusPayment();
     bindFormSubmit();
     bindExpensesListClick();
+    initCategoryAutoComplete();
 });
 
 // const input = document.getElementById('category-input');
