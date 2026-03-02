@@ -46,7 +46,7 @@ export function fillFormForEdit(expense) {
     form.value.value = expense.value;
     form.description.value = expense.description;
 
-    form.installments.value = expense.installments;
+    form.installments.value = expense.installment;
     textInstallment.textContent = "Número da parcela";
     document.getElementById("installments").disabled = true;
 
@@ -66,30 +66,28 @@ export function fillFormForEdit(expense) {
 
 //Função para lidar com o salvamento da despesa
 async function handleSaveExpenses(event) {
-    //inicio no UI  
-        //Para deixe o evento em espera enquanto não haver o clique
-        event.preventDefault();
-    //função para pegar os elementos DOM / seta dados base
-        //localizar os elementos pre carregados (data, categoria, pagamento/data do pagamento)
-        const form = event.target;
-        const categoryTyped = document.getElementById('category-input').value.trim();
-        const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
-        let paymentDate = document.querySelector(".expense-payment-date").value;
-        paymentDate = paymentForm == "true" ? paymentDate : "";
-        //definir o que será editado/criado salvar em data para passar para create ou update
-        const data = {
-            name: form.name.value.trim(),
-            description: form.description.value.trim(),
-            categoryName: categoryTyped,
-            installment: 1,
-            totalInstallments: Number(form.installments.value),
-            value: Number(form.value.value),
-            payment: paymentForm,
-            paymentDate: formatDateCalendar(paymentDate),
-            date: form.date.value
-        };
-        //envia para o controller para saber o proximo passo
-        expensesController.handleSaveExpenses(data);
+    //Para deixe o evento em espera enquanto não haver o clique
+    event.preventDefault();
+
+    const form = event.target;
+    const categoryTyped = document.getElementById('category-input').value.trim();
+    const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
+    let paymentDate = document.querySelector(".expense-payment-date").value;
+    paymentDate = paymentForm == "true" ? paymentDate : "";
+
+    const data = {
+        name: form.name.value.trim(),
+        description: form.description.value.trim(),
+        categoryName: categoryTyped,
+        installment: 1,
+        totalInstallments: Number(form.installments.value),
+        value: Number(form.value.value),
+        payment: paymentForm,
+        paymentDate: formatDateCalendar(paymentDate),
+        date: form.date.value
+    };
+
+    expensesController.handleSaveExpenses(data);
         
             //Checagem de inputs
             if (!data.name || isNaN(data.value || !data.categoryName)) {
