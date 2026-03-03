@@ -18,9 +18,7 @@ export function initExpenses() {
 export async function renderExpenseListForMouth() {
     try {
         feedback.setLoading(true);
-        expensesList = await getListExpensesForMonth();
-        expenseUi.renderExpensesList(expensesList);
-        sumary.updateSummary(expensesList);
+        await getListExpensesForMonth();
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar: ${e.message}`);
     } finally {
@@ -30,9 +28,15 @@ export async function renderExpenseListForMouth() {
 
 export async function getListExpensesForMonth() {
     const currentDate = date.getMonthAndYearFromCurrentPeriod();
-    const expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
-    
-    return expensesList;
+    expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
+    expenseUi.renderExpensesList(expensesList);
+    sumary.updateSummary(expensesList);
+}
+
+export async function getExpensesByName(name) {
+    expensesList = await service.getExpensesByName(name);
+    expenseUi.renderExpensesList(expensesList);
+    sumary.updateSummary(expensesList);
 }
 
 export async function handleEditExpensesForm(expenseId) {
