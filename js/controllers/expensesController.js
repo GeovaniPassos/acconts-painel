@@ -9,19 +9,18 @@ import * as formUi from "../ui/formUi.js";
 import * as core from "../core/expensesCore.js";
 
 const service = new Service(VARIABLE_CONNECTION);
+let expensesList = [];
 
 export function initExpenses() {
     renderExpenseListForMouth();
-    // trazer do main handleSaveExpenses
-    //formUi.bindFormSubmit(handleSaveExpenses);
 }
 
 export async function renderExpenseListForMouth() {
     try {
         feedback.setLoading(true);
-        const list = await getListExpensesForMonth();
-        expenseUi.renderExpensesList(list);
-        sumary.updateSummary(list);
+        expensesList = await getListExpensesForMonth();
+        expenseUi.renderExpensesList(expensesList);
+        sumary.updateSummary(expensesList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar: ${e.message}`);
     } finally {
@@ -43,16 +42,29 @@ export async function handleEditExpensesForm(expenseId) {
 }
 
 export async function getExpenseByPeriod(startDate, endDate) {
-    const list = await service.getExpensesByPeriod(startDate, endDate);
-    expenseUi.renderExpensesList(list);
+    expensesList = await service.getExpensesByPeriod(startDate, endDate);
+    expenseUi.renderExpensesList(expensesList);
+}
+
+export function updateExpensesList(expensesList) {
+    expenseUi.renderExpensesList(expensesList);
+    sumary.updateSummary(expensesList);
+}
+
+export function updateItemExpensesList(expense) {
+    expensesList = core.updateItemExpensesList(expense, expensesList);
+    updateExpensesList(expensesList);
 }
 
 export async function updateExpense(id, data) {
     try {
         feedback.setLoading(true);
-        await service.updateExpenses(id, data);
+        const result = await service.updateExpenses(id, data);
+
+        expensesList = core.updateItemExpensesList(result, expensesList);
+        updateExpensesList(expensesList);
+
         feedback.showMessage("success", "Despesa atualizada com sucesso.");
-        renderExpenseListForMouth();
     } catch (e) {
         feedback.showMessage("error", `Erro ao atualizar despesa: ${e.message}`);
     } finally {
@@ -64,11 +76,30 @@ export async function createExpense(data) {
     try {
         feedback.setLoading(true);
         await service.createExpenses(data);
+       
+        expensesList = core.addToList(expensesList, data);
+        updateExpensesList(expensesList);
+       
         feedback.showMessage("success", "Despesa criada com sucesso.");
-        renderExpenseListForMouth();
     } catch (e) {
         feedback.showMessage("error", `Erro ao criar despesa: ${e.message}`);
     } finally {
         feedback.setLoading(false);
     }  
 }
+
+export async function deleteExpense(id) {
+    try {
+        feedback.setLoading(true);
+        await service.deleteExpenses(id);
+        
+        expensesList = core.removeItemExpensesList(id, expensesList);
+        updateExpensesList(expensesList);
+        
+        feedback.showMessage("success", "Despesa deletada com sucesso.");
+    } catch (e) {
+        feedback.showMessage("error",`Erro ao deletar a despesa com o ${id}.`)
+    } finally {
+        feedback.setLoading(false);
+    }
+}   

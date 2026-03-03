@@ -31,3 +31,18 @@ export async function ensureCategoryExists(categoryTyped, categories, categories
 
     return newCategory;
 }
+
+export function removeItemExpensesList(id, list) {
+    list = list.filter(item => item.id !== id);
+    return list;
+}
+
+export function addToList(list, item) {
+    list.push(item);
+    return list;
+}
+
+export function updateItemExpensesList(item, list) {
+    list = list.map(expense => expense.id === item.id ? item : expense);
+    return list;
+}

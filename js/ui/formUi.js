@@ -3,6 +3,7 @@ import { toggleStatusVisual } from "./paymentUi.js";
 import * as expensesController from "../controllers/expensesController.js";
 import * as categoryController from "../controllers/categoriesController.js";
 import { setLoading } from "./feedback.js";
+import { clearCategorySuggestions } from "./categoriesUi.js";
 
 
 export function bindFormSubmit() {
@@ -13,6 +14,7 @@ export function clearForm() {
     const form = document.getElementById("expenses-form");
     form.dataset.id = "";
     form.reset();
+    clearCategorySuggestions();
     document.getElementById("name").disabled = false;
     document.getElementById("installments").disabled = false;
     document.querySelector(".modal-title").textContent = "Nova Despesa"

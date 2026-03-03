@@ -234,10 +234,12 @@ button {
     padding: 8px 10px;
     cursor: pointer;
     text-align: start;
+    color: #535353;
+    font-style: italic;
 }
 
 .category-suggestion-item:hover{
-    background: #f0f0f0;
+    background: #dfdfdf;
 }
 
 /* .ghost-text {
