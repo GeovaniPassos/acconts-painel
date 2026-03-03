@@ -20,6 +20,9 @@ export async function getListExpensesCurrentMonth() {
         feedback.setLoading(true);
         const currentDate = date.getMonthAndYearFromCurrentPeriod();
         expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
+        if (expensesList === null) {
+            return feedback.showMessage("info", "Nenhuma despesa encontrada para o mês atual.");
+        }
         expenseUi.renderExpensesList(expensesList);
         sumary.updateSummary(expensesList);
     } catch (e) {
@@ -31,6 +34,9 @@ export async function getListExpensesCurrentMonth() {
 
 export async function getExpensesByName(name) {
     expensesList = await service.getExpensesByName(name);
+    if (expensesList === null) {
+        return feedback.showMessage("info", "Nenhuma despesa encontrada para o nome informado.");
+    }
     expenseUi.renderExpensesList(expensesList);
     sumary.updateSummary(expensesList);
 }
@@ -43,6 +49,9 @@ export async function handleEditExpensesForm(expenseId) {
 
 export async function getExpenseByPeriod(startDate, endDate) {
     expensesList = await service.getExpensesByPeriod(startDate, endDate);
+    if (expensesList === null) {
+        return feedback.showMessage("info", "Nenhuma despesa encontrada para o período informado.");
+    }
     expenseUi.renderExpensesList(expensesList);
 }
 

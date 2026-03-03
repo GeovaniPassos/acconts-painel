@@ -18,14 +18,22 @@ export async function getCategoriesNames(value){
 }
 
 export async function checkCategory(categoryName) {
+
     if (!categoryName) return null;
 
     const categoriesList = await service.getCategory();
-    let category = categoriesList.find(
-        cat => cat.name.toLowerCase() === categoryName.toLowerCase()
-    );
 
-    if (!category) {
+    let category = null;
+
+    if (!categoriesList) {
+        category = categoriesList.find(
+        cat => cat.name.toLowerCase() === categoryName.toLowerCase()
+        );
+    }
+
+    if (category && category.name.toLowerCase() === categoryName.toLowerCase()) {
+        return category;
+    } else {
         const newCategory = core.newCategory(categoryName);
         category = await service.createCategory(newCategory);
     }

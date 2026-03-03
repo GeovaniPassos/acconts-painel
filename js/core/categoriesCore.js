@@ -19,6 +19,10 @@ export function newCategory(categoryName) {
 }
 
 export function filterCategories(categories, text) {
+    if (categories === null || text === null) {
+        return [];
+    }
+
     const term = text.toLowerCase().trim();
 
     return categories.filter(cat => cat.name.toLowerCase().includes(term));
