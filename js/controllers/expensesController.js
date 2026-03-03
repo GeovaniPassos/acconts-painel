@@ -60,7 +60,7 @@ export async function updateExpense(id, data) {
     try {
         feedback.setLoading(true);
         const result = await service.updateExpenses(id, data);
-
+        //TODO: Atualizar a api para calcular o sumary e retornar apenas o status da criação
         expensesList = core.updateItemExpensesList(result, expensesList);
         updateExpensesList(expensesList);
 
@@ -75,9 +75,9 @@ export async function updateExpense(id, data) {
 export async function createExpense(data) {
     try {
         feedback.setLoading(true);
-        await service.createExpenses(data);
+        const result = await service.createExpenses(data);
        
-        expensesList = core.addToList(expensesList, data);
+        expensesList = core.addToList(expensesList, result);
         updateExpensesList(expensesList);
        
         feedback.showMessage("success", "Despesa criada com sucesso.");

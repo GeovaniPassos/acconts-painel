@@ -14,7 +14,7 @@ export function renderExpensesList(expenses) {
 //Função para renderizar a lista de despesas
 function renderExpensesItem(expense) {
     const li = document.createElement("li");
-    li.dataset.id = expense.id;
+    li.dataset.id = expense.id; 
     li.className = "expense-item";
 
     const idPaid = expense.payment === true || expense.payment === "true";

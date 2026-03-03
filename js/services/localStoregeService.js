@@ -42,7 +42,6 @@ export default class LocalStorageService {
     async createExpenses(data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
-
         const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
         
         if (!category) {
