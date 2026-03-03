@@ -73,3 +73,10 @@ async function handleListClick(event) {
 export function bindExpensesListClick() {
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
 }
+
+export function bindBtnCurrentMonth() {
+    document.getElementById("btn-current-month").addEventListener("click", () => {
+        expensesController.getListExpensesCurrentMonth();
+    });
+}
+

@@ -12,25 +12,21 @@ const service = new Service(VARIABLE_CONNECTION);
 let expensesList = [];
 
 export function initExpenses() {
-    renderExpenseListForMouth();
+    getListExpensesCurrentMonth();
 }
 
-export async function renderExpenseListForMouth() {
+export async function getListExpensesCurrentMonth() {
     try {
         feedback.setLoading(true);
-        await getListExpensesForMonth();
+        const currentDate = date.getMonthAndYearFromCurrentPeriod();
+        expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
+        expenseUi.renderExpensesList(expensesList);
+        sumary.updateSummary(expensesList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar: ${e.message}`);
     } finally {
         feedback.setLoading(false);
     }
-}
-
-export async function getListExpensesForMonth() {
-    const currentDate = date.getMonthAndYearFromCurrentPeriod();
-    expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
-    expenseUi.renderExpensesList(expensesList);
-    sumary.updateSummary(expensesList);
 }
 
 export async function getExpensesByName(name) {

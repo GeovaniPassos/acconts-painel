@@ -11,7 +11,7 @@ import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
 import { toggleStatusPayment } from "./ui/paymentUi.js";
 import { bindFormSubmit } from "./ui/formUi.js";
-import { bindExpensesListClick } from "./ui/expensesUi.js";
+import { bindBtnCurrentMonth, bindExpensesListClick } from "./ui/expensesUi.js";
 import { initNameSearch } from "./controllers/searchController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,4 +25,5 @@ document.addEventListener("DOMContentLoaded", () => {
     bindExpensesListClick();
     initCategoryAutoComplete();
     initNameSearch();
+    bindBtnCurrentMonth();
 });
