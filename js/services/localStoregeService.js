@@ -159,7 +159,9 @@ export default class LocalStorageService {
 
     async togglePayment(id) {
         const expenses = JSON.parse(localStorage.getItem("expenses"));
+        const categories = JSON.parse(localStorage.getItem("categories"));
         const index = expenses.findIndex(exp => exp.id === Number(id));
+        
         
         if (index === -1) {
             throw new Error("Despesa não encontrada!");
@@ -172,7 +174,12 @@ export default class LocalStorageService {
             paymentDate: newPayment ? date.formatDateCalendar(date.getTodayDate()) : ""
         };
         localStorage.setItem("expenses", JSON.stringify(expenses));
-        return expenses[index];
+
+        const category = categories.find(cat => cat.id === expenses[index].category);
+            return {
+                ...expenses[index],
+                categoryName: category ? category.name: null,
+            };
     }
 
     async getExpensesByPeriod(startDate, endDate) {

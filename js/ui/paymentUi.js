@@ -37,7 +37,6 @@ export function bindPaymentToggleButtons(handlers) {
 export function toggleStatusPayment(){
     const statusbtnForm = document.querySelector(".btn-form-status");
     const paymentDateForm = document.querySelector(".expense-payment-date");
-
     statusbtnForm.addEventListener("click", () => {
         const isPaid = statusbtnForm.dataset.paid === "true";
         toggleStatusVisual(statusbtnForm, !isPaid);

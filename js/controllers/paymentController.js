@@ -18,7 +18,6 @@ async function handleTogglePayment(button) {
     try {
         const li = button.closest("li");
         const expenseId = Number(li.dataset.id);
-        
         const result = await service.togglePayment(expenseId);
         if (result) {
             expensesController.updateItemExpensesList(result);

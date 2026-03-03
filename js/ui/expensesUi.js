@@ -60,13 +60,11 @@ async function handleListClick(event) {
     if (btnDelete) {
         if (!confirm("Excluir está conta?")) return;
         expensesController.deleteExpense(id);
-        //ajustar o summary
     }
 
     const btnEdit = event.target.closest(".btn-edit");
     if (btnEdit) {
         expensesController.handleEditExpensesForm(id);
-        //ajustar o summary
     }
 }
 
