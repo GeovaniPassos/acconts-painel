@@ -25,7 +25,7 @@ export async function checkCategory(categoryName) {
 
     let category = null;
 
-    if (!categoriesList) {
+    if (categoriesList) {
         category = categoriesList.find(
         cat => cat.name.toLowerCase() === categoryName.toLowerCase()
         );

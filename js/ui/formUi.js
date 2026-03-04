@@ -80,11 +80,12 @@ async function handleSaveExpenses(event) {
         totalInstallments: Number(form.installments.value),
         value: Number(form.value.value),
         payment: paymentForm,
-        paymentDate: formatDateCalendar(paymentDate),
+        paymentDate: formatDate(paymentDate),
         date: form.date.value
     };
     //Checagem de inputs
-    if (!data.name || isNaN(data.value || !data.categoryName)) {
+    debugger
+    if (!data.name || isNaN(data.value) || !data.categoryName) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;
     }
