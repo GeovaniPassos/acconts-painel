@@ -33,7 +33,24 @@ export function getMonthAndYearFromCurrentPeriod() {
     return { monthCurrent, yearCurrent };
 }
 
-// Função para pegar o ano atual 
-// export function getYearFromTheCurrentPeriod() {
-//     return getDateParts().year;
-// }
+function format(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+export function getCurrentMonthPeriod() {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
+
+    return { 
+        startDate: format(startDate),
+        endDate: format(endDate) };
+}

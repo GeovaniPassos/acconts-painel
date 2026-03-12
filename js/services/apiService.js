@@ -28,13 +28,15 @@ export default class ApiService {
         if (response.success === false) {
             throw new Error(response.message || "Error na operação");
         }
-
+        console.log("Resposta da API:", response);
         return response.data;
+        
     }
 
     //Metodos para acessar as despesas
-    async getExpenses() {
-        return this.request("/expenses", { method: "GET" });
+    async getExpenses(startDate, endDate, name) {
+        return this.request(`/expenses?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
+            { method: "GET" });
     }
 
     async getExpensesById(id) {
@@ -66,17 +68,17 @@ export default class ApiService {
         return this.request(`/expenses/${id}`, { method: "DELETE" });
     }
 
-    async getExpensesByPeriod(startDate, endDate) {
-        return this.request(`/expenses/by-period?startDate=${startDate}&endDate=${endDate}`, { method: "GET" });
-    }
+    // async getExpensesByPeriod(startDate, endDate) {
+    //     return this.request(`/expenses/by-period?startDate=${startDate}&endDate=${endDate}`, { method: "GET" });
+    // }
 
-    async getExpensesByMonth(year, month) {
-        return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
-    }
+    // async getExpensesByMonth(year, month) {
+    //     return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
+    // }
 
-    async getExpensesByName(expenseName) {
-        return this.request(`/expenses/search?name=${expenseName}`, { method: "GET" });
-    }
+    // async getExpensesByName(expenseName) {
+    //     return this.request(`/expenses/search?name=${expenseName}`, { method: "GET" });
+    // }
 
     async togglePayment(id) {
         return this.request(`/expenses/${id}/toggle-payment`, { method: "PATCH" });

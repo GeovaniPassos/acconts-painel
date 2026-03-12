@@ -1,4 +1,4 @@
-import { formatDate, formatDateCalendar } from "../utils/date.js";
+import { formatDate } from "../utils/date.js";
 import { toggleStatusVisual } from "./paymentUi.js";
 import * as expensesController from "../controllers/expensesController.js";
 import * as categoryController from "../controllers/categoriesController.js";

@@ -18,8 +18,10 @@ export function initExpenses() {
 export async function getListExpensesCurrentMonth() {
     try {
         feedback.setLoading(true);
-        const currentDate = date.getMonthAndYearFromCurrentPeriod();
-        expensesList = await service.getExpensesByMonth(currentDate.yearCurrent, currentDate.monthCurrent);
+        debugger
+        expensesList = await service.getExpenses(
+                                    date.getCurrentMonthPeriod().startDate, 
+                                    date.getCurrentMonthPeriod().endDate, "");
         if (expensesList === null) {
             return feedback.showMessage("info", "Nenhuma despesa encontrada para o mês atual.");
         }
