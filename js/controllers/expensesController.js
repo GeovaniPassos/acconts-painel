@@ -74,7 +74,7 @@ export async function updateExpense(id, data) {
         
         feedback.showMessage("success", "Despesa atualizada com sucesso.");
     } catch (e) {
-        feedback.showMessage("error", `Erro ao atualizar despesa: ${e.message}`);
+        feedback.showMessage("error", `Erro ao atualizar despesa.`);
     } finally {
         feedback.setLoading(false);
     }
@@ -85,12 +85,11 @@ export async function createExpense(data) {
         feedback.setLoading(true);
         const result = await service.createExpenses(data);
        
-        //expensesList = core.addToList(expensesList, result);
         getListExpensesCurrentMonth();
        
         feedback.showMessage("success", "Despesa criada com sucesso.");
     } catch (e) {
-        feedback.showMessage("error", `Erro ao criar despesa: ${e.message}`);
+        feedback.showMessage("error", `Erro ao criar despesa.`);
     } finally {
         feedback.setLoading(false);
     }  
@@ -101,7 +100,6 @@ export async function deleteExpense(id) {
         feedback.setLoading(true);
         await service.deleteExpenses(id);
         
-        //expensesList = core.removeItemExpensesList(id, expensesList);
         getListExpensesCurrentMonth();
         
         feedback.showMessage("success", "Despesa deletada com sucesso.");

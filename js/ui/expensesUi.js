@@ -24,9 +24,11 @@ function renderExpensesItem(expense) {
     li.innerHTML = `
         <div class="info-group main">
             <strong class="expense-name">${expense.name}</strong>
-            <span class="expense-category">${expense.categoryName}</span>
+            <span class="expense-description">${expense.description}</span>
         </div>
-
+        <div class="expense-category">
+            <span>${expense.categoryName}</span>
+        </div>
         <div class="info-group finance">
             <div class="group-value-date">
                 <span class="expense-value">${formatMoney(expense.value)}</span>

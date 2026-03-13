@@ -120,7 +120,7 @@ button {
 /* O item da lista (Desktop) */
 .expense-item {
     display: grid;
-    grid-template-columns: 0.8fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
+    grid-template-columns: 0.8fr 0.5fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
     align-items: center;
     background: #fff;
     padding: 12px 16px;
@@ -129,6 +129,11 @@ button {
     border-left: 5px solid #ccc; /* Cor neutra inicial */
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     border-right: 5px solid #ccc;
+}
+
+.expense-item:hover {
+  background-color: #dadada;
+  transition: all 0.3s ease;
 }
 
 /* Sub-grupos de informação */
@@ -154,7 +159,19 @@ button {
 }
 
 .expense-name { font-size: 1rem; color: #333; }
-.expense-category { font-size: 0.8rem; color: #777; }
+.expense-description { font-size: 0.8rem; color: #777; font-style: italic;}
+
+.expense-category { 
+  font-size: 0.8rem;
+  color: #424242; 
+  transition: all 0.3s ease;
+  font-style: italic;
+  text-transform: uppercase; 
+  border: #424242 1px solid;
+  border-radius: 7px;
+  padding: 3px 0px;
+}
+
 .expense-value { font-weight: bold; color: #2c3e50; }
 .expense-date { font-size: 0.8rem; color: #777; }
 
