@@ -1,9 +1,5 @@
-import { findCategories, initCategoryAutoComplete } from "./ui/categoriesUi.js";
+import { initCategoryAutoComplete } from "./ui/categoriesUi.js";
 
-import { formatDate } from "./utils/date.js";
-
-import { updateSummary } from "./ui/sumary.js";
-import { showMessage, setLoading } from "./ui/feedback.js";
 import { initExpenses } from "./controllers/expensesController.js";
 import { bindModal } from "./ui/modal.js";
 import { releaseLocalstorage } from "./utils/localstoregeTests.js";

@@ -6,7 +6,7 @@ export function renderExpensesList(expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
 
-    expenses.forEach(exp => {
+    expenses.expenses.forEach(exp => {
         ul.appendChild(renderExpensesItem(exp));
     });
 }

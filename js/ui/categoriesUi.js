@@ -34,6 +34,12 @@ export function renderCategorySuggestions(categories) {
     });
 
     box.style.display = "block";
+
+    window.addEventListener("click", (event) => {
+        if (event.target != box) {
+            clearCategorySuggestions();
+        }
+    });
 }
 
 export function clearCategorySuggestions() {
@@ -50,3 +56,4 @@ function selectCategory(category) {
     input.value = category.name;
     clearCategorySuggestions();
 }
+

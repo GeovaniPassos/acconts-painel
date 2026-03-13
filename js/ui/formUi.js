@@ -1,4 +1,4 @@
-import { formatDate } from "../utils/date.js";
+import { formatDate, formatDateCalendar } from "../utils/date.js";
 import { toggleStatusVisual } from "./paymentUi.js";
 import * as expensesController from "../controllers/expensesController.js";
 import * as categoryController from "../controllers/categoriesController.js";
@@ -40,7 +40,7 @@ export function fillFormForEdit(expense) {
     categoryInput.value = expense.categoryName;
     
     form.name.value = expense.name;
-    document.getElementById("name").disabled = true;
+    document.getElementById("name");
 
     form.value.value = expense.value;
     form.description.value = expense.description;
@@ -80,11 +80,11 @@ async function handleSaveExpenses(event) {
         totalInstallments: Number(form.installments.value),
         value: Number(form.value.value),
         payment: paymentForm,
-        paymentDate: formatDate(paymentDate),
+        paymentDate: formatDateCalendar(paymentDate),
         date: form.date.value
     };
     //Checagem de inputs
-    debugger
+
     if (!data.name || isNaN(data.value) || !data.categoryName) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
         return;

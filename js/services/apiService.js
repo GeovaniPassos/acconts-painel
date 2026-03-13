@@ -9,7 +9,7 @@ export default class ApiService {
         });
 
         if (!resp.ok) {
-            let errorMessage = `Erro ${resp.status}`;
+            let errorMessage = `Erro: ${resp.status}`;
 
             try {
                 const errBody = await resp.json();
@@ -28,7 +28,7 @@ export default class ApiService {
         if (response.success === false) {
             throw new Error(response.message || "Error na operação");
         }
-        console.log("Resposta da API:", response);
+        console.log(response);
         return response.data;
         
     }
@@ -67,18 +67,6 @@ export default class ApiService {
     async deleteExpenses(id) {
         return this.request(`/expenses/${id}`, { method: "DELETE" });
     }
-
-    // async getExpensesByPeriod(startDate, endDate) {
-    //     return this.request(`/expenses/by-period?startDate=${startDate}&endDate=${endDate}`, { method: "GET" });
-    // }
-
-    // async getExpensesByMonth(year, month) {
-    //     return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
-    // }
-
-    // async getExpensesByName(expenseName) {
-    //     return this.request(`/expenses/search?name=${expenseName}`, { method: "GET" });
-    // }
 
     async togglePayment(id) {
         return this.request(`/expenses/${id}/toggle-payment`, { method: "PATCH" });

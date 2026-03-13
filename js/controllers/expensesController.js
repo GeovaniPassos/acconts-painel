@@ -18,7 +18,6 @@ export function initExpenses() {
 export async function getListExpensesCurrentMonth() {
     try {
         feedback.setLoading(true);
-        debugger
         expensesList = await service.getExpenses(
                                     date.getCurrentMonthPeriod().startDate, 
                                     date.getCurrentMonthPeriod().endDate, "");
@@ -28,7 +27,7 @@ export async function getListExpensesCurrentMonth() {
         expenseUi.renderExpensesList(expensesList);
         sumary.updateSummary(expensesList);
     } catch (e) {
-        feedback.showMessage("error", `Falha ao carregar: ${e.message}`);
+        feedback.showMessage("error", `Falha ao carregar`);
     } finally {
         feedback.setLoading(false);
     }
@@ -71,10 +70,8 @@ export async function updateExpense(id, data) {
     try {
         feedback.setLoading(true);
         const result = await service.updateExpenses(id, data);
-        //TODO: Atualizar a api para calcular o sumary e retornar apenas o status da criação
-        expensesList = core.updateItemExpensesList(result, expensesList);
-        updateExpensesList(expensesList);
-
+        getListExpensesCurrentMonth();
+        
         feedback.showMessage("success", "Despesa atualizada com sucesso.");
     } catch (e) {
         feedback.showMessage("error", `Erro ao atualizar despesa: ${e.message}`);
@@ -88,8 +85,8 @@ export async function createExpense(data) {
         feedback.setLoading(true);
         const result = await service.createExpenses(data);
        
-        expensesList = core.addToList(expensesList, result);
-        updateExpensesList(expensesList);
+        //expensesList = core.addToList(expensesList, result);
+        getListExpensesCurrentMonth();
        
         feedback.showMessage("success", "Despesa criada com sucesso.");
     } catch (e) {
@@ -104,8 +101,8 @@ export async function deleteExpense(id) {
         feedback.setLoading(true);
         await service.deleteExpenses(id);
         
-        expensesList = core.removeItemExpensesList(id, expensesList);
-        updateExpensesList(expensesList);
+        //expensesList = core.removeItemExpensesList(id, expensesList);
+        getListExpensesCurrentMonth();
         
         feedback.showMessage("success", "Despesa deletada com sucesso.");
     } catch (e) {
