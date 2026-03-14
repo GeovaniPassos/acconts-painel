@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+  <link rel="shortcut icon" href="./assets/accounting.png" type="image/x-icon">
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
@@ -14,10 +15,10 @@
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-  <h1>Sistema de Controle de Contas</h1>
-
-  
-
+  <div class="title">
+    <!-- <img src="./assets/accounting_128px.png" alt="icon" class="icon-title"> -->
+    <h1>Sistema de Controle de Contas</h1>
+  </div>
   <section id="summary-container" class="summary-cards">
     <div class="card total">
         <h3>Total Geral</h3>
@@ -38,7 +39,10 @@
 
   <div class="filter-container">
     <div class="filter-group">
-      <label for="date-range">Filtrar Período</label>
+      <div>
+        <label for="date-range">Filtrar Período</label>
+        <button id="btn-current-month">Mês atual</button>
+      </div>
       <input type="text" id="date-range" readonly placeholder="Selecione o mês">
     </div>
     <div class="filter-group">
@@ -51,7 +55,7 @@
     
   </div>
   <div id="messages"></div>
-  <div id="loader">Carregando...</div>
+  <div id="loader"></div>
   <!-- Modal formulario novo-->
   <div id="modal" class="modal">
     <div class="modal-content">  
@@ -62,26 +66,28 @@
             
             <div class="inline-autocomplete">
               <p>Categoria:</p>
-              <span id="ghost-text" class="ghost-text"></span>
               <input type="text"
                       id="category-input"
-                      placeholder="Selecione a categoria..."
-                      autocomplete="off"
+                      placeholder="Digite a categoria"
+                      autocomplete="off" maxlength="30"
               >
-              
+              <div 
+                id="category-suggestions"
+                class="category-suggestions-box">
+              </div>
             </div>
             </br>
             <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" required maxlength="30">
             </br>
             <label for="description">Descrição:</label>
-            <input type="text" id="description" name="description">
+            <input type="text" id="description" name="description" maxlength="40">
             </br>
             <label for="installments" class="installments">Quantidade Parcelas:</label>
-            <input type="number" id="installments" name="installments" step="1" value="1" min="1">
+            <input type="number" id="installments" name="installments" step="1" value="1" min="1" max="50">
             </br>
             <label for="value">Valor:</label>
-            <input type="number" id="value" name="value" step="0.01" required>
+            <input type="number" id="value" name="value" step="0.01" required max="999999.99">
             </br>
             <div class="form-payment">
             <label for="status">Status:</label>

@@ -34,6 +34,22 @@ button {
   cursor: pointer;
 }
 
+#btn-current-month {
+  width: 100px;
+  background-color: #2c3e50;
+}
+
+/* .title {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+  padding-right: 120px;
+}
+
+.icon-title {
+  padding-right: 170px;
+} */
+
 /* Estilo do modal */
 .modal {
   display: none; /* escondido por padrão */
@@ -104,7 +120,7 @@ button {
 /* O item da lista (Desktop) */
 .expense-item {
     display: grid;
-    grid-template-columns: 0.8fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
+    grid-template-columns: 0.8fr 0.5fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
     align-items: center;
     background: #fff;
     padding: 12px 16px;
@@ -113,6 +129,11 @@ button {
     border-left: 5px solid #ccc; /* Cor neutra inicial */
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     border-right: 5px solid #ccc;
+}
+
+.expense-item:hover {
+  background-color: #dadada;
+  transition: all 0.3s ease;
 }
 
 /* Sub-grupos de informação */
@@ -138,7 +159,19 @@ button {
 }
 
 .expense-name { font-size: 1rem; color: #333; }
-.expense-category { font-size: 0.8rem; color: #777; }
+.expense-description { font-size: 0.8rem; color: #777; font-style: italic;}
+
+.expense-category { 
+  font-size: 0.8rem;
+  color: #424242; 
+  transition: all 0.3s ease;
+  font-style: italic;
+  text-transform: uppercase; 
+  border: #424242 1px solid;
+  border-radius: 7px;
+  padding: 3px 0px;
+}
+
 .expense-value { font-weight: bold; color: #2c3e50; }
 .expense-date { font-size: 0.8rem; color: #777; }
 
@@ -200,18 +233,42 @@ button {
   }
 
 
-#category-input {
-    background: transparent; /* Permite ver o ghost-text atrás */
+/* #category-input {
+    background: transparent; 
     position: relative;
     color: #000000;
     margin-left: 20px;
+} */
+
+.category-suggestions-box{
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    width: 200px;
+    max-height: 180px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 40px;
+    left: 110px;
 }
 
-.ghost-text {
+.category-suggestion-item{
+    padding: 8px 10px;
+    cursor: pointer;
+    text-align: start;
+    color: #535353;
+    font-style: italic;
+}
+
+.category-suggestion-item:hover{
+    background: #dfdfdf;
+}
+
+/* .ghost-text {
     position: absolute;
-    color: #535353; /* Cor cinza clarinha igual VS Code */
-    pointer-events: none; /* O usuário não interage com o texto de trás */
-    white-space: pre; /* Mantém espaços extras se houver */
+    color: #535353; 
+    pointer-events: none; 
+    white-space: pre; 
 
     height: 22.5px;
     width: 194.5px;
@@ -220,7 +277,7 @@ button {
     padding: 8px;
     top: 8px;
 
-}
+} */
 
 /*Select com valores totais das despesas*/
 .summary-cards {

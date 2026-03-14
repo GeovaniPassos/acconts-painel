@@ -1,6 +1,6 @@
 import { categories } from "../data/category.js";
 import { expenses } from "../data/expenses.js";
-import { getDateParts } from "../ui.js";
+import * as date from "../utils/date.js";
 
 export default class LocalStorageService {
     constructor() {
@@ -42,7 +42,6 @@ export default class LocalStorageService {
     async createExpenses(data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
-
         const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
         
         if (!category) {
@@ -67,7 +66,7 @@ export default class LocalStorageService {
             const formattedDate = dateInstallment.toISOString().split('T')[0];
 
             const paymentDate = (data.payment === "true" && data.paymentDate === "") 
-                ? this.formateDateLocalstore() 
+                ? date.formatDateCalendar(date.getTodayDate())
                 : data.paymentDate;
 
             const newExpense = { 
@@ -137,7 +136,7 @@ export default class LocalStorageService {
         
         // Adiciona data atual se pagamento for true e data estiver vazia
         if (data.payment === "true" && data.paymentDate == "") {
-            data.paymentDate = this.formateDateLocalstore();
+            data.paymentDate = date.formatDateCalendar(date.getTodayDate());
         }
         category = Number(category.id);
         id = Number(id);
@@ -159,7 +158,9 @@ export default class LocalStorageService {
 
     async togglePayment(id) {
         const expenses = JSON.parse(localStorage.getItem("expenses"));
+        const categories = JSON.parse(localStorage.getItem("categories"));
         const index = expenses.findIndex(exp => exp.id === Number(id));
+        
         
         if (index === -1) {
             throw new Error("Despesa não encontrada!");
@@ -169,10 +170,15 @@ export default class LocalStorageService {
         expenses[index] = { 
             ...expenses[index], 
             payment: newPayment, 
-            paymentDate: newPayment ? this.formateDateLocalstore() : ""
+            paymentDate: newPayment ? date.formatDateCalendar(date.getTodayDate()) : ""
         };
         localStorage.setItem("expenses", JSON.stringify(expenses));
-        return expenses[index];
+
+        const category = categories.find(cat => cat.id === expenses[index].category);
+            return {
+                ...expenses[index],
+                categoryName: category ? category.name: null,
+            };
     }
 
     async getExpensesByPeriod(startDate, endDate) {
