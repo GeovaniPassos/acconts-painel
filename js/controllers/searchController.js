@@ -1,4 +1,5 @@
 import * as controllerExpenses from './expensesController.js';
+import * as feedback from '../ui/feedback.js';
 
 export let searchParams = {
     startDate: "",
@@ -9,20 +10,31 @@ export let searchParams = {
 export function initNameSearch() {
     const searchName = document.getElementById("searchName");
     const btnsearch = document.getElementById("btn-searchName");
+    const dateRange = document.getElementById("date-range");
     keyEnterSearch();
 
     btnsearch.addEventListener('click', async () => {
-        const dateRange = document.getElementById("date-range");
 
-        if (!dateRange.value) {
+        try {
+            feedback.setLoading(true);
+            if (!dateRange.value && !searchName.value.trim()) {
+                return feedback.showMessage("info", "Por favor, preencha pelo menos um campo de busca.");
+            }
+
+            if (!dateRange.value) {
             searchParams.startDate = "";
             searchParams.endDate = "";
+            }
+
+            searchParams.name = searchName.value;
+            controllerExpenses.getExpensesBySearch(searchParams);
+
+        } catch (e) {
+            feedback.showMessage("error", `Falha ao carregar`);
+        } finally {
+            feedback.setLoading(false);
         }
 
-        searchParams.name = searchName.value;
-        controllerExpenses.getExpensesBySearch(searchParams);
-
-        searchName.value = "";
     });
 
 }
@@ -35,3 +47,9 @@ export function keyEnterSearch() {
             }
         });
 }
+
+
+
+
+
+
