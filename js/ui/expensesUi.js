@@ -1,0 +1,82 @@
+import { formatDate } from "../utils/date.js";
+import { formatMoney } from "../utils/money.js";
+import * as expensesController from "../controllers/expensesController.js"
+
+export function renderExpensesList(expenses) {
+    const ul = document.getElementById("expenses-list");
+    ul.innerHTML = "";
+
+    expenses.expenses.forEach(exp => {
+        ul.appendChild(renderExpensesItem(exp));
+    });
+}
+
+//Função para renderizar a lista de despesas
+function renderExpensesItem(expense) {
+    const li = document.createElement("li");
+    li.dataset.id = expense.id; 
+    li.className = "expense-item";
+
+    const idPaid = expense.payment === true || expense.payment === "true";
+
+    const statusClass = idPaid ? "status-paid" : "status-pending";
+    const statusText = idPaid ? "Pago" : "Pendente";
+    li.innerHTML = `
+        <div class="info-group main">
+            <strong class="expense-name">${expense.name}</strong>
+            <span class="expense-description">${expense.description}</span>
+        </div>
+        <div class="expense-category">
+            <span>${expense.categoryName}</span>
+        </div>
+        <div class="info-group finance">
+            <div class="group-value-date">
+                <span class="expense-value">${formatMoney(expense.value)}</span>
+                <span class="expense-date">${formatDate(expense.date)}</span>
+            </div>
+            <div class="group-installments">
+                <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
+            </div>
+        </div>
+
+        <div class="info-group status">
+            <span class="badge btn-table-status ${statusClass}" data-paid="${expense.payment}">${statusText}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">${idPaid ? formatDate(expense.paymentDate) : "-"}</span>
+        </div>
+
+        <div class="actions">
+            <button class="btn-edit btn-icon" title="Editar">✏️</button>
+            <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
+        </div>
+    `;
+
+    return li;
+}
+
+async function handleListClick(event) {
+    const li = event.target.closest("li");
+    if (!li) return;
+    const id = Number(li.dataset.id);
+    
+    const btnDelete = event.target.closest(".btn-delete");
+    if (btnDelete) {
+        if (!confirm("Excluir está conta?")) return;
+        expensesController.deleteExpense(id);
+    }
+
+    const btnEdit = event.target.closest(".btn-edit");
+    if (btnEdit) {
+        expensesController.handleEditExpensesForm(id);
+    }
+}
+
+export function bindExpensesListClick() {
+    document.getElementById("expenses-list").addEventListener("click", handleListClick);
+}
+
+export function bindBtnCurrentMonth() {
+    document.getElementById("btn-current-month").addEventListener("click", () => {
+        expensesController.getListExpensesCurrentMonth();
+    });
+}
+

@@ -6,8 +6,8 @@ export default class Service {
         this.stragegy = stragegy === "api" ? new ApiService() : new LocalStorageService();
     }
     //Expenses
-    getExpenses() {
-        return this.stragegy.getExpenses();
+    getExpenses(startDate, endDate, name) {
+        return this.stragegy.getExpenses(startDate, endDate, name);
     }
 
     getExpensesById(id){

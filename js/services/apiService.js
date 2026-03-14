@@ -9,7 +9,7 @@ export default class ApiService {
         });
 
         if (!resp.ok) {
-            let errorMessage = `Erro ${resp.status}`;
+            let errorMessage = `Erro: ${resp.status}`;
 
             try {
                 const errBody = await resp.json();
@@ -18,11 +18,9 @@ export default class ApiService {
 
             throw new Error(errorMessage);
         }
-
         // Para respostas sem corpo
         const contentType = resp.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) return null;
-
         const response = await resp.json();
 
         if (response.success === false) {
@@ -33,8 +31,9 @@ export default class ApiService {
     }
 
     //Metodos para acessar as despesas
-    async getExpenses() {
-        return this.request("/expenses", { method: "GET" });
+    async getExpenses(startDate, endDate, name) {
+        return this.request(`/expenses?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
+            { method: "GET" });
     }
 
     async getExpensesById(id) {
@@ -64,18 +63,6 @@ export default class ApiService {
 
     async deleteExpenses(id) {
         return this.request(`/expenses/${id}`, { method: "DELETE" });
-    }
-
-    async getExpensesByPeriod(startDate, endDate) {
-        return this.request(`/expenses/by-period?startDate=${startDate}&endDate=${endDate}`, { method: "GET" });
-    }
-
-    async getExpensesByMonth(year, month) {
-        return this.request(`/expenses/by-month?year=${year}&month=${month}`, { method: "GET" });
-    }
-
-    async getExpensesByName(expenseName) {
-        return this.request(`/expenses/search?name=${expenseName}`, { method: "GET" });
     }
 
     async togglePayment(id) {
