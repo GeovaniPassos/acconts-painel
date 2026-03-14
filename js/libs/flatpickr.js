@@ -1,4 +1,4 @@
-import * as expensesController from "../controllers/expensesController.js";
+import * as searchController from "../controllers/searchController.js";
 
 export function initFlatpickr() {
     const element = document.getElementById("date-range");
@@ -14,7 +14,14 @@ export function initFlatpickr() {
                 const startDate = selectedDates[0].toISOString().split('T')[0];
                 const endDate = selectedDates[1].toISOString().split('T')[0];
 
-                expensesController.getExpenseByPeriod(startDate, endDate);
+                searchController.searchParams.startDate = startDate;
+                searchController.searchParams.endDate = endDate;
+
+            } else if (selectedDates.length === 0) {
+
+                searchController.searchParams.startDate = "";
+                searchController.searchParams.endDate = "";
+
             }
         }
     });

@@ -1,17 +1,28 @@
 import * as controllerExpenses from './expensesController.js';
 
-//     expenseData = await service.getExpensesByName(name);
-//     renderExpensesList(expenseData);
-//     updateSummary(expenseData);
-// });
+export let searchParams = {
+    startDate: "",
+    endDate: "",
+    name: ""
+};
 
 export function initNameSearch() {
     const searchName = document.getElementById("searchName");
-    const btnsearchName = document.getElementById("btn-searchName");
+    const btnsearch = document.getElementById("btn-searchName");
     keyEnterSearch();
 
-    btnsearchName.addEventListener('click', async () => {
-        controllerExpenses.getExpensesByName(searchName.value);
+    btnsearch.addEventListener('click', async () => {
+        const dateRange = document.getElementById("date-range");
+
+        if (!dateRange.value) {
+            searchParams.startDate = "";
+            searchParams.endDate = "";
+        }
+
+        searchParams.name = searchName.value;
+        controllerExpenses.getExpensesBySearch(searchParams);
+
+        searchName.value = "";
     });
 
 }

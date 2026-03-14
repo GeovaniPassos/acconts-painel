@@ -18,19 +18,16 @@ export default class ApiService {
 
             throw new Error(errorMessage);
         }
-
         // Para respostas sem corpo
         const contentType = resp.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) return null;
-
         const response = await resp.json();
 
         if (response.success === false) {
             throw new Error(response.message || "Error na operação");
         }
-        console.log(response);
+
         return response.data;
-        
     }
 
     //Metodos para acessar as despesas
