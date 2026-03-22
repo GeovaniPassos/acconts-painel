@@ -5,6 +5,12 @@ export default class Service {
     constructor(stragegy = "api") {
         this.stragegy = stragegy === "api" ? new ApiService() : new LocalStorageService();
     }
+
+    //Login
+    login(username, password) {
+        return this.stragegy.login(username, password);
+    }
+
     //Expenses
     getExpenses(startDate, endDate, name) {
         return this.stragegy.getExpenses(startDate, endDate, name);

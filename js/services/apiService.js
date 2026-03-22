@@ -30,6 +30,27 @@ export default class ApiService {
         return response.data;
     }
 
+    //Login
+    async login(username, password) {
+        const response = await fetch(`${API_BASE}/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (!response.ok) {
+            throw new Error("Usuário ou senha inválidos");
+        }
+
+        const data = await response.json();
+
+        localStorage.setItem("token", data.token);
+
+        window.location.href = "main.html";
+    }
+
     //Metodos para acessar as despesas
     async getExpenses(startDate, endDate, name) {
         return this.request(`/expenses?startDate=${startDate}&endDate=${endDate}&name=${name}`, 

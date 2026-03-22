@@ -68,7 +68,7 @@ h1 {
     margin-right: 40px;
 }
 
-.form {
+.form-login {
     display: grid;
     grid-template-columns: 1fr;
     gap: 5px;
