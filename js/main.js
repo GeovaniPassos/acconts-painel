@@ -9,9 +9,10 @@ import { toggleStatusPayment } from "./ui/paymentUi.js";
 import { bindFormSubmit } from "./ui/formUi.js";
 import { bindBtnCurrentMonth, bindExpensesListClick } from "./ui/expensesUi.js";
 import { initNameSearch } from "./controllers/searchController.js";
-import { loginInit } from "./ui/loginUi.js";
+import { checkAuthentication, logout } from "./ui/mainUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    checkAuthentication();
     initExpenses();
     bindModal();
     releaseLocalstorage();
@@ -23,5 +24,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initCategoryAutoComplete();
     initNameSearch();
     bindBtnCurrentMonth();
-    
+    logout();
 });

@@ -3,11 +3,16 @@ const API_BASE = "http://localhost:8080";
 
 export default class ApiService {
     async request(path, options = {}) {
+        debugger;
+        const token = localStorage.getItem("token");
+
         const resp = await fetch(`${API_BASE}${path}`, {
-            headers: {"Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : ""
+             },
             ...options
         });
-
         if (!resp.ok) {
             let errorMessage = `Erro: ${resp.status}`;
 

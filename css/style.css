@@ -3,6 +3,7 @@ body {
   text-align: center;
   margin: 40px;
   background-color: #f9f9f9;
+  display: none;
 }
 
 h1 {
@@ -43,6 +44,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 .title-text {
@@ -58,10 +60,10 @@ button {
   cursor: pointer;
   padding: 6px 12px;
   border-radius: 4px;
-
+  margin: 0px;
   
   display: flex;
-  margin-left: auto;
+  
 }
 
 /* Estilo do modal */
