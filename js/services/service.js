@@ -36,18 +36,6 @@ export default class Service {
         return this.stragegy.deleteExpenses(id);
     }
 
-    getExpensesByPeriod(startDate, endDate) {
-        return this.stragegy.getExpensesByPeriod(startDate, endDate);
-    }
-
-    getExpensesByMonth(year, month) {
-        return this.stragegy.getExpensesByMonth(year, month);
-    }
-
-    getExpensesByName(nameExpense) {
-        return this.stragegy.getExpensesByName(nameExpense);
-    }
-
     togglePayment(id) {
         return this.stragegy.togglePayment(id);
     }

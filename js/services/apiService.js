@@ -3,17 +3,23 @@ const API_BASE = "http://localhost:8080";
 
 export default class ApiService {
     async request(path, options = {}) {
-        debugger;
         const token = localStorage.getItem("token");
 
         const resp = await fetch(`${API_BASE}${path}`, {
+            ...options,
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": token ? `Bearer ${token}` : ""
-             },
-            ...options
+                ...(token && { "Authorization": `Bearer ${token}` }),
+                ...(options.headers || {})
+             }
         });
+
         if (!resp.ok) {
+            if (resp.status === 401) {
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+            }
+            
             let errorMessage = `Erro: ${resp.status}`;
 
             try {
@@ -23,33 +29,23 @@ export default class ApiService {
 
             throw new Error(errorMessage);
         }
+
         // Para respostas sem corpo
         const contentType = resp.headers.get("content-type") || "";
+
         if (!contentType.includes("application/json")) return null;
+
         const response = await resp.json();
 
-        if (response.success === false) {
-            throw new Error(response.message || "Error na operação");
-        }
-
-        return response.data;
+        return response.data ?? response;
     }
 
     //Login
     async login(username, password) {
-        const response = await fetch(`${API_BASE}/auth/login`, {
+        const data = await this.request(`/auth/login`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify({ username, password })
         });
-
-        if (!response.ok) {
-            throw new Error("Usuário ou senha inválidos");
-        }
-
-        const data = await response.json();
 
         localStorage.setItem("token", data.token);
 

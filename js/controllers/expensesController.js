@@ -52,38 +52,11 @@ export async function getExpensesBySearch(searchParams) {
     }
 }
 
-// export async function getExpensesByName(name) {
-//     expensesList = await service.getExpensesByName(name);
-//     if (expensesList === null) {
-//         return feedback.showMessage("info", "Nenhuma despesa encontrada para o nome informado.");
-//     }
-//     expenseUi.renderExpensesList(expensesList);
-//     sumary.updateSummary(expensesList);
-// }
-
 export async function handleEditExpensesForm(expenseId) {
     const expense = await service.getExpensesById(expenseId);
     const formModel = core.buildEditFormModel(expense);
     formUi.fillFormForEdit(formModel);
 }
-
-// export async function getExpenseByPeriod(startDate, endDate) {
-//     expensesList = await service.getExpensesByPeriod(startDate, endDate);
-//     if (expensesList === null) {
-//         return feedback.showMessage("info", "Nenhuma despesa encontrada para o período informado.");
-//     }
-//     expenseUi.renderExpensesList(expensesList);
-// }
-
-// export function updateExpensesList(expensesList) {
-//     expenseUi.renderExpensesList(expensesList);
-//     sumary.updateSummary(expensesList);
-// }
-
-// export function updateItemExpensesList(expense) {
-//     expensesList = core.updateItemExpensesList(expense, expensesList);
-//     updateExpensesList(expensesList);
-// }
 
 export async function updateExpense(id, data) {
     try {
