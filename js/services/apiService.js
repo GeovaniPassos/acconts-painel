@@ -116,5 +116,10 @@ export default class ApiService {
 
     async deleteCategory(id) {
         return this.request(`/categories/${id}`, { method: "DELETE" });
-}
+    }
+
+    async getCategoryByName(categoryName) {
+        return this.request(`/categories/search?name=${categoryName}`,
+             { method: "GET" });
+    }
 }

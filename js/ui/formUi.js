@@ -94,6 +94,7 @@ async function handleSaveExpenses(event) {
         setLoading(true);
         // verificar existencia da categoria ou cria-la. o método é async!
         const category = await categoryController.checkCategory(data.categoryName);
+        //TODO: Ajustar para criar categoria caso não exista, criar uma nova
         data.categoryName = category.name; 
 
         //Salvar com base no modo edit ou criar se não for edit

@@ -8,7 +8,7 @@ import * as categoriesCore from "../core/categoriesCore.js";
 
 const service = new Service(VARIABLE_CONNECTION);
 
-let categoriesList = service.getCategory();
+let categoriesList = [];
 
 export async function getCategoriesNames(value){
     
@@ -21,24 +21,7 @@ export async function checkCategory(categoryName) {
 
     if (!categoryName) return null;
 
-    const categoriesList = await service.getCategory();
-
-    let category = null;
-
-    if (categoriesList) {
-        category = categoriesList.find(
-        cat => cat.name.toLowerCase() === categoryName.toLowerCase()
-        );
-    }
-
-    if (category && category.name.toLowerCase() === categoryName.toLowerCase()) {
-        return category;
-    } else {
-        const newCategory = core.newCategory(categoryName);
-        category = await service.createCategory(newCategory);
-    }
-
-    return category;
+    return await service.getCategoryByName(categoryName);
 }
 
 export async function handleCategoryTyping(text) {
@@ -48,6 +31,9 @@ export async function handleCategoryTyping(text) {
     }
 
     const categories = await service.getCategory();
+    
+    if (!categories) return;
+
     const filtered = categoriesCore.filterCategories(categories, text);
 
     categoriesUi.renderCategorySuggestions(filtered);

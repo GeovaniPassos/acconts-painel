@@ -60,4 +60,8 @@ export default class Service {
     deleteCategory(id) {
         return this.stragegy.deleteCategory(id);
     }
+
+    getCategoryByName(categoryName) {
+        return this.stragegy.getCategoryByName(categoryName);
+    }
 }
