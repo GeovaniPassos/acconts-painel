@@ -2,39 +2,68 @@ import { VARIABLE_CONNECTION } from "../config/config.js";
 import { findCategoryByName } from "../core/categoriesCore.js";
 import Service from "../services/service.js";
 
-import * as core from "../core/categoriesCore.js";
 import * as categoriesUi from "../ui/categoriesUi.js";
-import * as categoriesCore from "../core/categoriesCore.js";
 
 const service = new Service(VARIABLE_CONNECTION);
 
 let categoriesList = [];
 
-export async function getCategoriesNames(value){
+export async function getCategories() {
+
+    categoriesList = await service.getCategory();
+    return await categoriesList;
     
-    categoriesList = await findCategoryByName(categoriesList, value);
-
-    return categoriesList;
 }
 
-export async function checkCategory(categoryName) {
+export async function createCategory(name) {
+    if (!name) {
+        throw new Error("O nome da categoria é obrigatório.");
+    }
 
-    if (!categoryName) return null;
-
-    return await service.getCategoryByName(categoryName);
+    const data = { name, type: "EXPENSES" };
+    const category = await service.createCategory(data);
+    return category;
 }
 
-export async function handleCategoryTyping(text) {
+
+export async function getCategoriesNames(value){
+    return await service.getCategoryByName(value);
+}
+
+export function checkCategory(text) {
+    const list = categoriesList.filter(
+            cat => cat.name.toLowerCase().startsWith(text.toLowerCase())
+        );
+    return list; 
+}
+
+export function handleCategoryTyping(text) {
     if (!text || text.length < 1) {
         categoriesUi.clearCategorySuggestions();
         return;
     }
 
-    const categories = await service.getCategory();
-    
+    const categories = checkCategory(text);
+
     if (!categories) return;
 
-    const filtered = categoriesCore.filterCategories(categories, text);
+    categoriesUi.renderCategorySuggestions(categories);
+}
 
-    categoriesUi.renderCategorySuggestions(filtered);
+export async function findOrCreateCategory(categoryName) {
+    
+    if (!categoryName) {
+        throw new Error("O nome da categoria é obrigatório.");
+    }
+
+    const list = await getCategoriesNames(categoryName.toLowerCase());
+
+    let category = list[0];
+    //TODO: Verificar cadastros das despesas
+    if (category) {
+        return category.name;
+    } else {
+        category = await createCategory(categoryName);
+        return category.name;
+    }
 }

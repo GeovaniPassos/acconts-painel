@@ -12,6 +12,8 @@ export function initCategoryAutoComplete() {
         const value = event.target.value;
         categoriesController.handleCategoryTyping(value);
     });
+
+    categoriesController.getCategories();
 }
 
 export function renderCategorySuggestions(categories) {
@@ -20,6 +22,11 @@ export function renderCategorySuggestions(categories) {
 
     box.innerHTML = "";
 
+    if (categories === null || categories.length === 0) {
+        box.style.display = "none";
+        return;
+    }
+    
     categories.forEach(category => {
         const div = document.createElement("div");
         div.className = "category-suggestion-item";
