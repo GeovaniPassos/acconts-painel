@@ -75,7 +75,7 @@ async function handleSaveExpenses(event) {
     const data = {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
-        categoryName: categoryTyped,
+        categoryName: categoryTyped.trim(),
         installment: 1,
         totalInstallments: Number(form.installments.value),
         value: Number(form.value.value),

@@ -25,5 +25,5 @@ export function filterCategories(categories, text) {
 
     const term = text.toLowerCase().trim();
 
-    return categories.filter(cat => cat.name.toLowerCase().includes(term));
+    return categories.find(cat => cat.name.toLowerCase() === term);
 }

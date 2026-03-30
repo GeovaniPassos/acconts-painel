@@ -1,5 +1,5 @@
 import { VARIABLE_CONNECTION } from "../config/config.js";
-import { findCategoryByName } from "../core/categoriesCore.js";
+import { filterCategories, findCategoryByName } from "../core/categoriesCore.js";
 import Service from "../services/service.js";
 
 import * as categoriesUi from "../ui/categoriesUi.js";
@@ -51,19 +51,17 @@ export function handleCategoryTyping(text) {
 }
 
 export async function findOrCreateCategory(categoryName) {
-    
     if (!categoryName) {
         throw new Error("O nome da categoria é obrigatório.");
     }
 
-    const list = await getCategoriesNames(categoryName.toLowerCase());
+    let category = filterCategories(categoriesList, categoryName);
 
-    let category = list[0];
-    //TODO: Verificar cadastros das despesas
     if (category) {
         return category.name;
     } else {
-        category = await createCategory(categoryName);
-        return category.name;
+        await createCategory(categoryName);
+        await getCategories();
+        return filterCategories(categoriesList, categoryName).name;
     }
 }
