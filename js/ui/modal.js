@@ -1,3 +1,4 @@
+import { getCategories } from "../controllers/categoriesController.js";
 import * as date from "../utils/date.js";
 import { clearForm } from "./formUi.js";
 
@@ -19,6 +20,7 @@ export function openModal() {
         btnAbrir.addEventListener("click", () => {
             dateInput.value = date.formatDateCalendar(date.getTodayDate());
             modal.style.display = "block";
+            getCategories();
         });
     }
 }

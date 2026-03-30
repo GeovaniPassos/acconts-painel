@@ -3,12 +3,23 @@ const API_BASE = "http://localhost:8080";
 
 export default class ApiService {
     async request(path, options = {}) {
+        const token = localStorage.getItem("token");
+
         const resp = await fetch(`${API_BASE}${path}`, {
-            headers: {"Content-Type": "application/json" },
-            ...options
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(token && { "Authorization": `Bearer ${token}` }),
+                ...(options.headers || {})
+             }
         });
 
         if (!resp.ok) {
+            if (resp.status === 401) {
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+            }
+            
             let errorMessage = `Erro: ${resp.status}`;
 
             try {
@@ -18,16 +29,27 @@ export default class ApiService {
 
             throw new Error(errorMessage);
         }
+
         // Para respostas sem corpo
         const contentType = resp.headers.get("content-type") || "";
+
         if (!contentType.includes("application/json")) return null;
+
         const response = await resp.json();
 
-        if (response.success === false) {
-            throw new Error(response.message || "Error na operação");
-        }
+        return response.data ?? response;
+    }
 
-        return response.data;
+    //Login
+    async login(username, password) {
+        const data = await this.request(`/auth/login`, {
+            method: "POST",
+            body: JSON.stringify({ username, password })
+        });
+
+        localStorage.setItem("token", data.token);
+
+        window.location.href = "main.html";
     }
 
     //Metodos para acessar as despesas
@@ -94,5 +116,10 @@ export default class ApiService {
 
     async deleteCategory(id) {
         return this.request(`/categories/${id}`, { method: "DELETE" });
-}
+    }
+
+    async getCategoryByName(categoryName) {
+        return this.request(`/categories/search?name=${categoryName}`,
+             { method: "GET" });
+    }
 }

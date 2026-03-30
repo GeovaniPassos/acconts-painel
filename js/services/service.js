@@ -5,6 +5,12 @@ export default class Service {
     constructor(stragegy = "api") {
         this.stragegy = stragegy === "api" ? new ApiService() : new LocalStorageService();
     }
+
+    //Login
+    login(username, password) {
+        return this.stragegy.login(username, password);
+    }
+
     //Expenses
     getExpenses(startDate, endDate, name) {
         return this.stragegy.getExpenses(startDate, endDate, name);
@@ -30,18 +36,6 @@ export default class Service {
         return this.stragegy.deleteExpenses(id);
     }
 
-    getExpensesByPeriod(startDate, endDate) {
-        return this.stragegy.getExpensesByPeriod(startDate, endDate);
-    }
-
-    getExpensesByMonth(year, month) {
-        return this.stragegy.getExpensesByMonth(year, month);
-    }
-
-    getExpensesByName(nameExpense) {
-        return this.stragegy.getExpensesByName(nameExpense);
-    }
-
     togglePayment(id) {
         return this.stragegy.togglePayment(id);
     }
@@ -65,5 +59,9 @@ export default class Service {
 
     deleteCategory(id) {
         return this.stragegy.deleteCategory(id);
+    }
+
+    getCategoryByName(categoryName) {
+        return this.stragegy.getCategoryByName(categoryName);
     }
 }
