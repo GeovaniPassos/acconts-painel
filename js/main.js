@@ -10,6 +10,7 @@ import { bindFormSubmit } from "./ui/formUi.js";
 import { bindBtnCurrentMonth, bindExpensesListClick } from "./ui/expensesUi.js";
 import { initNameSearch } from "./controllers/searchController.js";
 import { checkAuthentication, logout } from "./ui/mainUi.js";
+import { initTables } from "./ui/tablesUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     checkAuthentication();
@@ -25,4 +26,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initNameSearch();
     bindBtnCurrentMonth();
     logout();
+    initTables();
 });

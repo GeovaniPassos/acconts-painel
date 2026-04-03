@@ -54,7 +54,6 @@
       <div class="filter-group button-group">
         <button id="btn-searchName">Buscar</button>
       </div>
-      
     </div>
     <div id="messages"></div>
     <div id="loader"></div>
@@ -106,10 +105,22 @@
           </div>
       </div>
     </div>
+  
+    <div class="tabs">
+      <button class="tab active tab-expenses" onclick="openTab('expenses')">Despesas</button>
+      <button class="tab tab-receipts" onclick="openTab('receipts')">Receitas</button>
+    </div>
 
-    <ul id="expenses-list"></ul>
+    <div id="expenses" class="tab-content active">
+      <ul id="expenses-list"></ul>
+    </div>
+
+    <div id="receipts" class="tab-content">
+      <ul id="income-list">exemplo     R$ 123.22</ul>
+    </div>
 
     <script type="module" src="./js/main.js"></script>
+
   </div>
 </body>
 </html>
