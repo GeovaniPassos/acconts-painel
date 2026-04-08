@@ -64,4 +64,9 @@ export default class Service {
     getCategoryByName(categoryName) {
         return this.stragegy.getCategoryByName(categoryName);
     }
+
+    //Receipts
+    getReceipts(startDate, endDate, name) {
+        return this.stragegy.getReceipts(startDate, endDate, name);
+    }
 }

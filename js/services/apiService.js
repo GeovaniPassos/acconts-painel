@@ -122,4 +122,10 @@ export default class ApiService {
         return this.request(`/categories/search?name=${categoryName}`,
              { method: "GET" });
     }
+
+    //Receipt
+    async getReceipts(startDate, endDate, name) {
+        return this.request(`/receipt?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
+            { method: "GET" });
+    }
 }

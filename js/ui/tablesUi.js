@@ -1,5 +1,4 @@
 export function initTables() {
-    openTab('expenses');
 
     const btnTableExpense = document.querySelector('.tab-expenses');
     const btnTableReceipt = document.querySelector('.tab-receipts');

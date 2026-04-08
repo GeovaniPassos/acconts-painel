@@ -11,6 +11,7 @@ import { bindBtnCurrentMonth, bindExpensesListClick } from "./ui/expensesUi.js";
 import { initNameSearch } from "./controllers/searchController.js";
 import { checkAuthentication, logout } from "./ui/mainUi.js";
 import { initTables } from "./ui/tablesUi.js";
+import { initReceipt } from "./controllers/receiptController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     checkAuthentication();
@@ -27,4 +28,5 @@ document.addEventListener("DOMContentLoaded", () => {
     bindBtnCurrentMonth();
     logout();
     initTables();
+    initReceipt();
 });
