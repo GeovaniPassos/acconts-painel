@@ -12,6 +12,7 @@ import { initNameSearch } from "./controllers/searchController.js";
 import { checkAuthentication, logout } from "./ui/mainUi.js";
 import { initTables } from "./ui/tablesUi.js";
 import { initReceipt } from "./controllers/receiptController.js";
+import { bindReceiptListClick } from "./ui/receiptUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     checkAuthentication();
@@ -29,4 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     logout();
     initTables();
     initReceipt();
+
+    bindReceiptListClick();
 });

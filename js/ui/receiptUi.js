@@ -56,7 +56,7 @@ async function handleListClick(event) {
 }
 
 export function bindReceiptListClick() {
-    document.getElementById("receipts-list").addEventListener("click", handleListClick);
+    document.getElementById("receipt-list").addEventListener("click", handleListClick);
 }
 
 export function bindBtnCurrentMonth() {
