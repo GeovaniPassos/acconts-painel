@@ -97,7 +97,7 @@ button {
   height: 20px;
 }
 
-#expenses-form {
+#expenses-form, #receipts-form {
   text-align: right;
   margin: 0px 10px;
   
@@ -128,7 +128,7 @@ button {
 /*####################################################################*/
 
 /* Container da lista */
-#expenses-list {
+#expenses-list, #receipt-list {
     list-style: none;
     padding: 0;
 }
@@ -136,7 +136,7 @@ button {
 /* O item da lista (Desktop) */
 .expense-item {
     display: grid;
-    grid-template-columns: 0.8fr 0.5fr 0.3fr 0.1fr 200px 100px; /* Alinha as colunas */
+    grid-template-columns: 0.6fr 0.5fr 0.5fr 0.3fr 0.3fr 0.3fr; /* Alinha as colunas */
     align-items: center;
     background: #fff;
     padding: 12px 16px;
@@ -147,7 +147,20 @@ button {
     border-right: 5px solid #ccc;
 }
 
-.expense-item:hover {
+.receipt-item {
+  display: grid;
+    grid-template-columns: 0.45fr 0.3fr 0.2fr 0.2fr; /* Alinha as colunas */
+    align-items: center;
+    background: #fff;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border-left: 5px solid #ccc; /* Cor neutra inicial */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-right: 5px solid #ccc;
+}
+
+.expense-item:hover, .receipt-item:hover {
   background-color: #dadada;
   transition: all 0.3s ease;
 }
@@ -174,11 +187,11 @@ button {
   display: flex;
 }
 
-.expense-name { font-size: 1rem; color: #333; }
-.expense-description { font-size: 0.8rem; color: #777; font-style: italic;}
+.expense-name, .receipt-name { font-size: 1rem; color: #333; }
+.expense-description, .receipt-description { font-size: 0.8rem; color: #777; font-style: italic;}
 
-.expense-category { 
-  font-size: 0.8rem;
+.expense-category, .receipt-category { 
+  font-size: 0.7rem;
   color: #424242; 
   transition: all 0.3s ease;
   font-style: italic;
@@ -188,8 +201,8 @@ button {
   padding: 3px 0px;
 }
 
-.expense-value { font-weight: bold; color: #2c3e50; }
-.expense-date { font-size: 0.8rem; color: #777; }
+.expense-value, .receipt-value { font-weight: bold; color: #2c3e50; }
+.expense-date, .receipt-date { font-size: 0.8rem; color: #777; }
 
 .expense-installments { 
   font-size: 0.8rem;
@@ -224,7 +237,7 @@ button {
 
 /* Ajustes para Celular (Responsividade) */
 @media (max-width: 600px) {
-    .expense-item {
+    .expense-item, .receipt-item {
         grid-template-columns: 1fr auto; /* Apenas duas colunas no celular */
         gap: 10px;
     }
@@ -496,7 +509,7 @@ button {
     width: 40%;
   }
 
-  .expense-item {
+  .expense-item, .receipt-item {
     grid-template-columns: 100px 120px 40px 80px 30px;
   }
 }
@@ -512,48 +525,55 @@ button {
 /* ABAS DE DESPESA E RECEITAS */
 
 .tab {
-      padding: 12px 24px;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      font-size: 16px;
-      color: #555;
-      transition: all 0.3s ease;
-      position: relative;
-    }
+  padding: 12px 24px;
+  font-weight: bold;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #555;
+  transition: all 0.3s ease;
+  position: relative;
+  background-color: #f9f9f9;
+}
 
-    .tab.active {
-      color: #007bff;
-      font-weight: bold;
-    }
+.tab.active {
+  background-color: white;
+}
 
-    .tab.active::after {
-      content: "";
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: #007bff;
-      border-radius: 3px 3px 0 0;
-    }
+.tab.active {
+  color: #007bff;
+  font-weight: bold;
+  border-radius: 10px 10px 0 0;
+}
 
-    /* Conteúdo das abas */
-    .tab-content {
-      display: none;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      animation: fadeIn 0.4s ease;
-    }
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #007bff;
+  border-radius: 3px 3px 0 0;
+}
 
-    .tab-content.active {
-      display: block;
-    }
+/* Conteúdo das abas */
+.tab-content {
+  display: none;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: fadeIn 0.4s ease;
+}
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
 

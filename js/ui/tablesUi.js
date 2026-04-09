@@ -14,5 +14,5 @@ export function openTab(tab) {
 
     // mostrar a escolhida
     document.getElementById(tab).classList.add('active');
-    document.querySelector(`.tab[onclick="openTab('${tab}')"]`).classList.add('active');
+    document.querySelector(`.tab-${tab}`).classList.add('active');
 }

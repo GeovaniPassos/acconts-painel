@@ -20,11 +20,11 @@ export async function getListReceiptsCurrentMonth() {
         searchParams.endDate = date.getCurrentMonthPeriod().endDate;
         searchParams.name = "";
         receiptList = await service.getReceipts(searchParams.startDate, searchParams.endDate, searchParams.name);
-        if (receiptList === null || receiptList.receipts.length == 0) {
+        if (receiptList === null || receiptList.receipt.length == 0) {
             return feedback.showMessage("info", "Nenhuma receita encontrada.");
         }
         receiptUi.renderReceiptList(receiptList);
-        sumary.updateSummary(receiptList);
+        //sumary.updateSummary(receiptList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar`);
     } finally {
