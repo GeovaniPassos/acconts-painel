@@ -7,12 +7,12 @@ import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
 import { toggleStatusPayment } from "./ui/paymentUi.js";
 import { bindFormSubmit } from "./ui/formUi.js";
-import { bindBtnCurrentMonth, bindExpensesListClick } from "./ui/expensesUi.js";
+import { bindBtnCurrentMonthExpenses, bindExpensesListClick } from "./ui/expensesUi.js";
 import { initNameSearch } from "./controllers/searchController.js";
 import { checkAuthentication, logout } from "./ui/mainUi.js";
 import { initTables } from "./ui/tablesUi.js";
 import { initReceipt } from "./controllers/receiptController.js";
-import { bindReceiptListClick } from "./ui/receiptUi.js";
+import { bindBtnCurrentMonthReceipts, bindReceiptListClick } from "./ui/receiptUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     checkAuthentication();
@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
     bindExpensesListClick();
     initCategoryAutoComplete();
     initNameSearch();
-    bindBtnCurrentMonth();
+    bindBtnCurrentMonthExpenses();
+    bindBtnCurrentMonthReceipts();
     logout();
     initTables();
     initReceipt();

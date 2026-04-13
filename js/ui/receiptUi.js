@@ -59,7 +59,7 @@ export function bindReceiptListClick() {
     document.getElementById("receipt-list").addEventListener("click", handleListClick);
 }
 
-export function bindBtnCurrentMonth() {
+export function bindBtnCurrentMonthReceipts() {
     document.getElementById("btn-current-month").addEventListener("click", () => {
         receiptsController.getListReceiptsCurrentMonth();
     });

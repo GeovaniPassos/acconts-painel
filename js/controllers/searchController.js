@@ -1,4 +1,6 @@
 import * as controllerExpenses from './expensesController.js';
+import * as controllerReceipts from './receiptController.js';
+
 import * as feedback from '../ui/feedback.js';
 
 export let searchParams = {
@@ -28,6 +30,7 @@ export function initNameSearch() {
 
             searchParams.name = searchName.value;
             controllerExpenses.getExpensesBySearch(searchParams);
+            controllerReceipts.getReceiptsBySearch(searchParams);
 
         } catch (e) {
             feedback.showMessage("error", `Falha ao carregar`);

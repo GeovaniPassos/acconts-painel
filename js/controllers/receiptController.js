@@ -31,3 +31,20 @@ export async function getListReceiptsCurrentMonth() {
         feedback.setLoading(false);
     }
 }
+
+export async function getReceiptsBySearch(searchParams) {
+    try {
+        feedback.setLoading(true);
+        receiptList = await service.getReceipts(searchParams.startDate, searchParams.endDate, searchParams.name);
+
+        if (receiptList.receipt.length == 0) {
+            feedback.showMessage("info", "Nenhuma receita encontrada para o período e nome informados.");
+        }
+        receiptUi.renderReceiptList(receiptList);
+        //sumary.updateSummary(receiptList);
+    } catch (e) {
+        feedback.showMessage("error", `Falha ao carregar`);
+    } finally {
+        feedback.setLoading(false);
+    }
+}

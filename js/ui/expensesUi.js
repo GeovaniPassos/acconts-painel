@@ -73,7 +73,7 @@ export function bindExpensesListClick() {
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
 }
 
-export function bindBtnCurrentMonth() {
+export function bindBtnCurrentMonthExpenses() {
     document.getElementById("btn-current-month").addEventListener("click", () => {
         expensesController.getListExpensesCurrentMonth();
     });
