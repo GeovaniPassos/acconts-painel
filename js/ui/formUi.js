@@ -10,6 +10,34 @@ export function bindFormSubmit() {
     document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
 }
 
+export function bindTypeSelector() {
+    const select = document.getElementById("type-select");
+
+    if (!select) return;
+
+    handleTypeChange(select.value);
+
+    select.addEventListener("change", (event) => {
+        handleTypeChange(event.target.value);
+    });
+}
+
+function handleTypeChange(selectedType) {
+    const sections = document.querySelectorAll(".form-section");
+
+    sections.forEach(section => {
+        const type = section.dataset.type;
+
+        section.classList.toggle("hidden", type !== selectedType);
+
+        if (type === selectedType) {
+            section.style.display = "block";
+        } else {
+            section.style.display = "none";
+        }
+    });
+}
+
 export function clearForm() {
     const form = document.getElementById("expenses-form");
     form.dataset.id = "";

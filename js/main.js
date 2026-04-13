@@ -6,7 +6,7 @@ import { releaseLocalstorage } from "./utils/localstoregeTests.js";
 import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
 import { toggleStatusPayment } from "./ui/paymentUi.js";
-import { bindFormSubmit } from "./ui/formUi.js";
+import { bindFormSubmit, bindTypeSelector } from "./ui/formUi.js";
 import { bindBtnCurrentMonthExpenses, bindExpensesListClick } from "./ui/expensesUi.js";
 import { initNameSearch } from "./controllers/searchController.js";
 import { checkAuthentication, logout } from "./ui/mainUi.js";
@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleStatusPayment();
     bindFormSubmit();
     bindExpensesListClick();
+    bindReceiptListClick();
     initCategoryAutoComplete();
     initNameSearch();
     bindBtnCurrentMonthExpenses();
@@ -33,4 +34,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initReceipt();
 
     bindReceiptListClick();
+    bindTypeSelector();
 });

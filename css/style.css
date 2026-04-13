@@ -187,6 +187,13 @@ button {
   display: flex;
 }
 
+.type-addition {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .expense-name, .receipt-name { font-size: 1rem; color: #333; }
 .expense-description, .receipt-description { font-size: 0.8rem; color: #777; font-style: italic;}
 
@@ -577,3 +584,10 @@ button {
   to {opacity: 1; transform: translateY(0);}
 }
 
+#receipts-form {
+  display: none;
+}
+
+.form-section {
+  display: none;
+}
