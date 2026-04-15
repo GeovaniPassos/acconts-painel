@@ -1,13 +1,16 @@
 import { formatDate, formatDateCalendar } from "../utils/date.js";
 import { toggleStatusVisual } from "./paymentUi.js";
 import * as expensesController from "../controllers/expensesController.js";
+import * as receiptsController from "../controllers/receiptController.js";
 import * as categoryController from "../controllers/categoriesController.js";
 import { setLoading, showMessage } from "./feedback.js";
 import { clearCategorySuggestions } from "./categoriesUi.js";
 
 
 export function bindFormSubmit() {
-    document.getElementById("expenses-form").addEventListener("submit", handleSaveExpenses);
+    document.getElementById("expenses-form").addEventListener("submit", handleSave);
+    document.getElementById("receipts-form").addEventListener("submit", handleSave);
+
 }
 
 export function bindTypeSelector() {
@@ -92,9 +95,11 @@ export function fillFormForEdit(expense) {
 }
 
 //Função para lidar com o salvamento da despesa
-async function handleSaveExpenses(event) {
-    event.preventDefault();
+async function handleSave(event) {
 
+    event.preventDefault();
+    //TODO: Separar a função do expense e receita e criar com base no dataset do 
+    // form para não precisar de 2 forms diferentes, só um com campos dinâmicos
     const form = event.target;
     const categoryTyped = document.getElementById('category-input').value.trim();
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
