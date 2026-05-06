@@ -66,25 +66,29 @@
           <h2 class="modal-title">Criar um novo registro</h2>
           <select name="type-select" id="type-select">
             <option value="expenses" selected>Despesa</option>
-            <option value="receipts">Receita</option>
+            <option value="receipt">Receita</option>
           </select>
         </div>
-        <!-- Formulário de despesas -->
-        <div class="form">
-          <form class="form-section" id="expenses-form" data-type="expenses">
-            
-            <div class="inline-autocomplete">
+
+         <div class="inline-autocomplete">
               <p>Categoria:</p>
               <input type="text"
-                      id="category-input"
+                      class="category-input"
                       placeholder="Digite a categoria"
                       autocomplete="off" maxlength="30"
               >
               <div 
-                id="category-suggestions"
-                class="category-suggestions-box">
+                class="category-suggestions category-suggestions-box" data-type="expenses">
               </div>
-            </div>
+          </div>
+
+        <!-- Formulário de despesas -->
+        
+        <div class="form">
+
+          <form class="form-section" id="expenses-form" data-type="expenses">
+            
+            
             </br>
             <label for="name">Nome:</label>
             <input type="text" id="name" name="name" required maxlength="30">
@@ -106,25 +110,16 @@
             </div>
             </br>
             <label for="date">Data Venc:</label>
-            <input class="input-date" type="date" id="date" name="date" required>
+            <input class="input-date date" type="date" name="date" required>
             </br>
             <button class="button-form" type="submit">Salvar</button>
           </form>
+
            <!-- Formulário de receitas -->
-          <form class="form-section" id="receipts-form" data-type="receipts">
+          
+           <form class="form-section" id="receipts-form" data-type="receipt">
             
-            <div class="inline-autocomplete">
-              <p>Categoria:</p>
-              <input type="text"
-                      id="category-input"
-                      placeholder="Digite a categoria"
-                      autocomplete="off" maxlength="30"
-              >
-              <div 
-                id="category-suggestions"
-                class="category-suggestions-box">
-              </div>
-            </div>
+            
             </br>
             <label for="name">Nome:</label>
             <input type="text" id="name" name="name" required maxlength="30">
@@ -136,7 +131,7 @@
             <input type="number" id="value" name="value" step="0.01" max="999999.99">
             </br>
             <label for="date">Data:</label>
-            <input class="input-date" type="date" id="date" name="date" required>
+            <input class="input-date date" type="date" name="date" required>
             </br>
             <button class="button-form" type="submit">Salvar</button>
           </form>

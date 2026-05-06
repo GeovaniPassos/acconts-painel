@@ -5,19 +5,21 @@ export async function findCategories(value) {
 }
 
 export function initCategoryAutoComplete() {
-    const input = document.getElementById('category-input');
-    if (!input) return;
+    const inputs = document.querySelectorAll(".category-input");
+    if (!inputs) return;
 
-    input.addEventListener("input", (event) => {
-        const value = event.target.value;
-        categoriesController.handleCategoryTyping(value);
+    inputs.forEach((input) => {
+        input.addEventListener("input", (event) => {
+            const value = event.target.value;
+            categoriesController.handleCategoryTyping(value);
+        });
     });
 
     categoriesController.getCategories();
 }
 
 export function renderCategorySuggestions(categories) {
-    const box = document.getElementById("category-suggestions");
+    const box = document.querySelector(".category-suggestions");
     if (!box) return;
 
     box.innerHTML = "";
@@ -50,7 +52,7 @@ export function renderCategorySuggestions(categories) {
 }
 
 export function clearCategorySuggestions() {
-    const box = document.getElementById("category-suggestions");
+    const box = document.querySelector(".category-suggestions");
 
     if(box) {
         box.innerHTML = "";
@@ -59,8 +61,10 @@ export function clearCategorySuggestions() {
 }
 
 function selectCategory(category) {
-    const input = document.getElementById("category-input");
-    input.value = category.name;
+    const inputs = document.querySelectorAll(".category-input");
+    inputs.forEach((input) => {
+        input.value = category.name;
+    });
     clearCategorySuggestions();
 }
 

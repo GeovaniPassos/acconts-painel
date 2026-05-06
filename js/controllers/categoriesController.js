@@ -15,16 +15,15 @@ export async function getCategories() {
     
 }
 
-export async function createCategory(name) {
+export async function createCategory(name, type) {
     if (!name) {
         throw new Error("O nome da categoria é obrigatório.");
     }
 
-    const data = { name, type: "EXPENSES" };
+    const data = { name, type };
     const category = await service.createCategory(data);
     return category;
 }
-
 
 export async function getCategoriesNames(value){
     return await service.getCategoryByName(value);
@@ -50,18 +49,19 @@ export function handleCategoryTyping(text) {
     categoriesUi.renderCategorySuggestions(categories);
 }
 
-export async function findOrCreateCategory(categoryName) {
+export async function findOrCreateCategory(categoryName, type) {
     if (!categoryName) {
         throw new Error("O nome da categoria é obrigatório.");
     }
 
-    let category = filterCategories(categoriesList, categoryName);
+    let category = filterCategories(categoriesList, categoryName, type);
 
     if (category) {
         return category.name;
     } else {
-        await createCategory(categoryName);
+        debugger
+        await createCategory(categoryName, type);
         await getCategories();
-        return filterCategories(categoriesList, categoryName).name;
+        return filterCategories(categoriesList, categoryName, type).name;
     }
 }

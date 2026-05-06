@@ -18,12 +18,12 @@ export function newCategory(categoryName) {
     return categoryCreate;
 }
 
-export function filterCategories(categories, text) {
-    if (categories === null || text === null) {
+export function filterCategories(categories, text, type) {
+    if (categories === null || text === null || type === null) {
         return [];
     }
 
     const term = text.toLowerCase().trim();
 
-    return categories.find(cat => cat.name.toLowerCase() === term);
+    return categories.find(cat => cat.name.toLowerCase() === term && cat.type === type);
 }

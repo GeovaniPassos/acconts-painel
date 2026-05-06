@@ -128,4 +128,22 @@ export default class ApiService {
         return this.request(`/receipt?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
             { method: "GET" });
     }
+
+    async createReceipts(data) {
+        return this.request("/receipt", {
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+    }
+
+    async updateReceipts(id, data) {
+        return this.request(`/receipt/${id}`, {
+            method: "PATCH",
+            body: JSON.stringify(data)
+        });
+    }
+
+    async deleteReceipts(id) {
+        return this.request(`/receipt/${id}`, { method: "DELETE" });
+    }
 }

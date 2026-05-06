@@ -14,11 +14,14 @@ function getModal() {
 // Função para o evento de abrir modal
 export function openModal() {
     const modal = getModal();
-    const dateInput = document.getElementById("date");
+    const dateInputs = document.querySelectorAll(".date");
     const btnAbrir = document.getElementById("btn-open-form");
+
     if (btnAbrir){
         btnAbrir.addEventListener("click", () => {
-            dateInput.value = date.formatDateCalendar(date.getTodayDate());
+            dateInputs.forEach((input) => {
+                input.value = date.formatDateCalendar(date.getTodayDate());
+            });
             modal.style.display = "block";
             getCategories();
         });

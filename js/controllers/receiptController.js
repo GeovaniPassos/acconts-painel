@@ -32,6 +32,12 @@ export async function getListReceiptsCurrentMonth() {
     }
 }
 
+export async function handleEditReceiptForm(receiptId) {
+    const receipt = await service.getReceiptsById(receiptId);
+    const formModel = core.buildEditFormModel(receipt);
+    formUi.fillFormForEdit(formModel);
+}
+
 export async function getReceiptsBySearch(searchParams) {
     try {
         feedback.setLoading(true);
@@ -48,3 +54,48 @@ export async function getReceiptsBySearch(searchParams) {
         feedback.setLoading(false);
     }
 }
+
+export async function createReceipt(data) {
+    try {
+        feedback.setLoading(true);
+        await service.createReceipts(data);
+       
+        getReceiptsBySearch(searchParams);
+       
+        feedback.showMessage("success", "Receita criada com sucesso.");
+    } catch (e) {
+        feedback.showMessage("error", `Erro ao criar receita.`);
+    } finally {
+        feedback.setLoading(false);
+    }  
+}
+
+export async function updateReceipt(id, data) {
+    try {
+        feedback.setLoading(true);
+        await service.updateReceipts(id, data);
+        
+        getReceiptsBySearch(searchParams);
+        
+        feedback.showMessage("success", "Receita atualizada com sucesso.");
+    } catch (e) {
+        feedback.showMessage("error", `Erro ao atualizar receita.`);
+    } finally {
+        feedback.setLoading(false);
+    }
+}
+
+export async function deleteReceipt(id) {
+    try {
+        feedback.setLoading(true);
+        await service.deleteReceipts(id);
+        
+        getReceiptsBySearch(searchParams);
+        
+        feedback.showMessage("success", "Receita deletada com sucesso.");
+    } catch (e) {
+        feedback.showMessage("error",`Erro ao deletar a receita com o ${id}.`)
+    } finally {
+        feedback.setLoading(false);
+    }
+}   

@@ -98,24 +98,30 @@ export function fillFormForEdit(expense) {
 async function handleSave(event) {
 
     event.preventDefault();
-    //TODO: Separar a função do expense e receita e criar com base no dataset do 
-    // form para não precisar de 2 forms diferentes, só um com campos dinâmicos
+
+    const typeRegistry = event.target.dataset.type;
+
     const form = event.target;
-    const categoryTyped = document.getElementById('category-input').value.trim();
+    const categoryTyped = document.querySelector('.category-input').value.trim();
     const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
     let paymentDate = document.querySelector(".expense-payment-date").value;
     paymentDate = paymentForm == "true" ? paymentDate : "";
-    const data = {
+    
+    let data = {
         name: form.name.value.trim(),
         description: form.description.value.trim(),
         categoryName: categoryTyped.trim(),
-        installment: 1,
-        totalInstallments: Number(form.installments.value),
         value: Number(form.value.value),
-        payment: paymentForm,
-        paymentDate: formatDateCalendar(paymentDate),
         date: form.date.value
     };
+    
+    if (typeRegistry === "expenses") {
+        
+            data.installment = 1;
+            data.totalInstallments = Number(form.installments.value);
+            data.payment = paymentForm;
+            data.paymentDate = formatDateCalendar(paymentDate);
+    }    
 
     if (!data.name || isNaN(data.value) || !data.categoryName) {
         showMessage("error", "Preencha o nome, valor e categoria pelo menos.");
@@ -124,13 +130,25 @@ async function handleSave(event) {
 
     try {
         setLoading(true);
-        data.categoryName = await categoryController.findOrCreateCategory(data.categoryName);
+
+        data.categoryName = await categoryController.findOrCreateCategory(data.categoryName, typeRegistry);
 
         //Salvar com base no modo edit ou criar se não for edit
-        if (form.dataset.mode === "edit" && form.dataset.id) {
-            await expensesController.updateExpense(form.dataset.id, data);
-        } else {
-            await expensesController.createExpense(data);
+        if (typeRegistry === "expenses") {
+
+            if (form.dataset.mode === "edit" && form.dataset.id) {
+                await expensesController.updateExpense(form.dataset.id, data);
+            } else {
+                await expensesController.createExpense(data);
+            }
+
+        } else if (typeRegistry === "receipt") {
+
+            if (form.dataset.mode === "edit" && form.dataset.id) {
+                await receiptsController.updateReceipts(form.dataset.id, data);
+            } else {
+                await receiptsController.createReceipts(data);
+            }
         }
 
         // Limpa o formulario

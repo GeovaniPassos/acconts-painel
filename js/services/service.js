@@ -69,4 +69,16 @@ export default class Service {
     getReceipts(startDate, endDate, name) {
         return this.stragegy.getReceipts(startDate, endDate, name);
     }
+
+    createReceipts(data) {
+        return this.stragegy.createReceipts(data);
+    }
+
+    updateReceipts(id, data) {
+        return this.stragegy.updateReceipts(id, data);
+    }
+
+    deleteReceipts(id) {
+        return this.stragegy.deleteReceipts(id);
+    }
 }
