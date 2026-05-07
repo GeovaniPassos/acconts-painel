@@ -21,6 +21,7 @@ export async function getListReceiptsCurrentMonth() {
         searchParams.name = "";
         receiptList = await service.getReceipts(searchParams.startDate, searchParams.endDate, searchParams.name);
         if (receiptList === null || receiptList.receipt.length == 0) {
+            receiptUi.emptyReceiptList();
             return feedback.showMessage("info", "Nenhuma receita encontrada.");
         }
         receiptUi.renderReceiptList(receiptList);
@@ -44,7 +45,8 @@ export async function getReceiptsBySearch(searchParams) {
         receiptList = await service.getReceipts(searchParams.startDate, searchParams.endDate, searchParams.name);
 
         if (receiptList.receipt.length == 0) {
-            feedback.showMessage("info", "Nenhuma receita encontrada para o período e nome informados.");
+            receiptUi.emptyReceiptList();
+            return feedback.showMessage("info", "Nenhuma receita encontrada para o período e nome informados.");
         }
         receiptUi.renderReceiptList(receiptList);
         //sumary.updateSummary(receiptList);

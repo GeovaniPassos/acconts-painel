@@ -24,6 +24,7 @@ export async function getListExpensesCurrentMonth() {
         searchParams.name = "";
         expensesList = await service.getExpenses(searchParams.startDate, searchParams.endDate, searchParams.name);
         if (expensesList === null || expensesList.expenses.length == 0) {
+            expenseUi.emptyExpensesList();
             return feedback.showMessage("info", "Nenhuma despesa encontrada.");
         }
         expenseUi.renderExpensesList(expensesList);
@@ -39,9 +40,10 @@ export async function getExpensesBySearch(searchParams) {
     try {
         feedback.setLoading(true);
         expensesList = await service.getExpenses(searchParams.startDate, searchParams.endDate, searchParams.name);
-
         if (expensesList.expenses.length == 0) {
-            feedback.showMessage("info", "Nenhuma despesa encontrada para o período e nome informados.");
+            expenseUi.emptyExpensesList();
+            sumary.updateSummary(expensesList);
+            return feedback.showMessage("info", "Nenhuma despesa encontrada para o período e nome informados.");
         }
         expenseUi.renderExpensesList(expensesList);
         sumary.updateSummary(expensesList);

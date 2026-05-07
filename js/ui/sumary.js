@@ -1,7 +1,13 @@
 import { formatMoney } from "../utils/money.js"
 
 export function updateSummary(expensesList) {
-
+    if (!expensesList) {
+        expensesList = {
+            total: 0,
+            totalPaid: 0,
+            totalUnpaid: 0
+        };
+    }
     // Atualizando o DOM com formatação de moeda brasileira
     document.getElementById('total-geral').textContent = formatMoney(expensesList.total);
     document.getElementById('total-pago').textContent = formatMoney(expensesList.totalPaid);

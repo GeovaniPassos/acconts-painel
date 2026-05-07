@@ -79,3 +79,12 @@ export function bindBtnCurrentMonthExpenses() {
     });
 }
 
+export function emptyExpensesList() {
+    const ul = document.getElementById("expenses-list");
+    ul.innerHTML = "";
+
+    const li = document.createElement("li");
+    li.innerHTML = "Nenhuma despesa informada nesse período.";
+    ul.appendChild(li);
+}
+

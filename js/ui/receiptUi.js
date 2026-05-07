@@ -64,3 +64,12 @@ export function bindBtnCurrentMonthReceipts() {
         receiptsController.getListReceiptsCurrentMonth();
     });
 }
+
+export function emptyReceiptList() {
+    const ul = document.getElementById("receipt-list");
+    ul.innerHTML = "";
+
+    const li = document.createElement("li");
+    li.innerHTML = "Nenhuma receita informada nesse período.";
+    ul.appendChild(li);
+}
