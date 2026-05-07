@@ -70,24 +70,22 @@
           </select>
         </div>
 
-         <div class="inline-autocomplete">
-              <p>Categoria:</p>
-              <input type="text"
-                      class="category-input"
-                      placeholder="Digite a categoria"
-                      autocomplete="off" maxlength="30"
-              >
-              <div 
-                class="category-suggestions category-suggestions-box" data-type="expenses">
-              </div>
-          </div>
-
         <!-- Formulário de despesas -->
         
         <div class="form">
 
           <form class="form-section" id="expenses-form" data-type="expenses">
-            
+            <div class="inline-autocomplete">
+              <p>Categoria:</p>
+              <input type="text"
+                      class="category-input"
+                      placeholder="Digite a categoria"
+                      autocomplete="off" maxlength="30"
+                      data-type="expenses">
+              <div 
+                class="category-suggestions category-suggestions-box" data-type="expenses">
+              </div>
+          </div>
             
             </br>
             <label for="name">Nome:</label>
@@ -118,7 +116,18 @@
            <!-- Formulário de receitas -->
           
            <form class="form-section" id="receipts-form" data-type="receipt">
-            
+            <div class="inline-autocomplete">
+              <p>Categoria:</p>
+              <input type="text"
+                      class="category-input"
+                      placeholder="Digite a categoria"
+                      autocomplete="off" maxlength="30"
+                      data-type="receipt"
+              >
+              <div 
+                class="category-suggestions category-suggestions-box" data-type="receipt">
+              </div>
+          </div>
             
             </br>
             <label for="name">Nome:</label>

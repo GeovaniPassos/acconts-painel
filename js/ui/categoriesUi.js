@@ -7,11 +7,12 @@ export async function findCategories(value) {
 export function initCategoryAutoComplete() {
     const inputs = document.querySelectorAll(".category-input");
     if (!inputs) return;
-
+    
     inputs.forEach((input) => {
         input.addEventListener("input", (event) => {
             const value = event.target.value;
-            categoriesController.handleCategoryTyping(value);
+            const type = event.target.dataset.type;
+            categoriesController.handleCategoryTyping(value, type);
         });
     });
 
@@ -19,11 +20,10 @@ export function initCategoryAutoComplete() {
 }
 
 export function renderCategorySuggestions(categories) {
-    const box = document.querySelector(".category-suggestions");
+    const type = event.target.dataset.type;
+    const box = document.querySelector(`.category-suggestions[data-type="${type}"]`);
     if (!box) return;
-
     box.innerHTML = "";
-
     if (categories === null || categories.length === 0) {
         box.style.display = "none";
         return;
@@ -52,8 +52,9 @@ export function renderCategorySuggestions(categories) {
 }
 
 export function clearCategorySuggestions() {
-    const box = document.querySelector(".category-suggestions");
-
+    const type = event.target.dataset.type;
+    const box = document.querySelector(`.category-suggestions[data-type="${type}"]`);
+    
     if(box) {
         box.innerHTML = "";
         box.style.display = "none";

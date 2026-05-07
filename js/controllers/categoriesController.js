@@ -29,20 +29,19 @@ export async function getCategoriesNames(value){
     return await service.getCategoryByName(value);
 }
 
-export function checkCategory(text) {
+export function checkCategory(text, type) {
     const list = categoriesList.filter(
-            cat => cat.name.toLowerCase().startsWith(text.toLowerCase())
+            cat => cat.name.toLowerCase().startsWith(text.toLowerCase()) && cat.type === type.toUpperCase()
         );
     return list; 
 }
 
-export function handleCategoryTyping(text) {
+export function handleCategoryTyping(text, type) {
     if (!text || text.length < 1) {
         categoriesUi.clearCategorySuggestions();
         return;
     }
-
-    const categories = checkCategory(text);
+    const categories = checkCategory(text, type);
 
     if (!categories) return;
 
@@ -59,7 +58,6 @@ export async function findOrCreateCategory(categoryName, type) {
     if (category) {
         return category.name;
     } else {
-        debugger
         await createCategory(categoryName, type);
         await getCategories();
         return filterCategories(categoriesList, categoryName, type).name;
