@@ -42,7 +42,6 @@ export function closeModal() {
             clearAndCloseModal(modal);
         }
     });
-
 }
 
 //Limpar e desabilitar a visualização do modal

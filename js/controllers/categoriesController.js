@@ -52,7 +52,6 @@ export async function findOrCreateCategory(categoryName, type) {
     if (!categoryName) {
         throw new Error("O nome da categoria é obrigatório.");
     }
-
     let category = filterCategories(categoriesList, categoryName, type);
 
     if (category) {

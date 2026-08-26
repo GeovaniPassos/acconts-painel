@@ -20,6 +20,7 @@ export function initCategoryAutoComplete() {
 }
 
 export function renderCategorySuggestions(categories) {
+    debugger
     const type = event.target.dataset.type;
     const box = document.querySelector(`.category-suggestions[data-type="${type}"]`);
     if (!box) return;

@@ -96,7 +96,7 @@ export function fillFormForEdit(expense) {
 
 //Função para lidar com o salvamento da despesa
 async function handleSave(event) {
-
+    
     event.preventDefault();
 
     const typeRegistry = event.target.dataset.type;
@@ -135,7 +135,6 @@ async function handleSave(event) {
 
         //Salvar com base no modo edit ou criar se não for edit
         if (typeRegistry === "expenses") {
-
             if (form.dataset.mode === "edit" && form.dataset.id) {
                 await expensesController.updateExpense(form.dataset.id, data);
             } else {
@@ -143,12 +142,15 @@ async function handleSave(event) {
             }
 
         } else if (typeRegistry === "receipt") {
-
+            debugger
             if (form.dataset.mode === "edit" && form.dataset.id) {
-                await receiptsController.updateReceipts(form.dataset.id, data);
+                await receiptsController.updateReceipt(form.dataset.id, data);
             } else {
-                await receiptsController.createReceipts(data);
+                await receiptsController.createReceipt(data);
             }
+        } else {
+            showMessage("error", "Erro ao criar a receita ou despesa.");
+            return;
         }
 
         // Limpa o formulario
