@@ -45,7 +45,7 @@ export function handleCategoryTyping(text, type) {
 
     if (!categories) return;
 
-    categoriesUi.renderCategorySuggestions(categories);
+    categoriesUi.renderCategorySuggestions(categories, type);
 }
 
 export async function findOrCreateCategory(categoryName, type) {

@@ -19,12 +19,13 @@ export function initCategoryAutoComplete() {
     categoriesController.getCategories();
 }
 
-export function renderCategorySuggestions(categories) {
-    debugger
-    const type = event.target.dataset.type;
+export function renderCategorySuggestions(categories, type) {
     const box = document.querySelector(`.category-suggestions[data-type="${type}"]`);
+
     if (!box) return;
+    
     box.innerHTML = "";
+    
     if (categories === null || categories.length === 0) {
         box.style.display = "none";
         return;
@@ -32,12 +33,13 @@ export function renderCategorySuggestions(categories) {
     
     categories.forEach(category => {
         const div = document.createElement("div");
+
         div.className = "category-suggestion-item";
         div.textContent = category.name;
         div.dataset.id = category.id;
 
         div.addEventListener("click", () => {
-            selectCategory(category);
+            selectCategory(category, box);
         });
 
         box.appendChild(div);
@@ -46,27 +48,24 @@ export function renderCategorySuggestions(categories) {
     box.style.display = "block";
 
     window.addEventListener("click", (event) => {
-        if (event.target != box) {
-            clearCategorySuggestions();
+        if (!box.contains(event.target)) {
+            clearCategorySuggestions(box);
         }
     });
 }
 
-export function clearCategorySuggestions() {
-    const type = event.target.dataset.type;
-    const box = document.querySelector(`.category-suggestions[data-type="${type}"]`);
+export function clearCategorySuggestions(box) {
+    if(!box) return;
+    box.innerHTML = "";
+    box.style.display = "none";
     
-    if(box) {
-        box.innerHTML = "";
-        box.style.display = "none";
-    }
 }
 
-function selectCategory(category) {
+function selectCategory(category, box) {
     const inputs = document.querySelectorAll(".category-input");
     inputs.forEach((input) => {
         input.value = category.name;
     });
-    clearCategorySuggestions();
+    clearCategorySuggestions(box);
 }
 
