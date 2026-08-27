@@ -42,13 +42,22 @@ function handleTypeChange(selectedType) {
 }
 
 export function clearForm() {
-    const form = document.querySelector('.form-section');
-    form.dataset.id = "";
-    //form.reset();
+    const forms = document.querySelectorAll(".form-section");
+    forms.forEach(form => {
+        form.reset();
+        form.dataset.mode = "";
+        form.dataset.id = "";
+    });
+
+    const selector = document.getElementById("type-select");
+    selector.value = "expenses";
+    selector.disabled = false;
+    handleTypeChange(selector.value);
+
     clearCategorySuggestions();
     document.getElementById("name").disabled = false;
     document.getElementById("installments").disabled = false;
-    document.querySelector(".modal-title").textContent = "Novo registro"
+    document.querySelector(".modal-title").textContent = "Novo registro";
     document.querySelector(".installments").textContent = "Quantidade Parcelas:";
     // Reset do botão de status
     const statusBtn = document.querySelector(".btn-form-status");
@@ -65,12 +74,14 @@ export function fillFormForEdit(expense) {
     const textInstallment = document.querySelector(".installments");
     //Ajustar o modal de despesa e receita e o nova receita
     const selector = document.getElementById("type-select");
+    selector.value = "expenses";
     selector.disabled = true;
+    handleTypeChange(selector.value);
 
     form.dataset.mode = "edit";
     form.dataset.id = expense.id;
 
-    const categoryInput = document.querySelector(".category-input");
+    const categoryInput = form.querySelector(".category-input");
     categoryInput.value = expense.categoryName;
 
     form.name.value = expense.name;
@@ -103,12 +114,14 @@ export function fillFormForEditReceipt(receipt) {
     const modalTitle = document.querySelector(".modal-title");
 
     const selector = document.getElementById("type-select");
+    selector.value = "receipt";
     selector.disabled = true;
+    handleTypeChange(selector.value);
 
     form.dataset.mode = "edit";
     form.dataset.id = receipt.id;
 
-    const categoryInput = document.querySelector(".category-input");
+    const categoryInput = form.querySelector(".category-input");
     categoryInput.value = receipt.categoryName;
     
     form.name.value = receipt.name;
@@ -132,12 +145,10 @@ async function handleSave(event) {
     event.preventDefault();
 
     const typeRegistry = event.target.dataset.type;
+    const modal = document.getElementById("modal");
 
     const form = event.target;
-    const categoryTyped = document.querySelector('.category-input').value.trim();
-    const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
-    let paymentDate = document.querySelector(".expense-payment-date").value;
-    paymentDate = paymentForm == "true" ? paymentDate : "";
+    const categoryTyped = form.querySelector(".category-input").value.trim();
     
     let data = {
         name: form.name.value.trim(),
@@ -148,6 +159,10 @@ async function handleSave(event) {
     };
     
     if (typeRegistry === "expenses") {
+            const paymentForm = document.querySelector(".btn-form-status").dataset.paid;
+            let paymentDate = document.querySelector(".expense-payment-date").value;
+            paymentDate = paymentForm == "true" ? paymentDate : "";
+
         
             data.installment = 1;
             data.totalInstallments = Number(form.installments.value);

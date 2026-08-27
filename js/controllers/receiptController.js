@@ -24,10 +24,11 @@ export async function getListReceiptsCurrentMonth() {
         receiptList = await service.getReceipts(searchParams.startDate, searchParams.endDate, searchParams.name);
         if (receiptList === null || receiptList.receipt.length == 0) {
             receiptUi.emptyReceiptList();
+            sumary.updateReceiptSummary(receiptList || { receipt: [] });
             return feedback.showMessage("info", "Nenhuma receita encontrada.");
         }
         receiptUi.renderReceiptList(receiptList);
-        //sumary.updateSummary(receiptList);
+        sumary.updateReceiptSummary(receiptList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar`);
     } finally {
@@ -48,10 +49,11 @@ export async function getReceiptsBySearch(searchParams) {
 
         if (receiptList.receipt.length == 0) {
             receiptUi.emptyReceiptList();
+            sumary.updateReceiptSummary(receiptList);
             return feedback.showMessage("info", "Nenhuma receita encontrada para o período e nome informados.");
         }
         receiptUi.renderReceiptList(receiptList);
-        //sumary.updateSummary(receiptList);
+        sumary.updateReceiptSummary(receiptList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar`);
     } finally {

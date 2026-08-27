@@ -19,6 +19,7 @@ export function openModal() {
 
     if (btnAbrir){
         btnAbrir.addEventListener("click", () => {
+            clearForm();
             dateInputs.forEach((input) => {
                 input.value = date.formatDateCalendar(date.getTodayDate());
             });
