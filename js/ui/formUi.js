@@ -42,13 +42,13 @@ function handleTypeChange(selectedType) {
 }
 
 export function clearForm() {
-    const form = document.getElementById("expenses-form");
+    const form = document.querySelector('.form-section');
     form.dataset.id = "";
-    form.reset();
+    //form.reset();
     clearCategorySuggestions();
     document.getElementById("name").disabled = false;
     document.getElementById("installments").disabled = false;
-    document.querySelector(".modal-title").textContent = "Nova Despesa"
+    document.querySelector(".modal-title").textContent = "Novo registro"
     document.querySelector(".installments").textContent = "Quantidade Parcelas:";
     // Reset do botão de status
     const statusBtn = document.querySelector(".btn-form-status");
@@ -63,15 +63,16 @@ export function fillFormForEdit(expense) {
     const modal = document.getElementById("modal");
     const modalTitle = document.querySelector(".modal-title");
     const textInstallment = document.querySelector(".installments");
-
-    document.getElementById("type-select").style.display = "none";
+    //Ajustar o modal de despesa e receita e o nova receita
+    const selector = document.getElementById("type-select");
+    selector.disabled = true;
 
     form.dataset.mode = "edit";
     form.dataset.id = expense.id;
 
     const categoryInput = document.querySelector(".category-input");
     categoryInput.value = expense.categoryName;
-    // AJUSTAR PARA CARREGAR A CATEGORIA
+
     form.name.value = expense.name;
     document.getElementById("name");
 
@@ -101,7 +102,8 @@ export function fillFormForEditReceipt(receipt) {
     const modal = document.getElementById("modal");
     const modalTitle = document.querySelector(".modal-title");
 
-    document.getElementById("type-select").style.display = "none";
+    const selector = document.getElementById("type-select");
+    selector.disabled = true;
 
     form.dataset.mode = "edit";
     form.dataset.id = receipt.id;
