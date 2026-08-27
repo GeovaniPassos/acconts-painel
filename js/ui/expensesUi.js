@@ -45,7 +45,7 @@ function renderExpensesItem(expense) {
         </div>
 
         <div class="actions">
-            <button class="btn-edit btn-icon" title="Editar">✏️</button>
+            <button class="btn-edit btn-icon " title="Editar">✏️</button>
             <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
         </div>
     `;

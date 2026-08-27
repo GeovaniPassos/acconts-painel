@@ -32,6 +32,7 @@ export function openModal() {
 export function closeModal() {
     const modal = getModal();
     const btnFechar = document.getElementById("btn-to-close");
+    document.getElementById("type-select").style.display = "block";
 
     btnFechar.addEventListener("click", () => {
         clearAndCloseModal(modal);   

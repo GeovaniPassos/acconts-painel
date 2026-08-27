@@ -146,4 +146,8 @@ export default class ApiService {
     async deleteReceipts(id) {
         return this.request(`/receipt/${id}`, { method: "DELETE" });
     }
+
+    async getReceiptById(id) {
+        return this.request(`/receipt/${id}`, { method: "GET" });
+    }
 }

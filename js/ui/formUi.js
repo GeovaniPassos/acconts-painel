@@ -64,12 +64,14 @@ export function fillFormForEdit(expense) {
     const modalTitle = document.querySelector(".modal-title");
     const textInstallment = document.querySelector(".installments");
 
+    document.getElementById("type-select").style.display = "none";
+
     form.dataset.mode = "edit";
     form.dataset.id = expense.id;
 
-    const categoryInput = document.getElementById('category-input');
+    const categoryInput = document.querySelector(".category-input");
     categoryInput.value = expense.categoryName;
-    
+    // AJUSTAR PARA CARREGAR A CATEGORIA
     form.name.value = expense.name;
     document.getElementById("name");
 
@@ -90,6 +92,34 @@ export function fillFormForEdit(expense) {
     }
 
     if (modalTitle) modalTitle.textContent = "Editar despesa";
+
+    modal.style.display = "block";
+}
+
+export function fillFormForEditReceipt(receipt) {
+    const form = document.getElementById("receipts-form");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.querySelector(".modal-title");
+
+    document.getElementById("type-select").style.display = "none";
+
+    form.dataset.mode = "edit";
+    form.dataset.id = receipt.id;
+
+    const categoryInput = document.querySelector(".category-input");
+    categoryInput.value = receipt.categoryName;
+    
+    form.name.value = receipt.name;
+    document.getElementById("name");
+
+    form.value.value = receipt.value;
+    form.description.value = receipt.description;
+
+    if (receipt.date) {
+        form.date.value = receipt.date.split("T")[0];
+    }
+
+    if (modalTitle) modalTitle.textContent = "Editar receita";
 
     modal.style.display = "block";
 }
@@ -130,7 +160,6 @@ async function handleSave(event) {
 
     try {
         setLoading(true);
-
         data.categoryName = await categoryController.findOrCreateCategory(data.categoryName, typeRegistry);
 
         //Salvar com base no modo edit ou criar se não for edit
@@ -142,16 +171,12 @@ async function handleSave(event) {
             }
 
         } else if (typeRegistry === "receipt") {
-            debugger
             if (form.dataset.mode === "edit" && form.dataset.id) {
                 await receiptsController.updateReceipt(form.dataset.id, data);
             } else {
                 await receiptsController.createReceipt(data);
             }
-        } else {
-            showMessage("error", "Erro ao criar a receita ou despesa.");
-            return;
-        }
+        } 
 
         // Limpa o formulario
         form.reset();

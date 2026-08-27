@@ -81,4 +81,9 @@ export default class Service {
     deleteReceipts(id) {
         return this.stragegy.deleteReceipts(id);
     }
+
+    getReceiptById(id){
+        return this.stragegy.getReceiptById(id);
+    }
+    
 }

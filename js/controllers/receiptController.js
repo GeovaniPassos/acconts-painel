@@ -1,8 +1,10 @@
 import { VARIABLE_CONNECTION } from "../config/config.js";
 import Service from "../services/service.js";
 import * as date from "../utils/date.js";
+import * as formUi from "../ui/formUi.js"
 import * as feedback from "../ui/feedback.js";
 import * as receiptUi from "../ui/receiptUi.js";
+import * as core from "../core/receiptCore.js";
 import * as sumary from "../ui/sumary.js";
 import { searchParams } from "./searchController.js";
 
@@ -34,9 +36,9 @@ export async function getListReceiptsCurrentMonth() {
 }
 
 export async function handleEditReceiptForm(receiptId) {
-    const receipt = await service.getReceiptsById(receiptId);
+    const receipt = await service.getReceiptById(receiptId);
     const formModel = core.buildEditFormModel(receipt);
-    formUi.fillFormForEdit(formModel);
+    formUi.fillFormForEditReceipt(formModel);
 }
 
 export async function getReceiptsBySearch(searchParams) {

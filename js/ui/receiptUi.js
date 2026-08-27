@@ -42,7 +42,6 @@ async function handleListClick(event) {
     const li = event.target.closest("li");
     if (!li) return;
     const id = Number(li.dataset.id);
-    
     const btnDelete = event.target.closest(".btn-delete");
     if (btnDelete) {
         if (!confirm("Excluir está receita?")) return;
@@ -51,7 +50,7 @@ async function handleListClick(event) {
 
     const btnEdit = event.target.closest(".btn-edit");
     if (btnEdit) {
-        receiptsController.handleEditReceiptsForm(id);
+        receiptsController.handleEditReceiptForm(id);
     }
 }
 
