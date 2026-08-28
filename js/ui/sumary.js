@@ -2,6 +2,7 @@ import { formatMoney } from "../utils/money.js"
 
 let currentExpenses = null;
 let currentReceipts = null;
+let totalPaid = null;
 
 export function updateSummary(expensesList) {
     currentExpenses = expensesList;
@@ -36,5 +37,5 @@ function renderSummary() {
     document.getElementById('total-pago').textContent = formatMoney(Number(expenses.totalPaid || 0));
     document.getElementById('total-pendente').textContent = formatMoney(Number(expenses.totalUnpaid || 0));
     document.getElementById('total-receitas').textContent = formatMoney(receiptTotal);
-    document.getElementById('saldo-total').textContent = formatMoney(receiptTotal - expenseTotal);
+    document.getElementById('saldo-total').textContent = formatMoney(receiptTotal - expenses.totalPaid);
 }
