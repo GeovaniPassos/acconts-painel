@@ -47,8 +47,9 @@ export default class ApiService {
             body: JSON.stringify({ username, password })
         });
 
-        localStorage.setItem("token", data.token);
-
+        setTimeout(() => {
+            localStorage.setItem("token", data.token);
+        }, 50);
         window.location.href = "./main.html";
     }
 
