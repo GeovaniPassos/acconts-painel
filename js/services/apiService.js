@@ -17,7 +17,7 @@ export default class ApiService {
         if (!resp.ok) {
             if (resp.status === 401) {
                 localStorage.removeItem("token");
-                window.location.href = "login.html";
+                window.location.href = "./login.html";
             }
             
             let errorMessage = `Erro: ${resp.status}`;
