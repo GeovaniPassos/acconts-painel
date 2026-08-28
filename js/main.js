@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initNameSearch();
     bindBtnCurrentMonthExpenses();
     bindBtnCurrentMonthReceipts();
+    checkAuthentication();
     logout();
     initTables();
     initReceipt();
