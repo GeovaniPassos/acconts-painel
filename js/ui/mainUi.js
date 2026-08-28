@@ -7,7 +7,7 @@ export function checkAuthentication() {
         setTimeout(() => {
             const retryToken = localStorage.getItem('token');
             if (!retryToken) {
-                window.location.href = 'login.html';
+                window.location.href = './login.html';
             } else {
                 document.body.style.display = "block";
             }
@@ -22,7 +22,7 @@ export function logout() {
     btnLogout.addEventListener('click', () => {
         if (confirm('Tem certeza que deseja sair?')) {
             localStorage.removeItem('token');
-            window.location.href = 'login.html';
+            window.location.href = './login.html';
         }
     });
 }
