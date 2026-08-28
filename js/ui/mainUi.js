@@ -1,4 +1,7 @@
 export function checkAuthentication() {
+
+    const token = localStorage.getItem('token');
+    
     if (!token) {
         
         setTimeout(() => {
