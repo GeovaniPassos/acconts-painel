@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: contas-panel
+    runtime: static
+    buildCommand: ""
+    publishDir: "."  
