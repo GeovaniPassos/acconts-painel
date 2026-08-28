@@ -49,7 +49,7 @@ export default class ApiService {
 
         localStorage.setItem("token", data.token);
 
-        window.location.href = "main.html";
+        window.location.href = "./main.html";
     }
 
     //Metodos para acessar as despesas
