@@ -1,5 +1,5 @@
 import { VARIABLE_CONNECTION } from "../config/config.js";
-import { filterCategories, findCategoryByName } from "../core/categoriesCore.js";
+import { filterCategories } from "../core/categoriesCore.js";
 import Service from "../services/service.js";
 
 import * as categoriesUi from "../ui/categoriesUi.js";

@@ -331,27 +331,93 @@ button {
     background: #fff;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .card h3 {
     font-size: 0.9rem;
     color: #666;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
     text-transform: uppercase;
+    order: 1;
 }
 
 .card p {
     font-size: 1.5rem;
     font-weight: bold;
     color: #2c3e50;
+    margin: 0;
+    order: 2;
 }
 
 /* Cores específicas para cada tipo */
-.card.total { border-top: 5px solid #3498db; }
-.card.paid p { color: #27ae60; }
-.card.paid { border-top: 5px solid #27ae60; }
-.card.pending p { color: #e74c3c; }
-.card.pending { border-top: 5px solid #e74c3c; }
+.card.total { 
+    background: #3498db;
+    border: none;
+}
+
+.card.total h3 {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card.total p { 
+    color: #fff;
+}
+
+.card.paid { 
+    background: #27ae60;
+    border: none;
+}
+
+.card.paid h3 {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card.paid p { 
+    color: #fff;
+}
+
+.card.pending { 
+    background: #e74c3c;
+    border: none;
+}
+
+.card.pending h3 {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card.pending p { 
+    color: #fff;
+}
+
+.card.receipts-total {
+    background: #f39c12;
+    border: none;
+}
+
+.card.receipts-total h3 {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card.receipts-total p {
+    color: #fff;
+}
+
+.card.balance {
+    background: #9b59b6;
+    border: none;
+}
+
+.card.balance h3 {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card.balance p {
+    color: #fff;
+}
 
 @media (max-width: 600px) {
     .card {

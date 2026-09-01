@@ -1,21 +1,10 @@
 export function findCategoryByName(categoriesList, value) {
 
-    categoriesList = categoriesList.map(cat => cat.name);
+    const categoryNames = categoriesList.map(cat => cat.name);
 
-    categoriesList.find(cat => 
+    return categoryNames.find(cat => 
         cat.toLowerCase().startsWith(value.toLowerCase())
     );
-    
-    return categoriesList;
-}
-
-export function newCategory(categoryName) {
-    const categoryCreate = {
-        name: categoryName,
-        type: "EXPENSES"
-    };
-    
-    return categoryCreate;
 }
 
 export function filterCategories(categories, text, type) {
