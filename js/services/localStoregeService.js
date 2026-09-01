@@ -14,16 +14,43 @@ export default class LocalStorageService {
     }
     
     //Expenses
-    async getExpenses() {
-        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    async getExpenses(startDate = "", endDate = "", name = "") {
+        const allExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
-        return expenses.map(exp => {
+        
+        let expenses = allExpenses.map(exp => {
             const category = categories.find(cat => cat.id === exp.category);
             return {
                 ...exp,
                 categoryName: category ? category.name: null,
             };
         });
+
+        // Aplicar filtros
+        if (startDate && endDate) {
+            expenses = expenses.filter(expense => {
+                return expense.date >= startDate && expense.date <= endDate;
+            });
+        }
+
+        if (name && name.trim()) {
+            const search = name.toLowerCase().trim();
+            expenses = expenses.filter(expense => {
+                return expense.name?.toLowerCase().includes(search);
+            });
+        }
+
+        // Calcular totais
+        const totalPaid = expenses.filter(exp => exp.payment).reduce((sum, exp) => sum + Number(exp.value || 0), 0);
+        const totalUnpaid = expenses.filter(exp => !exp.payment).reduce((sum, exp) => sum + Number(exp.value || 0), 0);
+        const total = totalPaid + totalUnpaid;
+
+        return {
+            expenses: expenses,
+            total: total,
+            totalPaid: totalPaid,
+            totalUnpaid: totalUnpaid
+        };
     }    
     
     async getExpensesById(id){
@@ -84,43 +111,6 @@ export default class LocalStorageService {
         
         localStorage.setItem("expenses", JSON.stringify(expenses));
         return createdExpenses;
-    }  
-    
-    async addInstallments(data) {
-        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-        const categories = JSON.parse(localStorage.getItem("categories"));
-        const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
-
-        if (!category) {
-            throw new Error("Categoria não encontrada!");
-        }
-        
-        const expensesList = expenses.find(exp => exp.name.toLowerCase() == data.name.toLowerCase());
-        console.log(expensesList)
-
-        if (!expensesList) {
-            throw new Error("Despesa não encontrada!");
-        }
-        
-        const expenseRef = await expensesList.reduce((previous, current) => {
-                previous.installment > current.installment ? current : previous;
-        });
-
-        console.log(`Despesa: ${expenseRef}`);
-        
-
-        const nextId = expenses.length > 0 ? Math.max(...expenses.map(exp => exp.id)) + 1 : 1;
-        //const dateRef = 
-
-        // for(let i = 1; i <= data.totalInstallments; i++) {
-            
-        // }
-
-        //const totInstallments = expensesList.totalInstallments + data.totInstallments;
-        //const dateRef = new Date(expense.date);
-
-        //const desiredDate = dateRef.getUTCDate();
-
     }
 
     async updateExpenses(id, data) {
@@ -181,39 +171,6 @@ export default class LocalStorageService {
             };
     }
 
-    async getExpensesByPeriod(startDate, endDate) {
-        const expenses = await this.getExpenses();
-
-        return expenses.filter(expense => {
-            if (!expense.date) return false;
-
-            return expense.date >= startDate &&
-                expense.date <= endDate;
-        });
-    }
-
-    async getExpensesByMonth(year, month) {
-        const expenses = await this.getExpenses();
-
-        const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
-
-        return expenses.filter(expense => {
-            return expense.date.substring(0, 7) === yearMonth;
-        });
-    }
-
-    async getExpensesByName(name) {
-        const expenses = await this.getExpenses();
-
-        if (!name || !name.trim()) return expenses;
-
-        const search = name.toLowerCase().trim();
-        
-        return expenses.filter(expense => {
-            return expense.name?.toLowerCase().includes(search);
-        });
-    }
-
     //Categories
     async getCategory() {
         const categories = JSON.parse(localStorage.getItem("categories")) || [];
@@ -265,39 +222,121 @@ export default class LocalStorageService {
         const newCategoryArray = categories.filter(cat => cat.id !== Number(id));
 
         localStorage.setItem("categories", JSON.stringify(newCategoryArray));
-
     }
 
-    async getExpensesByPeriod(startDate, endDate) {
-        const expenses = await this.getExpenses();
-
-        return expenses.filter(expense => {
-            if (!expense.date) return false;
-
-            return expense.date >= startDate &&
-                expense.date <= endDate;
-        });
-    }
-
-    async getExpensesByMonth(year, month) {
-        const expenses = await this.getExpenses();
-
-        const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
-
-        return expenses.filter(expense => {
-            return expense.date.substring(0, 7) === yearMonth;
-        });
-    }
-
-    async getExpensesByName(name) {
-        const expenses = await this.getExpenses();
-
-        if (!name || !name.trim()) return expenses;
-
-        const search = name.toLowerCase().trim();
+    //Receipts
+    async getReceipts(startDate = "", endDate = "", name = "") {
+        const allReceipts = JSON.parse(localStorage.getItem("receipts")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
         
-        return expenses.filter(expense => {
-            return expense.name?.toLowerCase().includes(search);
+        let receipts = allReceipts.map(rec => {
+            const category = categories.find(cat => cat.id === rec.category);
+            return {
+                ...rec,
+                categoryName: category ? category.name: null,
+            };
         });
+
+        // Aplicar filtros
+        if (startDate && endDate) {
+            receipts = receipts.filter(receipt => {
+                return receipt.date >= startDate && receipt.date <= endDate;
+            });
+        }
+
+        if (name && name.trim()) {
+            const search = name.toLowerCase().trim();
+            receipts = receipts.filter(receipt => {
+                return receipt.name?.toLowerCase().includes(search);
+            });
+        }
+
+        // Calcular total
+        const total = receipts.reduce((sum, rec) => sum + Number(rec.value || 0), 0);
+
+        return {
+            receipt: receipts,
+            total: total
+        };
+    }
+
+    async getReceiptById(id) {
+        const receipts = JSON.parse(localStorage.getItem("receipts")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
+        const receipt = receipts.find(rec => rec.id === Number(id));
+
+        if (!receipt) return null;
+        const category = categories.find(cat => cat.id === receipt.category);
+        return {
+            ...receipt,
+            categoryName: category ? category.name: null,
+        };
+    }
+
+    async createReceipts(data) {
+        const receipts = JSON.parse(localStorage.getItem("receipts")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
+        const category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
+        
+        if (!category) {
+            throw new Error("Categoria não encontrada!");
+        }
+
+        const nextId = receipts.length > 0 ? Math.max(...receipts.map(rec => rec.id)) + 1 : 1;
+        
+        const newReceipt = { 
+            ...data, 
+            id: nextId, 
+            category: category.id 
+        };
+        
+        receipts.push(newReceipt);
+        localStorage.setItem("receipts", JSON.stringify(receipts));
+        return newReceipt;
+    }
+
+    async updateReceipts(id, data) {
+        const receipts = JSON.parse(localStorage.getItem("receipts")) || [];
+        const categories = JSON.parse(localStorage.getItem("categories"));
+
+        let category = categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase());
+        
+        const index = receipts.findIndex(rec => rec.id === Number(id));
+        if (index === -1) {
+            throw new Error("Receita não encontrada!");
+        }
+
+        category = Number(category.id);
+        id = Number(id);
+        receipts[index] = { ...receipts[index], ...data, id, category};
+
+        localStorage.setItem("receipts", JSON.stringify(receipts));
+        
+        return receipts[index];
+    }
+
+    async deleteReceipts(id) {
+        const receipts = JSON.parse(localStorage.getItem("receipts")) || [];
+
+        const newReceiptArray = receipts.filter(rec => rec.id !== Number(id));
+
+        localStorage.setItem("receipts", JSON.stringify(newReceiptArray));
+    }
+
+    async login(email, password) {
+        // Mock login para localStorage
+        // Em produção, isso seria implementado com uma API real
+        const userData = {
+            email: email,
+            token: `token_${Date.now()}`,
+            authenticated: true
+        };
+        localStorage.setItem("token", userData.token);
+        return userData;
+    }
+
+    async getCategoryByName(categoryName) {
+        const categories = JSON.parse(localStorage.getItem("categories")) || [];
+        return categories.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
     }
 }

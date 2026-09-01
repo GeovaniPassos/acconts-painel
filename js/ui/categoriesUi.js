@@ -1,9 +1,5 @@
 import * as categoriesController from "../controllers/categoriesController.js";
 
-export async function findCategories(value) {
-    return await getCategoriesNames(value);
-}
-
 export function initCategoryAutoComplete() {
     const inputs = document.querySelectorAll(".category-input");
     if (!inputs) return;
