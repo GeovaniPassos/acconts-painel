@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sistema de Controle de Contas</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -23,7 +24,7 @@
     </div>
     <section id="summary-container" class="summary-cards">
       <div class="card total">
-          <h3>Total Geral</h3>
+          <h3>Total de Débitos</h3>
           <p id="total-geral">R$ 0,00</p>
       </div>
       <div class="card paid">
@@ -34,10 +35,18 @@
           <h3>Pendente</h3>
           <p id="total-pendente">R$ 0,00</p>
       </div>
+        <div class="card receipts-total">
+          <h3>Total de receitas</h3>
+          <p id="total-receitas">R$ 0,00</p>
+        </div>
+        <div class="card balance">
+          <h3>Saldo Disponível</h3>
+          <p id="saldo-total">R$ 0,00</p>
+        </div>
     </section>
     
     <button id="btn-clear-localstorege" style="background-color: gray;">Reset LocalStorege</button>
-    <button id="btn-open-form"> + Adicionar Despesa</button>
+    <button id="btn-open-form"> + Adicionar Despesa ou Receita</button>
 
     <div class="filter-container">
       <div class="filter-group">
@@ -54,62 +63,115 @@
       <div class="filter-group button-group">
         <button id="btn-searchName">Buscar</button>
       </div>
-      
     </div>
     <div id="messages"></div>
     <div id="loader"></div>
+
     <!-- Modal formulario novo-->
     <div id="modal" class="modal">
       <div class="modal-content">  
-        <span id="btn-to-close" class="close">&times;</span>
-        <h2 class="modal-title">Nova Despesa</h2>
-          <div class="form">
-            <form id="expenses-form">
-              
-              <div class="inline-autocomplete">
-                <p>Categoria:</p>
-                <input type="text"
-                        id="category-input"
-                        placeholder="Digite a categoria"
-                        autocomplete="off" maxlength="30"
-                >
-                <div 
-                  id="category-suggestions"
-                  class="category-suggestions-box">
-                </div>
+        <div class="header-form">
+          <span id="btn-to-close" class="close">&times;</span>
+          <h2 class="modal-title">Criar um novo registro</h2>
+          <select name="type-select" id="type-select">
+            <option value="expenses" selected>Despesa</option>
+            <option value="receipt">Receita</option>
+          </select>
+        </div>
+
+        <!-- Formulário de despesas -->
+        
+        <div class="form">
+
+          <form class="form-section" id="expenses-form" data-type="expenses">
+            <div class="inline-autocomplete">
+              <p>Categoria:</p>
+              <input type="text"
+                      class="category-input"
+                      placeholder="Digite a categoria"
+                      autocomplete="off" maxlength="30"
+                      data-type="expenses">
+              <div 
+                class="category-suggestions category-suggestions-box" data-type="expenses">
               </div>
-              </br>
-              <label for="name">Nome:</label>
-              <input type="text" id="name" name="name" required maxlength="30">
-              </br>
-              <label for="description">Descrição:</label>
-              <input type="text" id="description" name="description" maxlength="40">
-              </br>
-              <label for="installments" class="installments">Quantidade Parcelas:</label>
-              <input type="number" id="installments" name="installments" step="1" value="1" min="1" max="50">
-              </br>
-              <label for="value">Valor:</label>
-              <input type="number" id="value" name="value" step="0.01" max="999999.99">
-              </br>
-              <div class="form-payment">
-              <label for="status">Status:</label>
-              <button type="button" class="badge status-pending btn-form-status" id="status" 
-                  data-paid="false">Pendente</button>
-              <input type="text" name="paymentDate" id="status" class="expense-payment-date">
+            </div>
+            
+            </br>
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required maxlength="30">
+            </br>
+            <label for="description">Descrição:</label>
+            <input type="text" id="description" name="description" maxlength="40">
+            </br>
+            <label for="installments" class="installments">Quantidade Parcelas:</label>
+            <input type="number" id="installments" name="installments" step="1" value="1" min="1" max="50">
+            </br>
+            <label for="value">Valor:</label>
+            <input type="number" id="value" name="value" step="0.01" max="999999.99">
+            </br>
+            <div class="form-payment">
+            <label for="status">Status:</label>
+            <button type="button" class="badge status-pending btn-form-status" id="status" 
+                data-paid="false">Pendente</button>
+            <input type="text" name="paymentDate" id="status" class="expense-payment-date">
+            </div>
+            </br>
+            <label for="date">Data Venc:</label>
+            <input class="input-date date" type="date" name="date" required>
+            </br>
+            <button class="button-form" type="submit">Salvar</button>
+          </form>
+
+           <!-- Formulário de receitas -->
+          
+          <form class="form-section" id="receipts-form" data-type="receipt">
+            <div class="inline-autocomplete">
+              <p>Categoria:</p>
+              <input type="text"
+                      class="category-input"
+                      placeholder="Digite a categoria"
+                      autocomplete="off" maxlength="30"
+                      data-type="receipt"
+              >
+              <div 
+                class="category-suggestions category-suggestions-box" data-type="receipt">
               </div>
-              </br>
-              <label for="date">Data Venc:</label>
-              <input class="input-date" type="date" id="date" name="date" required>
-              </br>
-              <button class="button-form" type="submit">Salvar</button>
-            </form>
-          </div>
+            </div>
+            
+            </br>
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required maxlength="30">
+            </br>
+            <label for="description">Descrição:</label>
+            <input type="text" id="description" name="description" maxlength="40">
+            </br>
+            <label for="value">Valor:</label>
+            <input type="number" id="value" name="value" step="0.01" max="999999.99">
+            </br>
+            <label for="date">Data:</label>
+            <input class="input-date date" type="date" name="date" required>
+            </br>
+            <button class="button-form" type="submit">Salvar</button>
+          </form>
+        </div>     
       </div>
     </div>
+  
+    <div class="tabs">
+      <button class="tab active tab-expenses">Despesas</button>
+      <button class="tab tab-receipts">Receitas</button>
+    </div>
 
-    <ul id="expenses-list"></ul>
+    <div id="expenses" class="tab-content active">
+      <ul id="expenses-list"></ul>
+    </div>
+
+    <div id="receipts" class="tab-content">
+      <ul id="receipt-list"></ul>
+    </div>
 
     <script type="module" src="./js/main.js"></script>
+
   </div>
 </body>
 </html>

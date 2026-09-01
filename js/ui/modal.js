@@ -14,11 +14,15 @@ function getModal() {
 // Função para o evento de abrir modal
 export function openModal() {
     const modal = getModal();
-    const dateInput = document.getElementById("date");
+    const dateInputs = document.querySelectorAll(".date");
     const btnAbrir = document.getElementById("btn-open-form");
+
     if (btnAbrir){
         btnAbrir.addEventListener("click", () => {
-            dateInput.value = date.formatDateCalendar(date.getTodayDate());
+            clearForm();
+            dateInputs.forEach((input) => {
+                input.value = date.formatDateCalendar(date.getTodayDate());
+            });
             modal.style.display = "block";
             getCategories();
         });
@@ -30,6 +34,9 @@ export function closeModal() {
     const modal = getModal();
     const btnFechar = document.getElementById("btn-to-close");
 
+    const selector = document.getElementById("type-select");
+    selector.disabled = false;
+
     btnFechar.addEventListener("click", () => {
         clearAndCloseModal(modal);   
     });
@@ -39,7 +46,6 @@ export function closeModal() {
             clearAndCloseModal(modal);
         }
     });
-
 }
 
 //Limpar e desabilitar a visualização do modal

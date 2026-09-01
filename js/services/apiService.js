@@ -1,5 +1,5 @@
-const API_BASE = "http://localhost:8080";
-//const API_BASE = "https://acconts-api.onrender.com"
+//const API_BASE = "http://localhost:8080";
+const API_BASE = "https://acconts-api-28o5.onrender.com"
 
 export default class ApiService {
     async request(path, options = {}) {
@@ -17,7 +17,7 @@ export default class ApiService {
         if (!resp.ok) {
             if (resp.status === 401) {
                 localStorage.removeItem("token");
-                window.location.href = "login.html";
+                window.location.href = "./login.html";
             }
             
             let errorMessage = `Erro: ${resp.status}`;
@@ -47,9 +47,10 @@ export default class ApiService {
             body: JSON.stringify({ username, password })
         });
 
-        localStorage.setItem("token", data.token);
-
-        window.location.href = "main.html";
+        setTimeout(() => {
+            localStorage.setItem("token", data.token);
+        }, 50);
+        window.location.href = "./main.html";
     }
 
     //Metodos para acessar as despesas
@@ -121,5 +122,33 @@ export default class ApiService {
     async getCategoryByName(categoryName) {
         return this.request(`/categories/search?name=${categoryName}`,
              { method: "GET" });
+    }
+
+    //Receipt
+    async getReceipts(startDate, endDate, name) {
+        return this.request(`/receipt?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
+            { method: "GET" });
+    }
+
+    async createReceipts(data) {
+        return this.request("/receipt", {
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+    }
+
+    async updateReceipts(id, data) {
+        return this.request(`/receipt/${id}`, {
+            method: "PATCH",
+            body: JSON.stringify(data)
+        });
+    }
+
+    async deleteReceipts(id) {
+        return this.request(`/receipt/${id}`, { method: "DELETE" });
+    }
+
+    async getReceiptById(id) {
+        return this.request(`/receipt/${id}`, { method: "GET" });
     }
 }
