@@ -16,26 +16,16 @@ Sistema web frontend para controle financeiro pessoal de despesas e receitas, co
 
 ### Executando
 
-**Opção 1: Servidor Python (recomendado)**
-```bash
-# Python 3
-python -m http.server 8000
-
-# Python 2
-python -m SimpleHTTPServer 8000
-```
-Acesse: `http://localhost:8000/login.html`
-
-**Opção 2: VS Code Live Server**
+**VS Code Live Server**
 1. Instale a extensão "Live Server"
 2. Clique com botão direito em `login.html` → "Open with Live Server"
 
-**Opção 3: Node.js http-server**
+**Opção 2: Node.js http-server**
 ```bash
 npx http-server -p 8000
 ```
 
-**Opção 4: Abrir direto (pode ter limitações CORS)**
+**Opção 3: Abrir direto (pode ter limitações CORS)**
 Dê duplo clique em `login.html`
 
 ---
