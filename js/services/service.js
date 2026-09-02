@@ -64,4 +64,26 @@ export default class Service {
     getCategoryByName(categoryName) {
         return this.stragegy.getCategoryByName(categoryName);
     }
+
+    //Receipts
+    getReceipts(startDate, endDate, name) {
+        return this.stragegy.getReceipts(startDate, endDate, name);
+    }
+
+    createReceipts(data) {
+        return this.stragegy.createReceipts(data);
+    }
+
+    updateReceipts(id, data) {
+        return this.stragegy.updateReceipts(id, data);
+    }
+
+    deleteReceipts(id) {
+        return this.stragegy.deleteReceipts(id);
+    }
+
+    getReceiptById(id){
+        return this.stragegy.getReceiptById(id);
+    }
+    
 }

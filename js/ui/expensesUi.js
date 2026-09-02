@@ -45,7 +45,7 @@ function renderExpensesItem(expense) {
         </div>
 
         <div class="actions">
-            <button class="btn-edit btn-icon" title="Editar">✏️</button>
+            <button class="btn-edit btn-icon " title="Editar">✏️</button>
             <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
         </div>
     `;
@@ -57,7 +57,6 @@ async function handleListClick(event) {
     const li = event.target.closest("li");
     if (!li) return;
     const id = Number(li.dataset.id);
-    
     const btnDelete = event.target.closest(".btn-delete");
     if (btnDelete) {
         if (!confirm("Excluir está conta?")) return;
@@ -74,9 +73,18 @@ export function bindExpensesListClick() {
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
 }
 
-export function bindBtnCurrentMonth() {
+export function bindBtnCurrentMonthExpenses() {
     document.getElementById("btn-current-month").addEventListener("click", () => {
         expensesController.getListExpensesCurrentMonth();
     });
+}
+
+export function emptyExpensesList() {
+    const ul = document.getElementById("expenses-list");
+    ul.innerHTML = "";
+
+    const li = document.createElement("li");
+    li.innerHTML = "Nenhuma despesa informada nesse período.";
+    ul.appendChild(li);
 }
 
