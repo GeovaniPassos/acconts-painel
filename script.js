@@ -3,17 +3,15 @@ const boxes = document.querySelectorAll('.box');
 
 let selected = null;
 
-// Adiciona eventos em cada item arrastável
-items.forEach(item => {
+function configurarItem(item) {
   item.addEventListener('dragstart', (e) => {
     selected = e.target;
   });
-});
+}
 
-// Adiciona eventos em cada caixa de destino
-boxes.forEach(box => {
+function configurarBox(box) {
   box.addEventListener('dragover', (e) => {
-    e.preventDefault(); // Necessário para permitir o "drop"
+    e.preventDefault();
   });
 
   box.addEventListener('drop', (e) => {
@@ -23,4 +21,30 @@ boxes.forEach(box => {
       selected = null;
     }
   });
+}
+
+items.forEach(configurarItem);
+boxes.forEach(configurarBox);
+
+// TESTE 2
+
+const container = document.querySelector(".container");
+const botao = document.querySelector(".btn-adicionar");
+
+botao.addEventListener('click', () => {
+
+    const bloco = document.createElement('div');
+    bloco.classList.add('box');
+    configurarBox(bloco);
+
+    const conteudo = document.createElement('div');
+    conteudo.classList.add('item');
+    conteudo.draggable = true;
+    configurarItem(conteudo);
+
+    conteudo.textContent = 'Novo bloco';
+
+    bloco.appendChild(conteudo);
+
+    container.appendChild(bloco);
 });
