@@ -1,0 +1,36 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f9;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.box {
+  width: 200px;
+  min-height: 300px;
+  background: #ffffff;
+  border: 2px dashed #ccc;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.item {
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.item:active {
+  cursor: grabbing;
+}
