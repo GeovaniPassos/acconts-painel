@@ -42,14 +42,14 @@ body {
 }
 
 .name-card {
-  margin: 10px 0px;
   display: flex;
 }
 
 #input-name-card {
-  width: 100%;
-  height: 30px;
-  font-size: 1.3em;
+  width: 200px;
+  height: 40px;
+  margin: 5px 20px;
+  font-size: 2em;
 }
 
 .space {
@@ -60,12 +60,8 @@ body {
   font-size: 2em;
   display: none; 
   cursor: pointer;
-}
-
-.name-card, button {
-  font-size: 0.7em;
-  align-items: center;
-  width: 100%;
+  margin: 5px 20px;
+  padding: 2px;
 }
 
 .space-enter {
@@ -82,10 +78,10 @@ body {
 
 button {
   border: none;
-  font-size: 1.3em;
-  display: flex;
+  font-size: 2em;
   justify-self: center;
   align-items: center;
+  background: white;
 }
 
 .expenses-paid {
