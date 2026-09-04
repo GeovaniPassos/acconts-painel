@@ -47,3 +47,33 @@ botao.addEventListener('click', () => {
 
     container.insertBefore(bloco, cardButton);
 });
+
+
+// TESTE INPUT DO CARD
+
+const input = document.getElementById('input-name-card');
+const text = document.getElementById('card-title');
+
+// Função para transformar o input em texto (quando aperta Enter)
+input.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const value = input.value.trim();
+        
+        if (value !== "") {
+            text.textContent = value; // Define o texto
+            
+            // Altera a visibilidade
+            input.style.display = 'none';
+            text.style.display = 'inline';
+            
+        }
+    }
+});
+
+// Função para voltar a ser input (quando clica no lápis)
+text.addEventListener('click', function() {
+    input.style.display = 'inline-block';
+    text.style.display = 'none'
+    
+    input.focus(); // Coloca o cursor de digitação de volta no input
+});

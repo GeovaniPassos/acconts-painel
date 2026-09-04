@@ -1,35 +1,78 @@
 body {
   font-family: Arial, sans-serif;
-  display: flex;
+  
   justify-content: center;
   align-items: center;
   /* height: 100vh; */
+  min-width: 1200px;
   background-color: #f4f4f9;
   margin: 0;
 }
 
+.body-expenses {
+  display: flex;
+  margin-top: 100px;
+  min-height: 100vh;
+}
+
+.expenses {
+  justify-items: center;
+}
+
 .container {
   display: grid;
-  gap: 15px;
+  /* gap: 15px; */
   grid-template-columns: repeat(2, 1fr);
-
-  width: 600px;
+  height: auto;
+  /* width: 600px; */
 
   max-width: 100%;
-  margin: 0 auto;
-  
+  /* margin: 0 auto; */
 }
 
 .card, .card-button{
-  width: 100%;
-  margin-bottom: 15px;
-
+  /* width: 100%; */
+  /* margin-bottom: 15px; */
   min-height: 300px;
   min-width: 350px;
   background: #ffffff;
   border: 2px solid #ccc;
   padding: 6px;
   border-radius: 8px;
+}
+
+.name-card {
+  margin: 10px 0px;
+  display: flex;
+}
+
+#input-name-card {
+  width: 84%;
+  height: 30px;
+  font-size: 1.3em;
+}
+
+.space {
+  width: 100%;
+}
+
+#card-title {
+  font-size: 2em;
+  display: none; 
+  cursor: pointer;
+}
+
+.name-card, button {
+  font-size: 0.7em;
+  align-items: center;
+}
+
+.space-enter {
+  justify-content: space-between;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .card-button {
@@ -42,6 +85,10 @@ button {
   display: flex;
   justify-self: center;
   align-items: center;
+}
+
+.expenses-paid {
+  max-width: 300px;
 }
 
 .material-symbols-outlined {
