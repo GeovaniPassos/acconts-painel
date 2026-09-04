@@ -1,5 +1,5 @@
 const items = document.querySelectorAll('.item');
-const boxes = document.querySelectorAll('.box');
+const boxes = document.querySelectorAll('.card');
 
 let selected = null;
 
@@ -30,21 +30,20 @@ boxes.forEach(configurarBox);
 
 const container = document.querySelector(".container");
 const botao = document.querySelector(".btn-adicionar");
+const cardButton = document.querySelector(".card-button");
 
 botao.addEventListener('click', () => {
 
     const bloco = document.createElement('div');
-    bloco.classList.add('box');
+    bloco.classList.add('card');
     configurarBox(bloco);
 
     const conteudo = document.createElement('div');
-    conteudo.classList.add('item');
-    conteudo.draggable = true;
     configurarItem(conteudo);
 
     conteudo.textContent = 'Novo bloco';
 
     bloco.appendChild(conteudo);
 
-    container.appendChild(bloco);
+    container.insertBefore(bloco, cardButton);
 });
