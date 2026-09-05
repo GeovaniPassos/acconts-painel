@@ -1,12 +1,15 @@
 body {
   font-family: Arial, sans-serif;
-  
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   /* height: 100vh; */
-  min-width: 1200px;
   background-color: #f4f4f9;
   margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 .body-expenses {
@@ -108,4 +111,47 @@ button {
 
 .item:active {
   cursor: grabbing;
+}
+
+@media (max-width: 768px) {
+  body {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .body-expenses {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    padding: 16px;
+  }
+
+  .body-expenses > .expenses:not(.paid) {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 2;
+    width: auto;
+    min-width: 0;
+    background: #ffffff;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 316px;
+    width: 100%;
+  }
+
+  .card,
+  .card-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .body-expenses > .paid {
+    display: none;
+  }
 }
