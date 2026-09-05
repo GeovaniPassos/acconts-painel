@@ -1,0 +1,131 @@
+.cashflow-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 2fr) minmax(240px, 0.8fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.cashflow-panel,
+.cashflow-add-card {
+  min-height: 300px;
+  min-width: 0;
+  padding: 12px;
+  background: #fff;
+  border: 2px solid rgb(221, 220, 220);;
+  border-radius: 8px;
+}
+
+.cashflow-panel {
+  text-align: center;
+}
+
+.cashflow-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cashflow-add-card {
+    display: grid;
+    place-items: center;
+    color: gray;
+}
+
+.cashflow-add-button {
+    display: grid;
+    align-items: center;
+    padding: 8px 12px;
+    border: 0;
+    background: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+
+
+    color: rgb(201, 201, 201);
+    font-size: 1.2em;
+}
+
+#add-block-text {
+    margin: 0px;
+    font-style: italic;
+}
+
+.cashflow-card-content {
+  cursor: grab;
+}
+
+.cashflow-card-content:active {
+  cursor: grabbing;
+}
+
+.cashflow-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cashflow-card-input {
+  box-sizing: border-box;
+  width: 200px;
+  height: 40px;
+  margin: 5px 0;
+  font-size: 1.2rem;
+}
+
+
+.cashflow-card-title {
+  display: none;
+  margin: 5px 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.cashflow-card-space {
+  flex: 1;
+}
+
+.cashflow-card-delete {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .cashflow-layout {
+    display: block;
+  }
+
+  .cashflow-panel.cashflow-unpaid {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 3;
+    min-height: 120px;
+    background: #fff;
+  }
+
+  .cashflow-board {
+    grid-template-columns: 1fr;
+    padding-top: 136px;
+  }
+
+  .cashflow-panel.cashflow-paid {
+    display: none;
+  }
+}
+
+
+
+.item {
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.item:active {
+  cursor: grabbing;
+}

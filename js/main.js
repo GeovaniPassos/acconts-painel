@@ -13,6 +13,7 @@ import { checkAuthentication, logout } from "./ui/mainUi.js";
 import { initTables } from "./ui/tablesUi.js";
 import { initReceipt } from "./controllers/receiptController.js";
 import { bindBtnCurrentMonthReceipts, bindReceiptListClick } from "./ui/receiptUi.js";
+import { initCashflow } from "./ui/fluxoUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     checkAuthentication();
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindBtnCurrentMonthReceipts();
     logout();
     initTables();
+    initCashflow();
     initReceipt();
 
     bindReceiptListClick();

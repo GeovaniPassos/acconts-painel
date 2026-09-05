@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
   <link rel="shortcut icon" href="./assets/accounting.png" type="image/x-icon">
+  <link rel="stylesheet" href="./css/fluxo.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_2" />
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
@@ -160,6 +162,7 @@
     <div class="tabs">
       <button class="tab active tab-expenses">Despesas</button>
       <button class="tab tab-receipts">Receitas</button>
+      <button class="tab tab-fluxo">Fluxo de Caixa</button>
     </div>
 
     <div id="expenses" class="tab-content active">
@@ -168,6 +171,28 @@
 
     <div id="receipts" class="tab-content">
       <ul id="receipt-list"></ul>
+    </div>
+
+    <div id="fluxo" class="tab-content">
+      <div class="cashflow-layout">
+        <section class="cashflow-panel cashflow-unpaid">
+          <h2>Contas Não Pagas</h2>
+          <div class="item" draggable="true">Item 1</div>
+        </section>
+
+        <div class="cashflow-board">
+          <div class="cashflow-add-card">
+            <button class="cashflow-add-button"  type="button">
+              <span class="material-symbols-outlined" style="font-size: 3em" aria-hidden="true">add_2</span>
+              <p id="add-block-text">Adicionar bloco</p>
+            </button>
+          </div>
+        </div>
+
+        <section class="cashflow-panel cashflow-paid">
+          <h2>Contas Pagas</h2>
+        </section>
+      </div>
     </div>
 
     <script type="module" src="./js/main.js"></script>
