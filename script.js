@@ -1,6 +1,7 @@
 const items = document.querySelectorAll('.item');
 const boxes = document.querySelectorAll('.card');
 
+let cardIdCounter = 1;
 let selected = null;
 
 function configurarItem(item) {
@@ -16,6 +17,7 @@ function configurarBox(box) {
 
   box.addEventListener('drop', (e) => {
     e.preventDefault();
+
     if (selected) {
       box.appendChild(selected);
       selected = null;
@@ -26,54 +28,124 @@ function configurarBox(box) {
 items.forEach(configurarItem);
 boxes.forEach(configurarBox);
 
-// TESTE 2
-
 const container = document.querySelector(".container");
 const botao = document.querySelector(".btn-adicionar");
 const cardButton = document.querySelector(".card-button");
 
-botao.addEventListener('click', () => {
+// Evento único no container
+container.addEventListener('click', (event) => {
+  // EXCLUIR CARD
+  if (event.target.classList.contains('delete-card')) {
 
-    const bloco = document.createElement('div');
-    bloco.classList.add('card');
-    configurarBox(bloco);
+    const card = event.target.closest('.card');
 
-    const conteudo = document.createElement('div');
-    configurarItem(conteudo);
-
-    conteudo.textContent = 'Novo bloco';
-
-    bloco.appendChild(conteudo);
-
-    container.insertBefore(bloco, cardButton);
-});
-
-
-// TESTE INPUT DO CARD
-
-const input = document.getElementById('input-name-card');
-const text = document.getElementById('card-title');
-
-// Função para transformar o input em texto (quando aperta Enter)
-input.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        const value = input.value.trim();
-        
-        if (value !== "") {
-            text.textContent = value; // Define o texto
-            
-            // Altera a visibilidade
-            input.style.display = 'none';
-            text.style.display = 'inline';
-            
-        }
+    if (card) {
+      card.remove();
     }
+
+    return;
+  }
+
+  handleInputName(event);
 });
 
-// Função para voltar a ser input (quando clica no lápis)
-text.addEventListener('click', function() {
-    input.style.display = 'inline-block';
-    text.style.display = 'none'
-    
-    input.focus(); // Coloca o cursor de digitação de volta no input
+// Adicionar card
+botao.addEventListener('click', () => {
+  createCard(cardIdCounter);
+  cardIdCounter++;
 });
+
+
+// INPUT DO CARD
+
+function handleInputName(event) {
+
+  // Descobre em qual card aconteceu o clique
+  const card = event.target.closest('.card');
+
+  // Se o clique não aconteceu dentro de um card, sai
+  if (!card) {
+    return;
+  }
+
+  // Procura os elementos SOMENTE dentro desse card
+  const input = card.querySelector('.input-name-card');
+  const text = card.querySelector('.card-title');
+
+  // Clicou no título
+  if (event.target.closest('.card-title')) {
+
+    input.style.display = 'inline-block';
+    text.style.display = 'none';
+
+    input.focus();
+  }
+
+
+  // Clicou no input
+  if (event.target.closest('.input-name-card')) {
+
+    input.addEventListener('keydown', function(event) {
+
+      if (event.key === 'Enter') {
+
+        const value = input.value.trim();
+
+        if (value !== "") {
+
+          text.textContent = value;
+
+          input.style.display = 'none';
+          text.style.display = 'inline';
+
+          card.dataset.name = value;
+
+        }
+      }
+    });
+  }
+}
+
+
+function createCard(idCard) {
+
+  const bloco = document.createElement('div');
+
+  bloco.classList.add('card');
+
+  configurarBox(bloco);
+
+
+  const conteudo = document.createElement('div');
+
+  configurarItem(conteudo);
+
+
+  conteudo.innerHTML = `
+    <div class="name-card">
+
+      <input
+        type="text"
+        class="input-name-card"
+        placeholder="Descrição"
+      >
+
+      <span
+        class="card-title"
+        title="Clique para editar"
+      ></span>
+
+      <span class="space"></span>
+
+      <button class="delete-card">❌</button>
+
+    </div>
+  `;
+
+
+  bloco.dataset.id = idCard;
+
+  bloco.appendChild(conteudo);
+
+  container.insertBefore(bloco, cardButton);
+}
