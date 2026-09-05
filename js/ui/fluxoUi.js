@@ -1,3 +1,5 @@
+import * as expensesController from "../controllers/expensesController.js"
+
 let cashflowCardId = 1;
 let cashflowInitialized = false;
 let draggedCashflowContent = null;
@@ -116,4 +118,5 @@ export function initCashflow() {
     });
 
     cashflowInitialized = true;
+    expensesController.getListExpensesNotPaid();
 }

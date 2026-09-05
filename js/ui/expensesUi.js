@@ -88,3 +88,52 @@ export function emptyExpensesList() {
     ul.appendChild(li);
 }
 
+export function renderExpensesListNotPaid(expenses) {
+    const ul = document.getElementById("expenses-list-unpaid-flow");
+    ul.innerHTML = "";
+
+    expenses.expenses.forEach(exp => {
+        ul.appendChild(renderExpensesItemFlow(exp));
+    });
+}
+
+function renderExpensesItemFlow(expense) {
+    const li = document.createElement("li");
+    li.dataset.id = expense.id; 
+    li.className = "expense-item";
+
+    const idPaid = expense.payment === true || expense.payment === "true";
+
+    const statusClass = idPaid ? "status-paid" : "status-pending";
+    const statusText = idPaid ? "Pago" : "Pendente";
+    li.innerHTML = `
+        <div class="info-group main">
+            <strong class="expense-name">${expense.name}</strong>
+            <span class="expense-description">${expense.description}</span>
+        </div>
+        <div class="expense-category">
+            <span>${expense.categoryName}</span>
+        </div>
+        <div class="info-group finance">
+            <div class="group-value-date">
+                <span class="expense-value">${formatMoney(expense.value)}</span>
+                <span class="expense-date">${formatDate(expense.date)}</span>
+            </div>
+            <div class="group-installments">
+                <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
+            </div>
+        </div>
+
+        <div class="info-group status">
+            <span class="badge btn-table-status ${statusClass}" data-paid="${expense.payment}">${statusText}</span>
+            <span class="expense-date payment-date expense-payment-date-${expense.id}">${idPaid ? formatDate(expense.paymentDate) : "-"}</span>
+        </div>
+
+        <div class="actions">
+            <button class="btn-edit btn-icon " title="Editar">✏️</button>
+            <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
+        </div>
+    `;
+    li.setAttribute("draggable", "true");
+    return li;
+}

@@ -59,6 +59,11 @@ export default class ApiService {
             { method: "GET" });
     }
 
+    async getExpenses() {
+        return this.request(`/expenses`, 
+            { method: "GET" });
+    }
+
     async getExpensesById(id) {
         return this.request(`/expenses/${id}`, { method: "GET" });
     }

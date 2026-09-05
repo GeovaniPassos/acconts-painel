@@ -16,6 +16,10 @@ export default class Service {
         return this.stragegy.getExpenses(startDate, endDate, name);
     }
 
+    getExpenses() {
+        return this.stragegy.getExpenses();
+    }
+
     getExpensesById(id){
         return this.stragegy.getExpensesById(id);
     }
