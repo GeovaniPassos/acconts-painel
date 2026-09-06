@@ -1,13 +1,13 @@
 .cashflow-layout {
   display: grid;
-  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 2fr) minmax(300px, 0.8fr);
-  gap: 10px;
+  grid-template-columns: minmax(250px, 0.9fr) minmax(320px, 1.8fr) minmax(250px, 0.9fr);
+  gap: 16px;
   align-items: start;
 }
 
 .cashflow-panel,
 .cashflow-add-card {
-  min-height: 300px;
+  min-height: 160px;
   min-width: 0;
   padding: 12px;
   background: #fff;
@@ -17,6 +17,34 @@
 
 .cashflow-panel {
   text-align: center;
+}
+
+.cashflow-unpaid {
+  background: #fff;
+  border-color: #edb6b0;
+}
+
+.cashflow-unpaid > h2 {
+  color: #c0392b;
+}
+
+.cashflow-paid {
+  background: #fff;
+  border-color: #abd9ba;
+}
+
+.cashflow-paid > h2 {
+  color: #228b4d;
+}
+
+.cashflow-card {
+  background: #fff;
+  border-color: #b9d4ed;
+}
+
+.cashflow-add-card {
+  background: #fff;
+  border-color: #cbd9e5;
 }
 
 .cashflow-board {
@@ -61,21 +89,31 @@
 .cashflow-card-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.cashflow-card-header p {
+  margin: 0;
+  font-size: 1.5em !important;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .cashflow-card-input {
   box-sizing: border-box;
-  width: 200px;
-  height: 40px;
-  margin: 5px 0;
-  font-size: 1.2rem;
+  flex: 1 1 140px;
+  width: auto;
+  height: 34px;
+  margin: 0;
+  font-size: 1rem;
 }
 
 
 .cashflow-card-title {
   display: none;
-  margin: 5px 0;
-  font-size: 1.3rem;
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: bold;
   cursor: pointer;
 }
 
@@ -89,28 +127,72 @@
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .cashflow-layout {
-    display: block;
-  }
+.cashflow-warning-modal {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgb(0 0 0 / 58%);
+  backdrop-filter: blur(6px);
+}
 
-  .cashflow-panel.cashflow-unpaid {
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    right: 16px;
-    z-index: 3;
-    min-height: 120px;
-    background: #fff;
+.cashflow-warning-modal.is-open {
+  display: grid;
+}
+
+.cashflow-warning-dialog {
+  box-sizing: border-box;
+  width: min(100%, 430px);
+  padding: 28px;
+  color: #243447;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 35%);
+  text-align: center;
+}
+
+.cashflow-warning-dialog h2 {
+  margin: 0 0 12px;
+  font-size: 1.35rem;
+}
+
+.cashflow-warning-dialog p {
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+
+.cashflow-warning-close {
+  min-width: 110px;
+  border-radius: 6px;
+  background: #2c3e50;
+}
+
+@media (max-width: 960px) {
+  .cashflow-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .cashflow-board {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .cashflow-layout,
+  .cashflow-board {
     grid-template-columns: 1fr;
-    padding-top: 136px;
   }
 
-  .cashflow-panel.cashflow-paid {
-    display: none;
+  .cashflow-panel,
+  .cashflow-add-card {
+    min-height: 0;
+    padding: 10px;
+  }
+
+  .cashflow-card-input {
+    width: 100%;
   }
 }
 
@@ -127,4 +209,77 @@
 
 .item:active {
   cursor: grabbing;
+}
+
+/* A mesma despesa é exibida no fluxo com um layout compacto e arrastável. */
+.cashflow-panel .cashflow-expense-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin: 8px 0;
+  padding: 10px;
+  color: #333;
+  background: #fff;
+  border: 1px solid #a9cfee;
+  border-left: 4px solid #007bff;
+  border-radius: 6px;
+  box-shadow: none;
+  text-align: left;
+}
+
+.cashflow-panel .cashflow-expense-item .info-group.main {
+  grid-column: 1 / -1;
+}
+
+.cashflow-panel .cashflow-expense-item .expense-category {
+  align-self: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px 6px;
+  font-size: 0.62rem;
+  line-height: 1.2;
+}
+
+.cashflow-panel .cashflow-expense-item .info-group.finance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.cashflow-panel .cashflow-expense-item .group-value-date {
+  text-align: right;
+}
+
+.cashflow-panel .cashflow-expense-item .info-group.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+
+.cashflow-panel .cashflow-expense-item .badge {
+  margin: 0;
+}
+
+.cashflow-panel .cashflow-expense-item .actions {
+  align-self: center;
+  justify-self: end;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .cashflow-panel .cashflow-expense-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cashflow-panel .cashflow-expense-item .info-group.main,
+  .cashflow-panel .cashflow-expense-item .info-group.finance,
+  .cashflow-panel .cashflow-expense-item .actions {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .cashflow-panel .cashflow-expense-item .group-value-date {
+    text-align: left;
+  }
 }

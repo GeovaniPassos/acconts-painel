@@ -105,19 +105,3 @@ export async function deleteExpense(id) {
         feedback.setLoading(false);
     }
 }   
-
-export async function getListExpensesNotPaid() {
-    try {
-        feedback.setLoading(true);
-        const expensesListFlow = await service.getExpenses();
-        if (expensesListFlow === null || expensesListFlow.expenses.length == 0) {
-            return feedback.showMessage("info", "Nenhuma despesa encontrada.");
-        }
-
-        expenseUi.renderExpensesListNotPaid(expensesListFlow);
-    } catch (e) {
-        feedback.showMessage("error", `Falha ao carregar`);
-    } finally {
-        feedback.setLoading(false);
-    }
-}

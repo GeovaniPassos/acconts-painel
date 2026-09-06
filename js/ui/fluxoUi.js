@@ -1,56 +1,71 @@
-import * as expensesController from "../controllers/expensesController.js"
-
 let cashflowCardId = 1;
 let cashflowInitialized = false;
-let draggedCashflowContent = null;
+let draggedExpense = null;
 
-function configureCashflowDropZone(card) {
-    card.addEventListener("dragover", (event) => {
-        event.preventDefault();
+function showDeleteCardWarning() {
+    const modal = document.getElementById("cashflow-warning-modal");
+    const closeButton = document.getElementById("cashflow-warning-close");
+
+    if (!modal) return;
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    closeButton?.focus();
+}
+
+function closeDeleteCardWarning() {
+    const modal = document.getElementById("cashflow-warning-modal");
+    if (!modal) return;
+
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+}
+
+function bindDeleteCardWarningModal() {
+    const modal = document.getElementById("cashflow-warning-modal");
+    const closeButton = document.getElementById("cashflow-warning-close");
+
+    closeButton?.addEventListener("click", closeDeleteCardWarning);
+    modal?.addEventListener("click", event => {
+        if (event.target === modal) closeDeleteCardWarning();
     });
 
-    card.addEventListener("drop", (event) => {
-        event.preventDefault();
-
-        if (draggedCashflowContent) {
-            card.appendChild(draggedCashflowContent);
-            draggedCashflowContent = null;
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && modal?.classList.contains("is-open")) {
+            closeDeleteCardWarning();
         }
     });
 }
 
-function configureCashflowDrag(content) {
-    content.addEventListener("dragstart", (event) => {
-        draggedCashflowContent = event.currentTarget;
-        event.dataTransfer.effectAllowed = "move";
-    });
+function insertUnpaidExpenseByDueDate(panel, expense) {
+    const dueDate = expense.dataset.dueDate || "";
+    const nextExpense = [...panel.querySelectorAll(":scope > .cashflow-expense-item")]
+        .find(item => dueDate.localeCompare(item.dataset.dueDate || "") < 0);
 
-    content.addEventListener("dragend", () => {
-        draggedCashflowContent = null;
-    });
+    panel.insertBefore(expense, nextExpense || null);
 }
 
 function createCashflowCard(id) {
+
     const card = document.createElement("div");
+
     card.className = "cashflow-panel cashflow-card";
     card.dataset.id = id;
 
-    const content = document.createElement("div");
-    content.className = "cashflow-card-content";
-    content.draggable = true;
-    content.innerHTML = `
+    card.innerHTML = `
         <div class="cashflow-card-header">
-            <p style="font-size: 1.2rem;">Previsão Pgto: </p>
-            <input class="cashflow-card-input" type="text" placeholder="Descrição" maxlength="40">
+
+            <p style="font-size: 1.2rem;">Previsão Pgto:</p>
+            <input
+                class="cashflow-card-input" type="text" placeholder="Descrição" maxlength="40">
+
             <span class="cashflow-card-title" title="Clique para editar"></span>
             <span class="cashflow-card-space"></span>
+
             <button class="cashflow-card-delete" type="button" title="Excluir card">❌</button>
         </div>
     `;
 
-    card.appendChild(content);
-    configureCashflowDropZone(card);
-    configureCashflowDrag(content);
     return card;
 }
 
@@ -59,6 +74,11 @@ function handleCashflowCardClick(event, board) {
     if (!card) return;
 
     if (event.target.closest(".cashflow-card-delete")) {
+        const hasExpenses = card.querySelector(".cashflow-expense-item");
+        if (hasExpenses) {
+            showDeleteCardWarning();
+            return;
+        }
         card.remove();
         return;
     }
@@ -95,28 +115,77 @@ function handleCashflowCardKeydown(event) {
 }
 
 export function initCashflow() {
+
     if (cashflowInitialized) return;
 
+    const layout = document.querySelector(".cashflow-layout");
     const board = document.querySelector(".cashflow-board");
     const addButton = document.querySelector(".cashflow-add-button");
-    const dropZones = document.querySelectorAll(".cashflow-layout > .cashflow-panel");
 
-    if (!board || !addButton) return;
+    if (!layout || !board || !addButton) return;
 
-    dropZones.forEach(configureCashflowDropZone);
-    document
-        .querySelectorAll(".cashflow-layout [draggable='true']")
-        .forEach(configureCashflowDrag);
+    bindDeleteCardWarningModal();
 
-    board.addEventListener("click", (event) => handleCashflowCardClick(event, board));
-    board.addEventListener("keydown", handleCashflowCardKeydown);
+    // DRAG START
+    layout.addEventListener("dragstart", (event) => {
 
-    addButton.addEventListener("click", () => {
-        const card = createCashflowCard(cashflowCardId);
-        cashflowCardId += 1;
-        board.insertBefore(card, addButton.closest(".cashflow-add-card"));
+        const expense = event.target.closest(".expense-item");
+        if (!expense) return;
+        draggedExpense = expense;
+        event.dataTransfer.effectAllowed = "move";
     });
 
+    // Permite soltar em um card de previsão ou devolver uma despesa pendente
+    // ao painel de contas não pagas.
+    layout.addEventListener("dragover", (event) => {
+        const target = event.target.closest(".cashflow-card, .cashflow-unpaid");
+
+        if (!target) return;
+
+        event.preventDefault();
+
+        event.dataTransfer.dropEffect = "move";
+    });
+
+    // DROP
+    layout.addEventListener("drop", (event) => {
+        const target = event.target.closest(".cashflow-card, .cashflow-unpaid");
+        if (!target) return;
+        event.preventDefault();
+        if (!draggedExpense) return;
+
+        const isPaid = draggedExpense.dataset.paid === "true";
+        if (target.classList.contains("cashflow-unpaid") && isPaid) return;
+
+        if (target.classList.contains("cashflow-unpaid")) {
+            insertUnpaidExpenseByDueDate(target, draggedExpense);
+        } else {
+            target.appendChild(draggedExpense);
+        }
+        draggedExpense = null;
+    });
+
+    // DRAG END
+    layout.addEventListener("dragend", () => {
+        draggedExpense = null;
+    });
+
+    // ADICIONAR BLOCO
+    addButton.addEventListener("click", () => {
+        const card = createCashflowCard(cashflowCardId);
+        cashflowCardId++;
+        board.insertBefore(
+            card,
+            addButton.closest(".cashflow-add-card")
+        );
+    });
+
+    // CLICK
+    layout.addEventListener("click", (event) => {
+        handleCashflowCardClick(event);
+    });
+
+    // KEYDOWN
+    layout.addEventListener("keydown", handleCashflowCardKeydown);
     cashflowInitialized = true;
-    expensesController.getListExpensesNotPaid();
 }

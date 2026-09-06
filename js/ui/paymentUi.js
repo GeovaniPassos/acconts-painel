@@ -18,18 +18,21 @@ export function toggleStatusVisual(element, isPaid) {
 
 //Função para vincular o botão de alterar pagamento na tabela de despesas
 export function bindPaymentToggleButtons(handlers) {
-    const list = document.getElementById("expenses-list");
-    
-    if (!list) return;
+    const containers = [
+        document.getElementById("expenses-list"),
+        document.querySelector(".cashflow-layout")
+    ];
 
-    if (list.dataset.paymentToggleBound === "true") return;
-    list.dataset.paymentToggleBound = "true";
+    containers.forEach(container => {
+        if (!container || container.dataset.paymentToggleBound === "true") return;
+        container.dataset.paymentToggleBound = "true";
 
-    list.addEventListener("click", (event) => {
-        const btn = event.target.closest(".btn-table-status");
-        if (!btn) return;
+        container.addEventListener("click", (event) => {
+            const btn = event.target.closest(".btn-table-status");
+            if (!btn || !container.contains(btn)) return;
 
-        if (handlers?.onToggle) handlers.onToggle(btn);
+            if (handlers?.onToggle) handlers.onToggle(btn);
+        });
     });
 }
 

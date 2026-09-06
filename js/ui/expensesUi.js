@@ -9,18 +9,75 @@ export function renderExpensesList(expenses) {
     expenses.expenses.forEach(exp => {
         ul.appendChild(renderExpensesItem(exp));
     });
+
+    renderExpensesFlow(expenses.expenses);
+}
+
+// O fluxo recebe a mesma lista já carregada para a tela de despesas. São nós
+// separados apenas porque um elemento não pode existir em dois lugares do DOM.
+function renderExpensesFlow(expenses) {
+    const layout = document.querySelector(".cashflow-layout");
+    const unpaid = document.getElementById("cashflow-unpaid");
+    const paid = document.querySelector(".cashflow-paid");
+
+    if (!layout || !unpaid || !paid) return;
+
+    const forecastAssignments = getForecastAssignments(layout);
+    clearFlowExpenses(layout);
+
+    const unpaidExpenses = expenses
+        .filter(expense => expense.payment !== true && expense.payment !== "true")
+        .sort((first, second) => String(first.date || "").localeCompare(String(second.date || "")));
+
+    unpaidExpenses.forEach(expense => {
+        const item = renderExpensesItem(expense, { cashflow: true });
+        const forecastCard = forecastAssignments.get(String(expense.id));
+
+        if (forecastCard?.isConnected) {
+            forecastCard.appendChild(item);
+        } else {
+            unpaid.appendChild(item);
+        }
+    });
+
+    expenses
+        .filter(expense => expense.payment === true || expense.payment === "true")
+        .forEach(expense => {
+            paid.appendChild(renderExpensesItem(expense, { cashflow: true }));
+        });
+}
+
+function getForecastAssignments(layout) {
+    const assignments = new Map();
+
+    layout.querySelectorAll(".cashflow-card").forEach(card => {
+        card.querySelectorAll(":scope > .cashflow-expense-item").forEach(item => {
+            assignments.set(String(item.dataset.id), card);
+        });
+    });
+
+    return assignments;
+}
+
+function clearFlowExpenses(layout = document.querySelector(".cashflow-layout")) {
+    layout?.querySelectorAll(".cashflow-expense-item").forEach(item => item.remove());
 }
 
 //Função para renderizar a lista de despesas
-function renderExpensesItem(expense) {
+function renderExpensesItem(expense, { cashflow = false } = {}) {
     const li = document.createElement("li");
     li.dataset.id = expense.id; 
-    li.className = "expense-item";
+    li.dataset.paid = expense.payment === true || expense.payment === "true";
+    li.dataset.dueDate = expense.date || "";
+    li.className = `expense-item${cashflow ? " cashflow-expense-item" : ""}`;
 
     const idPaid = expense.payment === true || expense.payment === "true";
 
     const statusClass = idPaid ? "status-paid" : "status-pending";
-    const statusText = idPaid ? "Pago" : "Pendente";
+    const statusText = idPaid ? "Pago" : (cashflow ? "Pagar" : "Pendente");
+    const statusTitle = idPaid
+        ? "Clique para marcar como pendente"
+        : "Clique para marcar como paga";
     li.innerHTML = `
         <div class="info-group main">
             <strong class="expense-name">${expense.name}</strong>
@@ -40,7 +97,7 @@ function renderExpensesItem(expense) {
         </div>
 
         <div class="info-group status">
-            <span class="badge btn-table-status ${statusClass}" data-paid="${expense.payment}">${statusText}</span>
+            <button type="button" class="badge btn-table-status ${statusClass}" data-paid="${expense.payment}" title="${statusTitle}">${statusText}</button>
             <span class="expense-date payment-date expense-payment-date-${expense.id}">${idPaid ? formatDate(expense.paymentDate) : "-"}</span>
         </div>
 
@@ -49,6 +106,9 @@ function renderExpensesItem(expense) {
             <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
         </div>
     `;
+
+    li.setAttribute("draggable", "true");
+    li.classList.add('item');
 
     return li;
 }
@@ -71,6 +131,9 @@ async function handleListClick(event) {
 
 export function bindExpensesListClick() {
     document.getElementById("expenses-list").addEventListener("click", handleListClick);
+
+    const flow = document.querySelector(".cashflow-layout");
+    flow?.addEventListener("click", handleListClick);
 }
 
 export function bindBtnCurrentMonthExpenses() {
@@ -82,58 +145,9 @@ export function bindBtnCurrentMonthExpenses() {
 export function emptyExpensesList() {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
+    clearFlowExpenses();
 
     const li = document.createElement("li");
     li.innerHTML = "Nenhuma despesa informada nesse período.";
     ul.appendChild(li);
-}
-
-export function renderExpensesListNotPaid(expenses) {
-    const ul = document.getElementById("expenses-list-unpaid-flow");
-    ul.innerHTML = "";
-
-    expenses.expenses.forEach(exp => {
-        ul.appendChild(renderExpensesItemFlow(exp));
-    });
-}
-
-function renderExpensesItemFlow(expense) {
-    const li = document.createElement("li");
-    li.dataset.id = expense.id; 
-    li.className = "expense-item";
-
-    const idPaid = expense.payment === true || expense.payment === "true";
-
-    const statusClass = idPaid ? "status-paid" : "status-pending";
-    const statusText = idPaid ? "Pago" : "Pendente";
-    li.innerHTML = `
-        <div class="info-group main">
-            <strong class="expense-name">${expense.name}</strong>
-            <span class="expense-description">${expense.description}</span>
-        </div>
-        <div class="expense-category">
-            <span>${expense.categoryName}</span>
-        </div>
-        <div class="info-group finance">
-            <div class="group-value-date">
-                <span class="expense-value">${formatMoney(expense.value)}</span>
-                <span class="expense-date">${formatDate(expense.date)}</span>
-            </div>
-            <div class="group-installments">
-                <span class="expense-installments">${expense.installment}/${expense.totalInstallments}</span>
-            </div>
-        </div>
-
-        <div class="info-group status">
-            <span class="badge btn-table-status ${statusClass}" data-paid="${expense.payment}">${statusText}</span>
-            <span class="expense-date payment-date expense-payment-date-${expense.id}">${idPaid ? formatDate(expense.paymentDate) : "-"}</span>
-        </div>
-
-        <div class="actions">
-            <button class="btn-edit btn-icon " title="Editar">✏️</button>
-            <button class="btn-delete btn-icon" title="Deletar">🗑️</button>
-        </div>
-    `;
-    li.setAttribute("draggable", "true");
-    return li;
 }
