@@ -52,6 +52,21 @@
 
     <div class="filter-container">
       <div class="filter-group">
+        <fieldset class="month-filter" id="month-filter" aria-label="Filtrar por meses">
+          <legend>Filtrar por meses</legend>
+          <label><input type="checkbox" name="expense-month" value="01"> Jan</label>
+          <label><input type="checkbox" name="expense-month" value="02"> Fev</label>
+          <label><input type="checkbox" name="expense-month" value="03"> Mar</label>
+          <label><input type="checkbox" name="expense-month" value="04"> Abr</label>
+          <label><input type="checkbox" name="expense-month" value="05"> Mai</label>
+          <label><input type="checkbox" name="expense-month" value="06"> Jun</label>
+          <label><input type="checkbox" name="expense-month" value="07"> Jul</label>
+          <label><input type="checkbox" name="expense-month" value="08"> Ago</label>
+          <label><input type="checkbox" name="expense-month" value="09"> Set</label>
+          <label><input type="checkbox" name="expense-month" value="10"> Out</label>
+          <label><input type="checkbox" name="expense-month" value="11"> Nov</label>
+          <label><input type="checkbox" name="expense-month" value="12"> Dez</label>
+        </fieldset>
         <div>
           <label for="date-range">Filtrar Período</label>
           <button id="btn-current-month">Mês atual</button>
@@ -62,8 +77,16 @@
         <label for="searchName">Filtrar por nome</label>
         <input type="text" id="searchName" placeholder="Pesquise pelo nome">
       </div>
+      <div class="filter-group payment-filter-group">
+        <label for="payment-filter">Status de pagamento</label>
+        <select id="payment-filter">
+          <option value="" selected>Nenhum selecionado</option>
+          <option value="paid">Somente pagas</option>
+          <option value="unpaid">Somente não pagas</option>
+        </select>
+      </div>
       <div class="filter-group button-group">
-        <button id="btn-searchName">Buscar</button>
+        <button id="btn-searchName">Filtrar despesas</button>
       </div>
     </div>
     <div id="messages"></div>

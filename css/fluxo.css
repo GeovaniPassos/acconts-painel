@@ -216,10 +216,15 @@ h2 {
   cursor: grabbing;
 }
 
-/* A mesma despesa é exibida no fluxo com um layout compacto e arrastável. */
+/* A despesa inicia resumida e revela os demais dados ao ser selecionada. */
 .cashflow-panel .cashflow-expense-item {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "main main"
+    "category finance";
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 12px;
   margin: 8px 0;
   padding: 10px;
   color: #333;
@@ -229,13 +234,15 @@ h2 {
   border-radius: 6px;
   box-shadow: none;
   text-align: left;
+  cursor: pointer;
 }
 
 .cashflow-panel .cashflow-expense-item .info-group.main {
-  grid-column: 1 / -1;
+  grid-area: main;
 }
 
 .cashflow-panel .cashflow-expense-item .expense-category {
+  grid-area: category;
   align-self: center;
   width: fit-content;
   max-width: 100%;
@@ -245,6 +252,7 @@ h2 {
 }
 
 .cashflow-panel .cashflow-expense-item .info-group.finance {
+  grid-area: finance;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -256,6 +264,7 @@ h2 {
 }
 
 .cashflow-panel .cashflow-expense-item .info-group.status {
+  grid-area: status;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -267,20 +276,62 @@ h2 {
 }
 
 .cashflow-panel .cashflow-expense-item .actions {
+  grid-area: actions;
   align-self: center;
   justify-self: end;
   white-space: nowrap;
 }
 
+.cashflow-panel .cashflow-expense-item .group-installments,
+.cashflow-panel .cashflow-expense-item .info-group.status,
+.cashflow-panel .cashflow-expense-item .actions {
+  display: none;
+}
+
+.cashflow-panel .cashflow-expense-item.is-expanded {
+  grid-template-areas:
+    "main main main"
+    "category finance status"
+    "actions actions actions";
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  cursor: grab;
+}
+
+.cashflow-panel .cashflow-expense-item.is-expanded .group-installments,
+.cashflow-panel .cashflow-expense-item.is-expanded .info-group.status,
+.cashflow-panel .cashflow-expense-item.is-expanded .actions {
+  display: flex;
+}
+
+.cashflow-panel .cashflow-expense-item.is-expanded .actions {
+  display: block;
+}
+
+.cashflow-panel .cashflow-expense-item:focus-visible {
+  outline: 3px solid #72b7eb;
+  outline-offset: 2px;
+}
+
 @media (max-width: 420px) {
   .cashflow-panel .cashflow-expense-item {
+    grid-template-areas:
+      "main"
+      "category"
+      "finance";
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .cashflow-panel .cashflow-expense-item .info-group.main,
+  .cashflow-panel .cashflow-expense-item.is-expanded {
+    grid-template-areas:
+      "main"
+      "category"
+      "finance"
+      "status"
+      "actions";
+  }
+
   .cashflow-panel .cashflow-expense-item .info-group.finance,
   .cashflow-panel .cashflow-expense-item .actions {
-    grid-column: 1;
     justify-self: start;
   }
 

@@ -2,6 +2,8 @@ let cashflowCardId = 1;
 let cashflowInitialized = false;
 let draggedExpense = null;
 
+import * as expensesController from "../controllers/expensesController.js";
+
 function showDeleteCardWarning() {
     const modal = document.getElementById("cashflow-warning-modal");
     const closeButton = document.getElementById("cashflow-warning-close");
@@ -45,7 +47,7 @@ function insertUnpaidExpenseByDueDate(panel, expense) {
     panel.insertBefore(expense, nextExpense || null);
 }
 
-function createCashflowCard(id) {
+function createCashflowCard(id, name = "") {
 
     const card = document.createElement("div");
 
@@ -66,7 +68,60 @@ function createCashflowCard(id) {
         </div>
     `;
 
+    if (name) setCashflowCardName(card, name);
+
     return card;
+}
+
+function setCashflowCardName(card, name) {
+    const input = card.querySelector(".cashflow-card-input");
+    const title = card.querySelector(".cashflow-card-title");
+
+    card.dataset.name = name;
+    input.value = name;
+    input.style.display = "none";
+    title.textContent = name;
+    title.style.display = "inline";
+}
+
+function syncCashflowCards(board, expenses) {
+    const addCard = board.querySelector(".cashflow-add-card");
+    if (!addCard) return;
+
+    const cardsFromExpenses = [...new Map(
+        expenses
+            .filter(expense => expense.cashflowCardId !== null && expense.cashflowCardId !== undefined && expense.cashflowCardName)
+            .map(expense => [String(expense.cashflowCardId), {
+                id: expense.cashflowCardId,
+                name: expense.cashflowCardName
+            }])
+    ).values()].sort((first, second) => Number(first.id) - Number(second.id));
+
+    const cardsById = new Map(
+        [...board.querySelectorAll(".cashflow-card")].map(card => [String(card.dataset.id), card])
+    );
+    const persistedIds = new Set(cardsFromExpenses.map(card => String(card.id)));
+
+    board.querySelectorAll('.cashflow-card[data-persisted="true"]').forEach(card => {
+        if (!persistedIds.has(String(card.dataset.id))) card.remove();
+    });
+
+    cardsFromExpenses.forEach(cardData => {
+        let card = cardsById.get(String(cardData.id));
+        if (!card || !card.isConnected) {
+            card = createCashflowCard(cardData.id, cardData.name);
+        } else if (card.dataset.name !== cardData.name) {
+            setCashflowCardName(card, cardData.name);
+        }
+
+        card.dataset.persisted = "true";
+        board.insertBefore(card, addCard);
+    });
+
+    const numericIds = cardsFromExpenses
+        .map(card => Number(card.id))
+        .filter(Number.isFinite);
+    if (numericIds.length) cashflowCardId = Math.max(cashflowCardId, ...numericIds) + 1;
 }
 
 function handleCashflowCardClick(event, board) {
@@ -100,18 +155,19 @@ function handleCashflowCardClick(event, board) {
     }
 }
 
-function handleCashflowCardKeydown(event) {
+async function handleCashflowCardKeydown(event) {
     if (event.key !== "Enter" || !event.target.matches(".cashflow-card-input")) return;
 
     const value = event.target.value.trim();
     if (!value) return;
 
     const card = event.target.closest(".cashflow-card");
-    const title = card.querySelector(".cashflow-card-title");
-    title.textContent = value;
-    event.target.style.display = "none";
-    title.style.display = "inline";
-    card.dataset.name = value;
+    setCashflowCardName(card, value);
+
+    const assignedExpenses = [...card.querySelectorAll(":scope > .cashflow-expense-item")];
+    await Promise.all(assignedExpenses.map(expense =>
+        expensesController.updateExpenseCashflowCard(expense.dataset.id, card.dataset.id, value)
+    ));
 }
 
 export function initCashflow() {
@@ -125,12 +181,16 @@ export function initCashflow() {
     if (!layout || !board || !addButton) return;
 
     bindDeleteCardWarningModal();
+    document.addEventListener("cashflow:sync-cards", event => {
+        syncCashflowCards(board, event.detail || []);
+    });
+    syncCashflowCards(board, board.cashflowExpenses || []);
 
     // DRAG START
     layout.addEventListener("dragstart", (event) => {
 
         const expense = event.target.closest(".expense-item");
-        if (!expense) return;
+        if (!expense || expense.dataset.paid === "true") return;
         draggedExpense = expense;
         event.dataTransfer.effectAllowed = "move";
     });
@@ -148,21 +208,34 @@ export function initCashflow() {
     });
 
     // DROP
-    layout.addEventListener("drop", (event) => {
+    layout.addEventListener("drop", async (event) => {
         const target = event.target.closest(".cashflow-card, .cashflow-unpaid");
         if (!target) return;
         event.preventDefault();
         if (!draggedExpense) return;
 
-        const isPaid = draggedExpense.dataset.paid === "true";
+        const expense = draggedExpense;
+        draggedExpense = null;
+
+        const isPaid = expense.dataset.paid === "true";
         if (target.classList.contains("cashflow-unpaid") && isPaid) return;
 
         if (target.classList.contains("cashflow-unpaid")) {
-            insertUnpaidExpenseByDueDate(target, draggedExpense);
+            insertUnpaidExpenseByDueDate(target, expense);
+            await expensesController.updateExpenseCashflowCard(expense.dataset.id);
         } else {
-            target.appendChild(draggedExpense);
+            const cardName = target.dataset.name?.trim();
+            if (!cardName) {
+                target.querySelector(".cashflow-card-input")?.focus();
+                return;
+            }
+            target.appendChild(expense);
+            await expensesController.updateExpenseCashflowCard(
+                expense.dataset.id,
+                target.dataset.id,
+                cardName
+            );
         }
-        draggedExpense = null;
     });
 
     // DRAG END

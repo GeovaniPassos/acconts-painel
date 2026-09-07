@@ -55,12 +55,12 @@ export default class ApiService {
 
     //Metodos para acessar as despesas
     async getExpenses(startDate, endDate, name) {
-        return this.request(`/expenses?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
-            { method: "GET" });
-    }
-
-    async getExpenses() {
-        return this.request(`/expenses`, 
+        const query = new URLSearchParams();
+        if (startDate) query.set("startDate", startDate);
+        if (endDate) query.set("endDate", endDate);
+        if (name) query.set("name", name);
+        const path = query.size ? `/expenses?${query.toString()}` : "/expenses";
+        return this.request(path,
             { method: "GET" });
     }
 

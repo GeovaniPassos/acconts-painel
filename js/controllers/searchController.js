@@ -1,25 +1,33 @@
 import * as controllerExpenses from './expensesController.js';
-import * as controllerReceipts from './receiptController.js';
 
 import * as feedback from '../ui/feedback.js';
 
 export let searchParams = {
     startDate: "",
     endDate: "",
-    name: ""
+    name: "",
+    months: [],
+    paymentStatus: "all"
 };
 
 export function initNameSearch() {
     const searchName = document.getElementById("searchName");
     const btnsearch = document.getElementById("btn-searchName");
     const dateRange = document.getElementById("date-range");
+    const monthFilters = document.querySelectorAll('input[name="expense-month"]');
+    const paymentFilter = document.getElementById("payment-filter");
     keyEnterSearch();
 
-    btnsearch.addEventListener('click', async () => {
+    const applyFilters = async () => {
 
         try {
             feedback.setLoading(true);
-            if (!dateRange.value && !searchName.value.trim()) {
+            searchParams.months = [...monthFilters]
+                .filter(month => month.checked)
+                .map(month => month.value);
+            searchParams.paymentStatus = paymentFilter.value || "all";
+
+            if (!dateRange.value && !searchName.value.trim() && !searchParams.months.length && searchParams.paymentStatus === "all") {
                 return feedback.showMessage("info", "Por favor, preencha pelo menos um campo de busca.");
             }
 
@@ -28,9 +36,8 @@ export function initNameSearch() {
             searchParams.endDate = "";
             }
 
-            searchParams.name = searchName.value;
-            controllerExpenses.getExpensesBySearch(searchParams);
-            controllerReceipts.getReceiptsBySearch(searchParams);
+            searchParams.name = searchName.value.trim();
+            await controllerExpenses.getExpensesBySearch(searchParams);
 
         } catch (e) {
             feedback.showMessage("error", `Falha ao carregar`);
@@ -38,7 +45,10 @@ export function initNameSearch() {
             feedback.setLoading(false);
         }
 
-    });
+    };
+
+    btnsearch.addEventListener('click', applyFilters);
+    monthFilters.forEach(month => month.addEventListener("change", applyFilters));
 
 }
 
@@ -50,9 +60,5 @@ export function keyEnterSearch() {
             }
         });
 }
-
-
-
-
 
 

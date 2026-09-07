@@ -2,7 +2,7 @@ import { formatDate } from "../utils/date.js";
 import { formatMoney } from "../utils/money.js";
 import * as expensesController from "../controllers/expensesController.js"
 
-export function renderExpensesList(expenses) {
+export function renderExpensesList(expenses, flowExpenses = expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
 
@@ -10,17 +10,21 @@ export function renderExpensesList(expenses) {
         ul.appendChild(renderExpensesItem(exp));
     });
 
-    renderExpensesFlow(expenses.expenses);
+    renderExpensesFlow(flowExpenses.expenses);
 }
 
-// O fluxo recebe a mesma lista já carregada para a tela de despesas. São nós
-// separados apenas porque um elemento não pode existir em dois lugares do DOM.
+// O fluxo recebe a lista completa, separada da lista filtrada de despesas,
+// porque um elemento não pode existir em dois lugares do DOM.
 function renderExpensesFlow(expenses) {
     const layout = document.querySelector(".cashflow-layout");
     const unpaid = document.getElementById("cashflow-unpaid");
     const paid = document.querySelector(".cashflow-paid");
+    const board = document.querySelector(".cashflow-board");
 
-    if (!layout || !unpaid || !paid) return;
+    if (!layout || !unpaid || !paid || !board) return;
+
+    board.cashflowExpenses = expenses;
+    document.dispatchEvent(new CustomEvent("cashflow:sync-cards", { detail: expenses }));
 
     const forecastAssignments = getForecastAssignments(layout);
     clearFlowExpenses(layout);
@@ -42,9 +46,18 @@ function renderExpensesFlow(expenses) {
 
     expenses
         .filter(expense => expense.payment === true || expense.payment === "true")
+        .sort((first, second) => getExpenseDateForSort(second).localeCompare(getExpenseDateForSort(first)))
+        .slice(0, 10)
         .forEach(expense => {
             paid.appendChild(renderExpensesItem(expense, { cashflow: true }));
         });
+}
+
+function getExpenseDateForSort(expense) {
+    const value = expense.paymentDate || expense.date || "";
+    const [day, month, year] = String(value).split("/");
+
+    return year && month && day ? `${year}-${month}-${day}` : String(value);
 }
 
 function getForecastAssignments(layout) {
@@ -70,6 +83,12 @@ function renderExpensesItem(expense, { cashflow = false } = {}) {
     li.dataset.paid = expense.payment === true || expense.payment === "true";
     li.dataset.dueDate = expense.date || "";
     li.className = `expense-item${cashflow ? " cashflow-expense-item" : ""}`;
+
+    if (cashflow) {
+        li.setAttribute("tabindex", "0");
+        li.setAttribute("aria-expanded", "false");
+        li.setAttribute("aria-label", `Ver detalhes de ${expense.name}`);
+    }
 
     const idPaid = expense.payment === true || expense.payment === "true";
 
@@ -107,7 +126,8 @@ function renderExpensesItem(expense, { cashflow = false } = {}) {
         </div>
     `;
 
-    li.setAttribute("draggable", "true");
+    // Contas já pagas permanecem somente no painel de pagas no fluxo.
+    li.setAttribute("draggable", String(!cashflow || !idPaid));
     li.classList.add('item');
 
     return li;
@@ -116,6 +136,20 @@ function renderExpensesItem(expense, { cashflow = false } = {}) {
 async function handleListClick(event) {
     const li = event.target.closest("li");
     if (!li) return;
+
+    const isCashflowItem = li.classList.contains("cashflow-expense-item");
+    const clickedControl = event.target.closest("button, input, select, textarea, label, a");
+
+    if (isCashflowItem && !clickedControl) {
+        const isExpanded = li.classList.toggle("is-expanded");
+        li.setAttribute("aria-expanded", String(isExpanded));
+        li.setAttribute(
+            "aria-label",
+            `${isExpanded ? "Ocultar" : "Ver"} detalhes de ${li.querySelector(".expense-name")?.textContent || "despesa"}`
+        );
+        return;
+    }
+
     const id = Number(li.dataset.id);
     const btnDelete = event.target.closest(".btn-delete");
     if (btnDelete) {
@@ -134,10 +168,21 @@ export function bindExpensesListClick() {
 
     const flow = document.querySelector(".cashflow-layout");
     flow?.addEventListener("click", handleListClick);
+    flow?.addEventListener("keydown", event => {
+        const item = event.target.closest(".cashflow-expense-item");
+        if (!item || !["Enter", " "].includes(event.key)) return;
+        if (event.target.closest("button, input, select, textarea, label, a")) return;
+
+        event.preventDefault();
+        item.click();
+    });
 }
 
 export function bindBtnCurrentMonthExpenses() {
     document.getElementById("btn-current-month").addEventListener("click", () => {
+        document.querySelectorAll('input[name="expense-month"]:checked')
+            .forEach(month => { month.checked = false; });
+        document.getElementById("payment-filter").value = "";
         expensesController.getListExpensesCurrentMonth();
     });
 }

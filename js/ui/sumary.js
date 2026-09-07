@@ -1,9 +1,7 @@
 import { formatMoney } from "../utils/money.js"
-import { searchParams } from "../controllers/searchController.js"
 
 let currentExpenses = null;
 let currentReceipts = null;
-let totalPaid = null;
 
 export function updateSummary(expensesList) {
     currentExpenses = expensesList;
@@ -20,25 +18,25 @@ function getReceiptTotal(receiptsList) {
     return receipts.reduce((total, receipt) => total + Number(receipt.value || 0), 0);
 }
 
-function getExpenseTotal(expensesList) {
-    if (Number.isFinite(Number(expensesList?.total))) {
-        return Number(expensesList.total);
-    }
-
+function getExpenseTotals(expensesList) {
     const expenses = expensesList?.expenses || [];
-    return expenses.reduce((total, expense) => total + Number(expense.value || 0), 0);
+    const totalPaid = expenses
+        .filter(expense => expense.payment === true || expense.payment === "true")
+        .reduce((total, expense) => total + Number(expense.value || 0), 0);
+    const totalUnpaid = expenses
+        .filter(expense => expense.payment !== true && expense.payment !== "true")
+        .reduce((total, expense) => total + Number(expense.value || 0), 0);
+
+    return { totalPaid, totalUnpaid, total: totalPaid + totalUnpaid };
 }
 
-function hasExpenses() {
-    return currentExpenses?.expenses && currentExpenses.expenses.length > 0;
-}
-
-function hasReceipts() {
-    return currentReceipts?.receipt && currentReceipts.receipt.length > 0;
-}
-
-function isActiveSearchByName() {
-    return searchParams.name && searchParams.name.trim() !== "";
+function hasActiveExpenseFilters() {
+    return Boolean(
+        document.getElementById("searchName")?.value.trim()
+        || document.getElementById("date-range")?.value
+        || document.querySelector('input[name="expense-month"]:checked')
+        || (document.getElementById("payment-filter")?.value || "all") !== "all"
+    );
 }
 
 function showCard(cardId) {
@@ -52,9 +50,6 @@ function hideCard(cardId) {
 }
 
 function updateVisibilityBasedOnSearch() {
-    const hasExp = hasExpenses();
-    const hasRec = hasReceipts();
-
     // Mostrar todos os cards inicialmente
     showCard('total-geral');
     showCard('total-pago');
@@ -62,33 +57,23 @@ function updateVisibilityBasedOnSearch() {
     showCard('total-receitas');
     showCard('saldo-total');
 
-    // Aplicar lógica condicional apenas se houver busca ativa por nome
-    if (isActiveSearchByName()) {
-        if (hasExp && !hasRec) {
-            // Apenas despesas: mostrar débitos, pago e pendente
-            hideCard('total-receitas');
-            hideCard('saldo-total');
-        } else if (!hasExp && hasRec) {
-            // Apenas receitas: mostrar apenas total de receitas
-            hideCard('total-geral');
-            hideCard('total-pago');
-            hideCard('total-pendente');
-            hideCard('saldo-total');
-        }
-        // Se houver ambos (hasExp && hasRec), mostrar todos
+    // Os filtros são exclusivos das despesas; receitas e saldo não devem
+    // misturar valores de períodos ou conjuntos diferentes.
+    if (hasActiveExpenseFilters()) {
+        hideCard('total-receitas');
+        hideCard('saldo-total');
     }
 }
 
 function renderSummary() {
-    const expenses = currentExpenses || {};
-    const expenseTotal = getExpenseTotal(currentExpenses);
+    const expenseTotals = getExpenseTotals(currentExpenses);
     const receiptTotal = getReceiptTotal(currentReceipts);
 
-    document.getElementById('total-geral').textContent = formatMoney(expenseTotal);
-    document.getElementById('total-pago').textContent = formatMoney(Number(expenses.totalPaid || 0));
-    document.getElementById('total-pendente').textContent = formatMoney(Number(expenses.totalUnpaid || 0));
+    document.getElementById('total-geral').textContent = formatMoney(expenseTotals.total);
+    document.getElementById('total-pago').textContent = formatMoney(expenseTotals.totalPaid);
+    document.getElementById('total-pendente').textContent = formatMoney(expenseTotals.totalUnpaid);
     document.getElementById('total-receitas').textContent = formatMoney(receiptTotal);
-    document.getElementById('saldo-total').textContent = formatMoney(receiptTotal - expenses.totalPaid);
+    document.getElementById('saldo-total').textContent = formatMoney(receiptTotal - expenseTotals.totalPaid);
 
     updateVisibilityBasedOnSearch();
 }

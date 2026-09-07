@@ -116,16 +116,17 @@ export default class LocalStorageService {
     async updateExpenses(id, data) {
         const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const categories = JSON.parse(localStorage.getItem("categories"));
-
-        let category = categories.find(cat => cat.name.toLowerCase() == data.categoryName.toLowerCase());
-        
         const index = expenses.findIndex(exp => exp.id === Number(id));
         if (index === -1) {
-            throw new Error("Categoria não encontrada!");
+            throw new Error("Despesa não encontrada!");
         }
+        let category = data.categoryName
+            ? categories.find(cat => cat.name.toLowerCase() === data.categoryName.toLowerCase())
+            : { id: expenses[index].category };
+        if (!category) throw new Error("Categoria não encontrada!");
         
         // Adiciona data atual se pagamento for true e data estiver vazia
-        if (data.payment === "true" && data.paymentDate == "") {
+        if (data.payment === "true" && data.paymentDate === "") {
             data.paymentDate = date.formatDateCalendar(date.getTodayDate());
         }
         category = Number(category.id);
