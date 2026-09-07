@@ -1,3 +1,7 @@
+h2 {
+  margin: 5px;
+  font-size: 1.2em;
+}
 .cashflow-layout {
   display: grid;
   grid-template-columns: minmax(250px, 0.9fr) minmax(320px, 1.8fr) minmax(250px, 0.9fr);
@@ -7,7 +11,7 @@
 
 .cashflow-panel,
 .cashflow-add-card {
-  min-height: 160px;
+  min-height: 355px;
   min-width: 0;
   padding: 12px;
   background: #fff;
@@ -87,7 +91,7 @@
 }
 
 .cashflow-card-header {
-  margin: 20px 15px;
+  margin: 5px 15px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -95,7 +99,7 @@
 
 .cashflow-card-header p {
   margin: 0;
-  font-size: 1.5em !important;
+  font-size: 1.2em !important;
   font-weight: bold;
   white-space: nowrap;
 }
@@ -113,7 +117,7 @@
 .cashflow-card-title {
   display: none;
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
 }
@@ -155,8 +159,8 @@
 }
 
 .cashflow-warning-dialog h2 {
-  margin: 0 0 12px;
-  font-size: 1.35rem;
+  margin: 0 0 5px;
+  font-size: 1.2em;
 }
 
 .cashflow-warning-dialog p {
@@ -236,7 +240,7 @@
   width: fit-content;
   max-width: 100%;
   padding: 2px 6px;
-  font-size: 0.62rem;
+  font-size: 0.8em;
   line-height: 1.2;
 }
 
