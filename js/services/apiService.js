@@ -4,14 +4,17 @@ const API_BASE = isLocalEnvironment
     : "https://acconts-api-28o5.onrender.com";
 
 export default class ApiService {
-    async request(path, options = {}) {
-        const token = localStorage.getItem("token");
+    getAuthorizationHeader() {
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        return token ? { "Authorization": `Bearer ${token}` } : {};
+    }
 
+    async request(path, options = {}) {
         const resp = await fetch(`${API_BASE}${path}`, {
             ...options,
             headers: {
                 "Content-Type": "application/json",
-                ...(token && { "Authorization": `Bearer ${token}` }),
+                ...this.getAuthorizationHeader(),
                 ...(options.headers || {})
              }
         });
@@ -46,6 +49,7 @@ export default class ApiService {
 
         if (!data?.token) throw new Error("A API não retornou um token de autenticação.");
         localStorage.setItem("token", data.token);
+        sessionStorage.setItem("token", data.token);
         window.location.replace("./main.html");
     }
 
@@ -100,18 +104,37 @@ export default class ApiService {
         });
     }
 
-    async getCashflowCards() { return this.request("/cashflow-cards", { method: "GET" }); }
+    async getCashflowCards() {
+        return this.request("/cashflow-cards", {
+            method: "GET"
+        });
+    }
+
     async createCashflowCard(name) {
-        return this.request("/cashflow-cards", { method: "POST", body: JSON.stringify({ name }) });
+        return this.request("/cashflow-cards", {
+            method: "POST",
+            body: JSON.stringify({ name })
+        });
     }
+
     async updateCashflowCard(id, name) {
-        return this.request(`/cashflow-cards/${id}`, { method: "PATCH", body: JSON.stringify({ name }) });
+        return this.request(`/cashflow-cards/${id}`, {
+            method: "PATCH",
+            body: JSON.stringify({ name })
+        });
     }
-    async deleteCashflowCard(id) { return this.request(`/cashflow-cards/${id}`, { method: "DELETE" }); }
+
+    async deleteCashflowCard(id) {
+        return this.request(`/cashflow-cards/${id}`, {
+            method: "DELETE"
+        });
+    }
 
     //Metodos para acessar as categorias
     async getCategory() {
-        return this.request("/categories", { method: "GET" });
+        return this.request("/categories", {
+            method: "GET"
+        });
     }
 
     async createCategory(data) {
@@ -143,7 +166,7 @@ export default class ApiService {
 
     //Receipt
     async getReceipts(startDate, endDate, name) {
-        return this.request(`/receipt?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
+        return this.request(`/receipt?startDate=${startDate}&endDate=${endDate}&name=${name}`,
             { method: "GET" });
     }
 

@@ -39,11 +39,25 @@ export default class Service {
         return this.stragegy.togglePayment(id);
     }
 
-    updateExpenseCashflowCard(id, cashflowCardId) { return this.stragegy.updateExpenseCashflowCard(id, cashflowCardId); }
-    getCashflowCards() { return this.stragegy.getCashflowCards(); }
-    createCashflowCard(name) { return this.stragegy.createCashflowCard(name); }
-    updateCashflowCard(id, name) { return this.stragegy.updateCashflowCard(id, name); }
-    deleteCashflowCard(id) { return this.stragegy.deleteCashflowCard(id); }
+    updateExpenseCashflowCard(id, cashflowCardId) {
+        return this.stragegy.updateExpenseCashflowCard(id, cashflowCardId);
+    }
+
+    getCashflowCards() {
+        return this.stragegy.getCashflowCards();
+    }
+
+    createCashflowCard(name) {
+        return this.stragegy.createCashflowCard(name);
+    }
+
+    updateCashflowCard(id, name) {
+        return this.stragegy.updateCashflowCard(id, name);
+    }
+
+    deleteCashflowCard(id) {
+        return this.stragegy.deleteCashflowCard(id);
+    }
 
     //Categories
     getCategory() {
@@ -90,5 +104,5 @@ export default class Service {
     getReceiptById(id){
         return this.stragegy.getReceiptById(id);
     }
-    
+
 }

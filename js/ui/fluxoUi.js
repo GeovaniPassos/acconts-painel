@@ -1,4 +1,3 @@
-let cashflowCardId = 1;
 let cashflowInitialized = false;
 let draggedExpense = null;
 
@@ -51,12 +50,12 @@ function insertUnpaidExpenseByDueDate(panel, expense) {
     panel.insertBefore(expense, nextExpense || null);
 }
 
-function createCashflowCard(id, name = "") {
+function createCashflowCard(id = null, name = "") {
 
     const card = document.createElement("div");
 
     card.className = "cashflow-panel cashflow-card";
-    card.dataset.id = id;
+    if (id !== null && id !== undefined) card.dataset.id = id;
 
     card.innerHTML = `
         <div class="cashflow-card-header">
@@ -115,10 +114,6 @@ function syncCashflowCards(board) {
         board.insertBefore(card, addCard);
     });
 
-    const numericIds = cardsFromExpenses
-        .map(card => Number(card.id))
-        .filter(Number.isFinite);
-    if (numericIds.length) cashflowCardId = Math.max(cashflowCardId, ...numericIds) + 1;
 }
 
 async function handleCashflowCardClick(event, board) {
@@ -177,7 +172,8 @@ async function handleCashflowCardKeydown(event) {
             cashflowCards.push(created);
         }
         setCashflowCardName(card, value);
-    } catch (_) {
+    } catch (error) {
+        showMessage("error", error.message || "Não foi possível salvar o card.");
         event.target.focus();
     }
 }
@@ -260,8 +256,7 @@ export function initCashflow() {
 
     // ADICIONAR BLOCO
     addButton.addEventListener("click", () => {
-        const card = createCashflowCard(cashflowCardId);
-        cashflowCardId++;
+        const card = createCashflowCard();
         board.insertBefore(
             card,
             addButton.closest(".cashflow-add-card")
