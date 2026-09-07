@@ -59,6 +59,8 @@ function renderExpensesFlow(expenses) {
         .forEach(expense => {
             paid.appendChild(renderExpensesItem(expense, { cashflow: true }));
         });
+
+    document.dispatchEvent(new CustomEvent("cashflow:update-totals"));
 }
 
 function getExpenseDateForSort(expense) {
@@ -78,6 +80,7 @@ function renderExpensesItem(expense, { cashflow = false } = {}) {
     li.dataset.id = expense.id; 
     li.dataset.paid = expense.payment === true || expense.payment === "true";
     li.dataset.dueDate = expense.date || "";
+    li.dataset.value = expense.value || 0;
     li.className = `expense-item${cashflow ? " cashflow-expense-item" : ""}`;
 
     if (cashflow) {

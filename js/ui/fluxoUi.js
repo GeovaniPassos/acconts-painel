@@ -68,12 +68,41 @@ function createCashflowCard(id = null, name = "") {
             <span class="cashflow-card-space"></span>
 
             <button class="cashflow-card-delete" type="button" title="Excluir card">❌</button>
+            <span class="cashflow-card-total">Total: R$ 0,00</span>
         </div>
     `;
 
     if (name) setCashflowCardName(card, name);
 
     return card;
+}
+
+function updateCashflowCardTotal(card) {
+    if (!card) return;
+    const total = [...card.querySelectorAll(":scope > .cashflow-expense-item")]
+        .reduce((sum, expense) => sum + Number(expense.dataset.value || 0), 0);
+    const totalElement = card.querySelector(".cashflow-card-total");
+    if (totalElement) totalElement.textContent = `Total: ${total.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    })}`;
+}
+
+function updateAllCashflowCardTotals(board) {
+    board.querySelectorAll(".cashflow-card").forEach(updateCashflowCardTotal);
+}
+
+function autoScrollWhileDragging(pointerY) {
+    const edgeSize = 110;
+    const maxSpeed = 18;
+    const distanceFromTop = pointerY;
+    const distanceFromBottom = window.innerHeight - pointerY;
+
+    if (distanceFromTop < edgeSize) {
+        window.scrollBy(0, -Math.ceil((edgeSize - distanceFromTop) / edgeSize * maxSpeed));
+    } else if (distanceFromBottom < edgeSize) {
+        window.scrollBy(0, Math.ceil((edgeSize - distanceFromBottom) / edgeSize * maxSpeed));
+    }
 }
 
 function setCashflowCardName(card, name) {
@@ -192,6 +221,9 @@ export function initCashflow() {
     document.addEventListener("cashflow:sync-cards", () => {
         syncCashflowCards(board);
     });
+    document.addEventListener("cashflow:update-totals", () => {
+        updateAllCashflowCardTotals(board);
+    });
     cashflowCardController.getCashflowCards().then(cards => {
         cashflowCards = cards || [];
         syncCashflowCards(board);
@@ -210,6 +242,7 @@ export function initCashflow() {
     // Permite soltar em um card de previsão ou devolver uma despesa pendente
     // ao painel de contas não pagas.
     layout.addEventListener("dragover", (event) => {
+        autoScrollWhileDragging(event.clientY);
         const target = event.target.closest(".cashflow-card, .cashflow-unpaid");
 
         if (!target) return;
@@ -227,6 +260,7 @@ export function initCashflow() {
         if (!draggedExpense) return;
 
         const expense = draggedExpense;
+        const sourceCard = expense.closest(".cashflow-card");
         draggedExpense = null;
 
         const isPaid = expense.dataset.paid === "true";
@@ -247,6 +281,9 @@ export function initCashflow() {
                 target.dataset.id
             );
         }
+
+        updateCashflowCardTotal(sourceCard);
+        if (target.classList.contains("cashflow-card")) updateCashflowCardTotal(target);
     });
 
     // DRAG END
