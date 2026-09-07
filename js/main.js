@@ -2,7 +2,6 @@ import { initCategoryAutoComplete } from "./ui/categoriesUi.js";
 
 import { initExpenses } from "./controllers/expensesController.js";
 import { bindModal } from "./ui/modal.js";
-import { releaseLocalstorage } from "./utils/localstoregeTests.js";
 import { definePayment } from "./controllers/paymentController.js";
 import { initFlatpickr } from "./libs/flatpickr.js";
 import { toggleStatusPayment } from "./ui/paymentUi.js";
@@ -13,12 +12,12 @@ import { checkAuthentication, logout } from "./ui/mainUi.js";
 import { initTables } from "./ui/tablesUi.js";
 import { initReceipt } from "./controllers/receiptController.js";
 import { bindBtnCurrentMonthReceipts, bindReceiptListClick } from "./ui/receiptUi.js";
+import { initCashflow } from "./ui/fluxoUi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    checkAuthentication();
+    if (!checkAuthentication()) return;
     initExpenses();
     bindModal();
-    releaseLocalstorage();
     definePayment();
     initFlatpickr();
     toggleStatusPayment();
@@ -31,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindBtnCurrentMonthReceipts();
     logout();
     initTables();
+    initCashflow();
     initReceipt();
 
     bindReceiptListClick();

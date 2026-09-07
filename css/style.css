@@ -490,19 +490,50 @@ button {
 
 /* Ajustando o input de filtro */
 #month-filter {
-    padding: 5px 10px;
-    border: 2px solid #e0e0e0;
-    border-radius: 4px;
+    box-sizing: border-box;
+    width: auto;
+    padding: 6px 8px 8px;
+    border: 1px solid #d5dce3;
+    border-radius: 6px;
     background-color: #fff;
-    cursor: pointer;
-    font-weight: bold;
     color: #34495e;
-    text-align: center;
-    width: 100px;
 }
 
 #month-filter:hover {
     border-color: #3498db;
+}
+
+.month-filter {
+  display: flex;
+  grid-template-columns: repeat(6, max-content);
+  gap: 5px 8px;
+  width: fit-content;
+  margin: 0 0 8px;
+  padding: 6px 8px 8px;
+  border: 1px solid #d5dce3;
+  border-radius: 6px;
+  justify-content: center;
+}
+
+.month-filter legend {
+  padding: 0 4px;
+  font-size: 0.8rem;
+  color: #34495e;
+}
+
+.month-filter label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.month-filter input {
+  width: auto;
+  margin: 0;
+  padding: 0;
 }
 
 #installments {
@@ -549,6 +580,26 @@ button {
   font-size: 14px;
 }
 
+#payment-filter {
+  margin: 5px;
+  width: fit-content;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  color: inherit;
+  border: 1px solid #a8a8a8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.payment-filter-group {
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 /* botão */
 #btn-searchName {
   padding: 10px 16px;
@@ -569,6 +620,13 @@ button {
   .filter-group {
     width: 100%;
     display: flex;
+  }
+
+  .filter-group.payment-filter-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
   }
 
   .button-group {
@@ -679,8 +737,7 @@ button {
     flex-shrink: 0;
   }
 
-  #btn-open-form,
-  #btn-clear-localstorege {
+  #btn-open-form {
     width: 100%;
     margin-bottom: 8px;
   }

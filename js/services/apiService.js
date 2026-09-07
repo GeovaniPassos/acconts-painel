@@ -1,5 +1,7 @@
-//const API_BASE = "http://localhost:8080";
-const API_BASE = "https://acconts-api-28o5.onrender.com"
+const isLocalEnvironment = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+const API_BASE = isLocalEnvironment
+    ? "http://localhost:8080"
+    : "https://acconts-api-28o5.onrender.com";
 
 export default class ApiService {
     async request(path, options = {}) {
@@ -15,11 +17,6 @@ export default class ApiService {
         });
 
         if (!resp.ok) {
-            if (resp.status === 401) {
-                localStorage.removeItem("token");
-                window.location.href = "./login.html";
-            }
-            
             let errorMessage = `Erro: ${resp.status}`;
 
             try {
@@ -47,15 +44,19 @@ export default class ApiService {
             body: JSON.stringify({ username, password })
         });
 
-        setTimeout(() => {
-            localStorage.setItem("token", data.token);
-        }, 50);
-        window.location.href = "./main.html";
+        if (!data?.token) throw new Error("A API não retornou um token de autenticação.");
+        localStorage.setItem("token", data.token);
+        window.location.replace("./main.html");
     }
 
     //Metodos para acessar as despesas
     async getExpenses(startDate, endDate, name) {
-        return this.request(`/expenses?startDate=${startDate}&endDate=${endDate}&name=${name}`, 
+        const query = new URLSearchParams();
+        if (startDate) query.set("startDate", startDate);
+        if (endDate) query.set("endDate", endDate);
+        if (name) query.set("name", name);
+        const path = query.size ? `/expenses?${query.toString()}` : "/expenses";
+        return this.request(path,
             { method: "GET" });
     }
 
@@ -91,6 +92,22 @@ export default class ApiService {
     async togglePayment(id) {
         return this.request(`/expenses/${id}/toggle-payment`, { method: "PATCH" });
     }
+
+    async updateExpenseCashflowCard(id, cashflowCardId) {
+        return this.request(`/expenses/${id}/cashflow-card`, {
+            method: "PATCH",
+            body: JSON.stringify({ cashflowCardId })
+        });
+    }
+
+    async getCashflowCards() { return this.request("/cashflow-cards", { method: "GET" }); }
+    async createCashflowCard(name) {
+        return this.request("/cashflow-cards", { method: "POST", body: JSON.stringify({ name }) });
+    }
+    async updateCashflowCard(id, name) {
+        return this.request(`/cashflow-cards/${id}`, { method: "PATCH", body: JSON.stringify({ name }) });
+    }
+    async deleteCashflowCard(id) { return this.request(`/cashflow-cards/${id}`, { method: "DELETE" }); }
 
     //Metodos para acessar as categorias
     async getCategory() {

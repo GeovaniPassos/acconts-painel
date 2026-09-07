@@ -22,13 +22,16 @@ export async function getListExpensesCurrentMonth() {
         searchParams.startDate = date.getCurrentMonthPeriod().startDate;
         searchParams.endDate = date.getCurrentMonthPeriod().endDate;
         searchParams.name = "";
+        searchParams.months = [];
+        searchParams.paymentStatus = "all";
         expensesList = await service.getExpenses(searchParams.startDate, searchParams.endDate, searchParams.name);
+        const allExpenses = await service.getExpenses();
         if (expensesList === null || expensesList.expenses.length == 0) {
-            expenseUi.emptyExpensesList();
+            expenseUi.renderExpensesList(expensesList || { expenses: [] }, allExpenses || { expenses: [] });
             sumary.updateSummary(expensesList || { expenses: [] });
             return feedback.showMessage("info", "Nenhuma despesa encontrada.");
         }
-        expenseUi.renderExpensesList(expensesList);
+        expenseUi.renderExpensesList(expensesList, allExpenses || { expenses: [] });
         sumary.updateSummary(expensesList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar`);
@@ -40,13 +43,23 @@ export async function getListExpensesCurrentMonth() {
 export async function getExpensesBySearch(searchParams) {
     try {
         feedback.setLoading(true);
-        expensesList = await service.getExpenses(searchParams.startDate, searchParams.endDate, searchParams.name);
+        const selectedMonths = searchParams.months || [];
+        const selectedYear = (searchParams.startDate || `${new Date().getFullYear()}-01-01`).slice(0, 4);
+        const queryStartDate = selectedMonths.length ? `${selectedYear}-01-01` : searchParams.startDate;
+        const queryEndDate = selectedMonths.length ? `${selectedYear}-12-31` : searchParams.endDate;
+
+        expensesList = await service.getExpenses(queryStartDate, queryEndDate, searchParams.name);
+
+        if (selectedMonths.length || searchParams.paymentStatus !== "all") {
+            expensesList = filterExpenses(expensesList, searchParams, selectedMonths);
+        }
+        const allExpenses = await service.getExpenses();
         if (expensesList.expenses.length == 0) {
-            expenseUi.emptyExpensesList();
+            expenseUi.renderExpensesList(expensesList, allExpenses || { expenses: [] });
             sumary.updateSummary(expensesList);
             return feedback.showMessage("info", "Nenhuma despesa encontrada para o período e nome informados.");
         }
-        expenseUi.renderExpensesList(expensesList);
+        expenseUi.renderExpensesList(expensesList, allExpenses || { expenses: [] });
         sumary.updateSummary(expensesList);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar`);
@@ -55,10 +68,49 @@ export async function getExpensesBySearch(searchParams) {
     }
 }
 
+function filterExpenses(result, filters, selectedMonths) {
+    const expenses = (result.expenses || []).filter(expense => {
+        const expenseMonth = String(expense.date || "").slice(5, 7);
+        const isSelectedMonth = !selectedMonths.length || selectedMonths.includes(expenseMonth);
+        const isInPeriod = !filters.startDate || !filters.endDate
+            || (expense.date >= filters.startDate && expense.date <= filters.endDate);
+        const isPaid = expense.payment === true || expense.payment === "true";
+        const matchesPaymentStatus = filters.paymentStatus === "all"
+            || (filters.paymentStatus === "paid" && isPaid)
+            || (filters.paymentStatus === "unpaid" && !isPaid);
+
+        return isSelectedMonth && isInPeriod && matchesPaymentStatus;
+    });
+
+    const totalPaid = expenses
+        .filter(expense => expense.payment === true || expense.payment === "true")
+        .reduce((total, expense) => total + Number(expense.value || 0), 0);
+    const totalUnpaid = expenses
+        .filter(expense => expense.payment !== true && expense.payment !== "true")
+        .reduce((total, expense) => total + Number(expense.value || 0), 0);
+
+    return {
+        ...result,
+        expenses,
+        totalPaid,
+        totalUnpaid,
+        total: totalPaid + totalUnpaid
+    };
+}
+
 export async function handleEditExpensesForm(expenseId) {
     const expense = await service.getExpensesById(expenseId);
     const formModel = core.buildEditFormModel(expense);
     formUi.fillFormForEdit(formModel);
+}
+
+export async function updateExpenseCashflowCard(expenseId, cardId = null) {
+    try {
+        await service.updateExpenseCashflowCard(expenseId, cardId);
+    } catch (e) {
+        feedback.showMessage("error", "Não foi possível salvar o card da despesa.");
+        throw e;
+    }
 }
 
 export async function updateExpense(id, data) {

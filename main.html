@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
   <link rel="shortcut icon" href="./assets/accounting.png" type="image/x-icon">
+  <link rel="stylesheet" href="./css/fluxo.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_2" />
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
@@ -45,11 +47,25 @@
         </div>
     </section>
     
-    <button id="btn-clear-localstorege" style="background-color: gray;">Reset LocalStorege</button>
     <button id="btn-open-form"> + Adicionar Despesa ou Receita</button>
 
     <div class="filter-container">
       <div class="filter-group">
+        <fieldset class="month-filter" id="month-filter" aria-label="Filtrar por meses">
+          <legend>Filtrar por meses</legend>
+          <label><input type="checkbox" name="expense-month" value="01"> Jan</label>
+          <label><input type="checkbox" name="expense-month" value="02"> Fev</label>
+          <label><input type="checkbox" name="expense-month" value="03"> Mar</label>
+          <label><input type="checkbox" name="expense-month" value="04"> Abr</label>
+          <label><input type="checkbox" name="expense-month" value="05"> Mai</label>
+          <label><input type="checkbox" name="expense-month" value="06"> Jun</label>
+          <label><input type="checkbox" name="expense-month" value="07"> Jul</label>
+          <label><input type="checkbox" name="expense-month" value="08"> Ago</label>
+          <label><input type="checkbox" name="expense-month" value="09"> Set</label>
+          <label><input type="checkbox" name="expense-month" value="10"> Out</label>
+          <label><input type="checkbox" name="expense-month" value="11"> Nov</label>
+          <label><input type="checkbox" name="expense-month" value="12"> Dez</label>
+        </fieldset>
         <div>
           <label for="date-range">Filtrar Período</label>
           <button id="btn-current-month">Mês atual</button>
@@ -60,8 +76,16 @@
         <label for="searchName">Filtrar por nome</label>
         <input type="text" id="searchName" placeholder="Pesquise pelo nome">
       </div>
+      <div class="filter-group payment-filter-group">
+        <label for="payment-filter">Status de pagamento</label>
+        <select id="payment-filter">
+          <option value="" selected>Nenhum selecionado</option>
+          <option value="paid">Somente pagas</option>
+          <option value="unpaid">Somente não pagas</option>
+        </select>
+      </div>
       <div class="filter-group button-group">
-        <button id="btn-searchName">Buscar</button>
+        <button id="btn-searchName">Filtrar despesas</button>
       </div>
     </div>
     <div id="messages"></div>
@@ -160,6 +184,7 @@
     <div class="tabs">
       <button class="tab active tab-expenses">Despesas</button>
       <button class="tab tab-receipts">Receitas</button>
+      <button class="tab tab-fluxo">Fluxo de Caixa</button>
     </div>
 
     <div id="expenses" class="tab-content active">
@@ -168,6 +193,35 @@
 
     <div id="receipts" class="tab-content">
       <ul id="receipt-list"></ul>
+    </div>
+
+    <div id="fluxo" class="tab-content">
+      <div class="cashflow-layout">
+        <section class="cashflow-panel cashflow-unpaid" id="cashflow-unpaid">
+          <h2>Contas Não Pagas</h2>
+        </section>
+
+        <div class="cashflow-board">
+          <div class="cashflow-add-card">
+            <button class="cashflow-add-button"  type="button">
+              <span class="material-symbols-outlined" style="font-size: 3em" aria-hidden="true">add_2</span>
+              <p id="add-block-text">Adicionar bloco</p>
+            </button>
+          </div>
+        </div>
+
+        <section class="cashflow-panel cashflow-paid">
+          <h2>Contas Pagas</h2>
+        </section>
+      </div>
+    </div>
+
+    <div id="cashflow-warning-modal" class="cashflow-warning-modal" aria-hidden="true">
+      <div class="cashflow-warning-dialog" role="alertdialog" aria-modal="true" aria-labelledby="cashflow-warning-title" aria-describedby="cashflow-warning-text">
+        <h2 id="cashflow-warning-title">Não foi possível excluir o card</h2>
+        <p id="cashflow-warning-text">Mova as despesas para outro card ou para Contas Não Pagas antes de excluir este card.</p>
+        <button id="cashflow-warning-close" class="cashflow-warning-close" type="button">Entendi</button>
+      </div>
     </div>
 
     <script type="module" src="./js/main.js"></script>
