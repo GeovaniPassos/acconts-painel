@@ -2,6 +2,12 @@ import { formatDate } from "../utils/date.js";
 import { formatMoney } from "../utils/money.js";
 import * as expensesController from "../controllers/expensesController.js"
 
+let latestFlowExpenses = [];
+
+document.addEventListener("cashflow:cards-ready", () => {
+    if (latestFlowExpenses.length) renderExpensesFlow(latestFlowExpenses);
+});
+
 export function renderExpensesList(expenses, flowExpenses = expenses) {
     const ul = document.getElementById("expenses-list");
     ul.innerHTML = "";
@@ -16,6 +22,7 @@ export function renderExpensesList(expenses, flowExpenses = expenses) {
 // O fluxo recebe a lista completa, separada da lista filtrada de despesas,
 // porque um elemento não pode existir em dois lugares do DOM.
 function renderExpensesFlow(expenses) {
+    latestFlowExpenses = expenses;
     const layout = document.querySelector(".cashflow-layout");
     const unpaid = document.getElementById("cashflow-unpaid");
     const paid = document.querySelector(".cashflow-paid");
@@ -26,7 +33,6 @@ function renderExpensesFlow(expenses) {
     board.cashflowExpenses = expenses;
     document.dispatchEvent(new CustomEvent("cashflow:sync-cards", { detail: expenses }));
 
-    const forecastAssignments = getForecastAssignments(layout);
     clearFlowExpenses(layout);
 
     const unpaidExpenses = expenses
@@ -35,7 +41,9 @@ function renderExpensesFlow(expenses) {
 
     unpaidExpenses.forEach(expense => {
         const item = renderExpensesItem(expense, { cashflow: true });
-        const forecastCard = forecastAssignments.get(String(expense.id));
+        const forecastCard = expense.cashflowCardId == null
+            ? null
+            : board.querySelector(`.cashflow-card[data-id="${expense.cashflowCardId}"]`);
 
         if (forecastCard?.isConnected) {
             forecastCard.appendChild(item);
@@ -58,18 +66,6 @@ function getExpenseDateForSort(expense) {
     const [day, month, year] = String(value).split("/");
 
     return year && month && day ? `${year}-${month}-${day}` : String(value);
-}
-
-function getForecastAssignments(layout) {
-    const assignments = new Map();
-
-    layout.querySelectorAll(".cashflow-card").forEach(card => {
-        card.querySelectorAll(":scope > .cashflow-expense-item").forEach(item => {
-            assignments.set(String(item.dataset.id), card);
-        });
-    });
-
-    return assignments;
 }
 
 function clearFlowExpenses(layout = document.querySelector(".cashflow-layout")) {

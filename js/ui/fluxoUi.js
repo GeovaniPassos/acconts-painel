@@ -3,6 +3,10 @@ let cashflowInitialized = false;
 let draggedExpense = null;
 
 import * as expensesController from "../controllers/expensesController.js";
+import * as cashflowCardController from "../controllers/cashflowCardController.js";
+import { showMessage } from "./feedback.js";
+
+let cashflowCards = [];
 
 function showDeleteCardWarning() {
     const modal = document.getElementById("cashflow-warning-modal");
@@ -84,18 +88,11 @@ function setCashflowCardName(card, name) {
     title.style.display = "inline";
 }
 
-function syncCashflowCards(board, expenses) {
+function syncCashflowCards(board) {
     const addCard = board.querySelector(".cashflow-add-card");
     if (!addCard) return;
 
-    const cardsFromExpenses = [...new Map(
-        expenses
-            .filter(expense => expense.cashflowCardId !== null && expense.cashflowCardId !== undefined && expense.cashflowCardName)
-            .map(expense => [String(expense.cashflowCardId), {
-                id: expense.cashflowCardId,
-                name: expense.cashflowCardName
-            }])
-    ).values()].sort((first, second) => Number(first.id) - Number(second.id));
+    const cardsFromExpenses = [...cashflowCards].sort((first, second) => Number(first.id) - Number(second.id));
 
     const cardsById = new Map(
         [...board.querySelectorAll(".cashflow-card")].map(card => [String(card.dataset.id), card])
@@ -124,7 +121,7 @@ function syncCashflowCards(board, expenses) {
     if (numericIds.length) cashflowCardId = Math.max(cashflowCardId, ...numericIds) + 1;
 }
 
-function handleCashflowCardClick(event, board) {
+async function handleCashflowCardClick(event, board) {
     const card = event.target.closest(".cashflow-card");
     if (!card) return;
 
@@ -134,7 +131,15 @@ function handleCashflowCardClick(event, board) {
             showDeleteCardWarning();
             return;
         }
-        card.remove();
+        try {
+            if (card.dataset.id) {
+                await cashflowCardController.deleteCashflowCard(card.dataset.id);
+                cashflowCards = cashflowCards.filter(item => String(item.id) !== card.dataset.id);
+            }
+            card.remove();
+        } catch (_) {
+            showMessage("error", "Não foi possível excluir o card porque ele possui despesas associadas.");
+        }
         return;
     }
 
@@ -162,12 +167,19 @@ async function handleCashflowCardKeydown(event) {
     if (!value) return;
 
     const card = event.target.closest(".cashflow-card");
-    setCashflowCardName(card, value);
-
-    const assignedExpenses = [...card.querySelectorAll(":scope > .cashflow-expense-item")];
-    await Promise.all(assignedExpenses.map(expense =>
-        expensesController.updateExpenseCashflowCard(expense.dataset.id, card.dataset.id, value)
-    ));
+    try {
+        if (card.dataset.id) {
+            await cashflowCardController.updateCashflowCard(card.dataset.id, value);
+            cashflowCards = cashflowCards.map(item => String(item.id) === card.dataset.id ? { ...item, name: value } : item);
+        } else {
+            const created = await cashflowCardController.createCashflowCard(value);
+            card.dataset.id = created.id;
+            cashflowCards.push(created);
+        }
+        setCashflowCardName(card, value);
+    } catch (_) {
+        event.target.focus();
+    }
 }
 
 export function initCashflow() {
@@ -181,10 +193,14 @@ export function initCashflow() {
     if (!layout || !board || !addButton) return;
 
     bindDeleteCardWarningModal();
-    document.addEventListener("cashflow:sync-cards", event => {
-        syncCashflowCards(board, event.detail || []);
+    document.addEventListener("cashflow:sync-cards", () => {
+        syncCashflowCards(board);
     });
-    syncCashflowCards(board, board.cashflowExpenses || []);
+    cashflowCardController.getCashflowCards().then(cards => {
+        cashflowCards = cards || [];
+        syncCashflowCards(board);
+        document.dispatchEvent(new CustomEvent("cashflow:cards-ready"));
+    });
 
     // DRAG START
     layout.addEventListener("dragstart", (event) => {
@@ -222,7 +238,7 @@ export function initCashflow() {
 
         if (target.classList.contains("cashflow-unpaid")) {
             insertUnpaidExpenseByDueDate(target, expense);
-            await expensesController.updateExpenseCashflowCard(expense.dataset.id);
+            await expensesController.updateExpenseCashflowCard(expense.dataset.id, null);
         } else {
             const cardName = target.dataset.name?.trim();
             if (!cardName) {
@@ -232,8 +248,7 @@ export function initCashflow() {
             target.appendChild(expense);
             await expensesController.updateExpenseCashflowCard(
                 expense.dataset.id,
-                target.dataset.id,
-                cardName
+                target.dataset.id
             );
         }
     });

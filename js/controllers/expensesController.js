@@ -104,12 +104,9 @@ export async function handleEditExpensesForm(expenseId) {
     formUi.fillFormForEdit(formModel);
 }
 
-export async function updateExpenseCashflowCard(expenseId, cardId = null, cardName = null) {
+export async function updateExpenseCashflowCard(expenseId, cardId = null) {
     try {
-        await service.updateExpenses(expenseId, {
-            cashflowCardId: cardId,
-            cashflowCardName: cardName
-        });
+        await service.updateExpenseCashflowCard(expenseId, cardId);
     } catch (e) {
         feedback.showMessage("error", "Não foi possível salvar o card da despesa.");
         throw e;

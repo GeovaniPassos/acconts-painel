@@ -1,9 +1,8 @@
 import ApiService from "./apiService.js";
-import LocalStorageService from "./localStoregeService.js";
 
 export default class Service {
-    constructor(stragegy = "api") {
-        this.stragegy = stragegy === "api" ? new ApiService() : new LocalStorageService();
+    constructor() {
+        this.stragegy = new ApiService();
     }
 
     //Login
@@ -39,6 +38,12 @@ export default class Service {
     togglePayment(id) {
         return this.stragegy.togglePayment(id);
     }
+
+    updateExpenseCashflowCard(id, cashflowCardId) { return this.stragegy.updateExpenseCashflowCard(id, cashflowCardId); }
+    getCashflowCards() { return this.stragegy.getCashflowCards(); }
+    createCashflowCard(name) { return this.stragegy.createCashflowCard(name); }
+    updateCashflowCard(id, name) { return this.stragegy.updateCashflowCard(id, name); }
+    deleteCashflowCard(id) { return this.stragegy.deleteCashflowCard(id); }
 
     //Categories
     getCategory() {

@@ -737,8 +737,7 @@ button {
     flex-shrink: 0;
   }
 
-  #btn-open-form,
-  #btn-clear-localstorege {
+  #btn-open-form {
     width: 100%;
     margin-bottom: 8px;
   }
