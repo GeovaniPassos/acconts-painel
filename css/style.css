@@ -536,6 +536,42 @@ button {
   padding: 0;
 }
 
+.expense-sort-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.month-and-sort {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.expense-sort-controls span {
+  font-size: 0.8rem;
+  color: #34495e;
+}
+
+.expense-sort-button {
+  padding: 6px 9px;
+  background-color: #ecf0f1;
+  color: #34495e;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  font-size: 0.78rem;
+}
+
+.expense-sort-button:hover,
+.expense-sort-button.is-active {
+  background-color: #3498db;
+  border-color: #2980b9;
+  color: #fff;
+}
+
 #installments {
   width: 135px;
 }
@@ -620,6 +656,11 @@ button {
   .filter-group {
     width: 100%;
     display: flex;
+  }
+
+  .month-and-sort {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .filter-group.payment-filter-group {

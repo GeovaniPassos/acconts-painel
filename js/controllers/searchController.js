@@ -7,7 +7,8 @@ export let searchParams = {
     endDate: "",
     name: "",
     months: [],
-    paymentStatus: "all"
+    paymentStatus: "all",
+    sortBy: "createdAt"
 };
 
 export function initNameSearch() {
@@ -49,6 +50,18 @@ export function initNameSearch() {
 
     btnsearch.addEventListener('click', applyFilters);
     monthFilters.forEach(month => month.addEventListener("change", applyFilters));
+
+    document.querySelectorAll(".expense-sort-button").forEach(button => {
+        button.addEventListener("click", async () => {
+            searchParams.sortBy = button.dataset.sort;
+            document.querySelectorAll(".expense-sort-button").forEach(sortButton => {
+                const isActive = sortButton === button;
+                sortButton.classList.toggle("is-active", isActive);
+                sortButton.setAttribute("aria-pressed", String(isActive));
+            });
+            await controllerExpenses.getExpensesBySearch(searchParams);
+        });
+    });
 
 }
 

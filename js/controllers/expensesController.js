@@ -26,13 +26,14 @@ export async function getListExpensesCurrentMonth() {
         searchParams.paymentStatus = "all";
         expensesList = await service.getExpenses(searchParams.startDate, searchParams.endDate, searchParams.name);
         const allExpenses = await service.getExpenses();
+        const sortedExpenses = sortExpenses(expensesList || { expenses: [] }, searchParams);
         if (expensesList === null || expensesList.expenses.length == 0) {
-            expenseUi.renderExpensesList(expensesList || { expenses: [] }, allExpenses || { expenses: [] });
-            sumary.updateSummary(expensesList || { expenses: [] });
+            expenseUi.renderExpensesList(sortedExpenses, allExpenses || { expenses: [] });
+            sumary.updateSummary(sortedExpenses);
             return feedback.showMessage("info", "Nenhuma despesa encontrada.");
         }
-        expenseUi.renderExpensesList(expensesList, allExpenses || { expenses: [] });
-        sumary.updateSummary(expensesList);
+        expenseUi.renderExpensesList(sortedExpenses, allExpenses || { expenses: [] });
+        sumary.updateSummary(sortedExpenses);
     } catch (e) {
         feedback.showMessage("error", `Falha ao carregar`);
     } finally {
@@ -53,6 +54,7 @@ export async function getExpensesBySearch(searchParams) {
         if (selectedMonths.length || searchParams.paymentStatus !== "all") {
             expensesList = filterExpenses(expensesList, searchParams, selectedMonths);
         }
+        expensesList = sortExpenses(expensesList, searchParams);
         const allExpenses = await service.getExpenses();
         if (expensesList.expenses.length == 0) {
             expenseUi.renderExpensesList(expensesList, allExpenses || { expenses: [] });
@@ -96,6 +98,44 @@ function filterExpenses(result, filters, selectedMonths) {
         totalUnpaid,
         total: totalPaid + totalUnpaid
     };
+}
+
+function sortExpenses(result, filters) {
+    const expenses = [...(result?.expenses || [])];
+
+    expenses.sort((first, second) => {
+        if (filters.sortBy === "name") {
+            return compareText(first.name, second.name);
+        }
+
+        if (filters.sortBy === "category") {
+            return compareText(first.categoryName, second.categoryName)
+                || compareText(first.name, second.name);
+        }
+
+        return compareDate(getCreationDate(first), getCreationDate(second))
+            || Number(first.id || 0) - Number(second.id || 0);
+    });
+
+    return { ...result, expenses };
+}
+
+function compareText(first, second) {
+    return String(first || "").localeCompare(String(second || ""), "pt-BR", {
+        sensitivity: "base"
+    });
+}
+
+function compareDate(first, second) {
+    return String(first || "").localeCompare(String(second || ""));
+}
+
+function getCreationDate(expense) {
+    return expense.createdAt
+        || expense.createdDate
+        || expense.creationDate
+        || expense.created_at
+        || "";
 }
 
 export async function handleEditExpensesForm(expenseId) {

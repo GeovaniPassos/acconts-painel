@@ -51,7 +51,8 @@
 
     <div class="filter-container">
       <div class="filter-group">
-        <fieldset class="month-filter" id="month-filter" aria-label="Filtrar por meses">
+        <div class="month-and-sort">
+          <fieldset class="month-filter" id="month-filter" aria-label="Filtrar por meses">
           <legend>Filtrar por meses</legend>
           <label><input type="checkbox" name="expense-month" value="01"> Jan</label>
           <label><input type="checkbox" name="expense-month" value="02"> Fev</label>
@@ -65,7 +66,14 @@
           <label><input type="checkbox" name="expense-month" value="10"> Out</label>
           <label><input type="checkbox" name="expense-month" value="11"> Nov</label>
           <label><input type="checkbox" name="expense-month" value="12"> Dez</label>
-        </fieldset>
+          </fieldset>
+          <div class="expense-sort-controls" aria-label="Ordenar despesas">
+            <span>Ordenar por</span>
+            <button type="button" class="expense-sort-button" data-sort="name">Alfabética</button>
+            <button type="button" class="expense-sort-button" data-sort="category">Categoria</button>
+            <button type="button" class="expense-sort-button" data-sort="createdAt">Data de criação</button>
+          </div>
+        </div>
         <div>
           <label for="date-range">Filtrar Período</label>
           <button id="btn-current-month">Mês atual</button>
