@@ -1,6 +1,6 @@
 export function checkAuthentication() {
 
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     
     if (!token) {
         window.location.replace('./login.html');
@@ -16,6 +16,7 @@ export function logout() {
     btnLogout.addEventListener('click', () => {
         if (confirm('Tem certeza que deseja sair?')) {
             localStorage.removeItem('token');
+            // Limpa apenas uma chave legada, criada por versões anteriores.
             sessionStorage.removeItem('token');
             window.location.replace('./login.html');
         }

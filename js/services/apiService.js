@@ -4,8 +4,12 @@ const API_BASE = isLocalEnvironment
     : "https://acconts-api-28o5.onrender.com";
 
 export default class ApiService {
-    getAuthorizationHeader() {
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    getAuthorizationHeader(path) {
+        // Login é público. Nunca envie um JWT anterior aqui, pois ele pode já
+        // estar expirado e impedir a API de emitir um token novo.
+        if (path === "/auth/login") return {};
+
+        const token = localStorage.getItem("token");
         return token ? { "Authorization": `Bearer ${token}` } : {};
     }
 
@@ -14,7 +18,7 @@ export default class ApiService {
             ...options,
             headers: {
                 "Content-Type": "application/json",
-                ...this.getAuthorizationHeader(),
+                ...this.getAuthorizationHeader(path),
                 ...(options.headers || {})
              }
         });
@@ -42,6 +46,11 @@ export default class ApiService {
 
     //Login
     async login(username, password) {
+        // Remove tokens antigos (inclusive da versão anterior, que utilizava
+        // sessionStorage) antes de solicitar uma nova autenticação.
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+
         const data = await this.request(`/auth/login`, {
             method: "POST",
             body: JSON.stringify({ username, password })
@@ -49,7 +58,6 @@ export default class ApiService {
 
         if (!data?.token) throw new Error("A API não retornou um token de autenticação.");
         localStorage.setItem("token", data.token);
-        sessionStorage.setItem("token", data.token);
         window.location.replace("./main.html");
     }
 
